@@ -1,0 +1,108 @@
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:background="@android:color/holo_red_dark"
+             tools:context="com.saumykukreti.learnforever.fragments.HomeFragment">
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- TODO: Update blank fragment layout -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/buttton_insert_note"
+                    android:text="Insert"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"/>
+
+                <Button
+                    android:id="@+id/buttton_showall"
+                    android:text="showAll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"/>
+
+                <Button
+                    android:id="@+id/buttton_delete"
+                    android:text="delete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"/>
+
+                <Button
+                    android:id="@+id/buttton_update"
+                    android:text="update"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"/>
+
+
+
+            </LinearLayout>
+            <Button
+                android:id="@+id/buttton_categories"
+                android:text="categories"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"/>
+            <EditText
+                android:id="@+id/noteToUpdate"
+                android:hint="Noteidtoupdate"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"/>
+
+            <EditText
+                android:id="@+id/categoryedit"
+                android:hint="category"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"/>
+
+            <EditText
+                android:id="@+id/titleedit"
+                android:hint="title"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"/>
+            <EditText
+                android:id="@+id/cisedit"
+                android:hint="contentinshort"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"/>
+            <EditText
+                android:id="@+id/contentedit"
+                android:hint="content"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"/>
+            <TextView
+                android:id="@+id/currentdatabase"
+                android:text="Current Database"
+                android:layout_marginTop="100dp"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+
+</FrameLayout>

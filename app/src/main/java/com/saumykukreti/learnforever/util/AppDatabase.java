@@ -1,0 +1,16 @@
+package com.saumykukreti.learnforever.util;
+
+import android.arch.persistence.room.Database;
+import android.arch.persistence.room.RoomDatabase;
+
+import com.saumykukreti.learnforever.dao.NoteDao;
+import com.saumykukreti.learnforever.modelClasses.dataTables.NoteTable;
+
+/**
+ * Created by saumy on 12/8/2017.
+ */
+
+@Database(entities = {NoteTable.class}, version = 1)
+public abstract class AppDatabase extends RoomDatabase {
+    public abstract NoteDao noteDao();
+}
