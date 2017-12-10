@@ -133,4 +133,24 @@ public class DataController {
         }
         return true;
     }
+
+    public List<NoteTable> searchNoteWithString(String searchString){
+        searchString = '%' + searchString + '%';
+        List<NoteTable> listOfNotes = mDatabase.noteDao().searchNoteWithString(searchString);
+
+        if(listOfNotes.size()>0){
+            return listOfNotes;
+        }
+        else{
+            return new ArrayList<>();
+        }
+    }
 }
+
+
+
+
+
+
+
+

@@ -29,7 +29,7 @@ public interface NoteDao {
     @Query("SELECT * FROM NoteTable WHERE mId = :id")
     List<NoteTable> getNoteWithId(long id);
 
-    @Query("SELECT * FROM NOTETABLE WHERE title= :searchString OR CONTENT=:searchString")
+    @Query("SELECT * FROM NOTETABLE WHERE title LIKE :searchString OR CONTENT LIKE :searchString OR contentInShort LIKE :searchString")
     List<NoteTable> searchNoteWithString(String searchString);
 
     @Query("SELECT * FROM notetable WHERE category = :category")

@@ -79,8 +79,8 @@ public class NoteActivity extends AppCompatActivity {
         mListOfCategories.add(0,"Default");
 
         //Setting spinner
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, mListOfCategories);
-        arrayAdapter.setDropDownViewResource(android.R.layout.simple_list_item_1);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,R.layout.note_activity_category_text_layout, mListOfCategories);
+        arrayAdapter.setDropDownViewResource(R.layout.note_activity_category_list_text_layout);
         mCategorySpinner.setAdapter(arrayAdapter);
     }
 

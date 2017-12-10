@@ -5,185 +5,135 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="10dp"
+    app:cardBackgroundColor="@color/gray_color"
     android:orientation="vertical">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="10dp"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Title"
-            android:textStyle="bold"/>
-        <!--Line-->
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="10dp"
-            android:background="@android:color/darker_gray"/>
-
-        <EditText
-            android:id="@+id/edit_note_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:padding="10dp"
-            android:background="@drawable/edit_text_background_drawable"
-            android:hint="Note title"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Content In Short"
-            android:textStyle="bold"/>
-        <!--Line-->
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="10dp"
-            android:background="@android:color/darker_gray"/>
-
-        <EditText
-            android:id="@+id/edit_note_content_in_short"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:padding="10dp"
-            android:background="@drawable/edit_text_background_drawable"
-            android:hint="Note content in short"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Category"
-            android:textStyle="bold"/>
-        <!--Line-->
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="10dp"
-            android:background="@android:color/darker_gray"/>
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="20dp"
-            android:weightSum="105">
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:orientation="vertical">
 
-            <Spinner
-                android:id="@+id/categorySpinner"
-                android:layout_width="0dp"
+            <TextView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="90"/>
-
+                android:text="Title"
+                android:textStyle="bold"/>
+            <!--Line-->
             <ImageView
-                android:id="@+id/image_add_category"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="10"
-                android:background="@drawable/ic_add_black"/>
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:background="@android:color/darker_gray"/>
+
+            <EditText
+                android:id="@+id/edit_note_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:padding="10dp"
+                android:background="@drawable/background_drawable_with_white_background_and_gray_border"
+                android:hint="Note title"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Content In Short"
+                android:textStyle="bold"/>
+            <!--Line-->
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:background="@android:color/darker_gray"/>
+
+            <EditText
+                android:id="@+id/edit_note_content_in_short"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:padding="10dp"
+                android:background="@drawable/background_drawable_with_white_background_and_gray_border"
+                android:hint="Note content in short"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Category"
+                android:textStyle="bold"/>
+            <!--Line-->
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:background="@android:color/darker_gray"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp"
+                android:weightSum="105">
+
+                <Spinner
+                    android:id="@+id/categorySpinner"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="90"/>
+
+                <ImageView
+                    android:id="@+id/image_add_category"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="10"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/circle_background_drawable_with_white_background"/>
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/edit_category"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:padding="10dp"
+                android:background="@drawable/background_drawable_with_white_background_and_gray_border"
+                android:hint="New Category"
+                android:visibility="gone"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Content"
+                android:textStyle="bold"/>
+
+            <!--Line-->
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:background="@android:color/darker_gray"/>
+
+
+            <EditText
+                android:id="@+id/edit_note_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:minHeight="300dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/background_drawable_with_white_background_and_gray_border"
+                android:gravity="top"
+                android:hint="Content"/>
         </LinearLayout>
 
-        <EditText
-            android:id="@+id/edit_category"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:padding="10dp"
-            android:background="@drawable/edit_text_background_drawable"
-            android:hint="New Category"
-            android:visibility="gone"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Content"
-            android:textStyle="bold"/>
-
-        <!--Line-->
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="10dp"
-            android:background="@android:color/darker_gray"/>
-
-
-        <EditText
-            android:id="@+id/edit_note_content"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="10dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/edit_text_background_drawable"
-            android:gravity="top"
-            android:hint="Content"/>
-
-
-
-
-
-    </LinearLayout>
-
-
-
-    <!--<LinearLayout-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:weightSum="105"-->
-    <!--android:orientation="horizontal">-->
-
-    <!--<Spinner-->
-    <!--android:id="@+id/categorySpinner"-->
-    <!--android:layout_width="0dp"-->
-    <!--android:layout_weight="90"-->
-    <!--android:layout_height="wrap_content"/>-->
-
-    <!--<ImageView-->
-    <!--android:id="@+id/image_add_category"-->
-    <!--android:layout_width="0dp"-->
-    <!--android:layout_weight="10"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:background="@drawable/ic_add_black"/>-->
-    <!--</LinearLayout>-->
-
-    <!--<EditText-->
-    <!--android:id="@+id/edit_category"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:hint="New Category"-->
-    <!--android:visibility="gone"-->
-    <!--android:background="@android:color/transparent"/>-->
-
-    <!--<EditText-->
-    <!--android:id="@+id/edit_note_title"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:hint="Note title"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:background="@android:color/transparent"-->
-    <!--android:layout_marginTop="10dp"/>-->
-
-
-    <!--<EditText-->
-    <!--android:id="@+id/edit_note_content_in_short"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:hint="Note content in short"-->
-    <!--android:background="@android:color/transparent"-->
-    <!--android:layout_marginTop="10dp"/>-->
-
-    <!--<EditText-->
-    <!--android:id="@+id/edit_note_content"-->
-    <!--android:gravity="top"-->
-    <!--android:hint="Content"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"/>-->
+    </ScrollView>
 
 </android.support.v7.widget.CardView>
