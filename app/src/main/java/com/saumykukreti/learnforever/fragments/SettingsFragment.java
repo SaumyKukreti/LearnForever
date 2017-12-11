@@ -48,6 +48,11 @@ public class SettingsFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        mListener.updateActionBarForSettingsFragment();
+    }
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnSettingsFragmentInteractionListener) {
@@ -166,6 +171,6 @@ public class SettingsFragment extends Fragment {
     }
 
     public interface OnSettingsFragmentInteractionListener {
-
+        void updateActionBarForSettingsFragment();
     }
 }

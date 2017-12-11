@@ -59,6 +59,11 @@ public class CategoriesFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        mListener.updateActionBarForCategoriesFragment();
+    }
+    @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         DataController dataController = DataController.getInstance(getActivity());
@@ -90,5 +95,6 @@ public class CategoriesFragment extends Fragment {
     }
 
     public interface OnCategoriesFragmentInteractionListener {
+        void updateActionBarForCategoriesFragment();
     }
 }

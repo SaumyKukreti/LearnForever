@@ -9,11 +9,15 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.saumykukreti.learnforever.R;
+import com.saumykukreti.learnforever.activities.NavigationDrawerActivity;
 import com.saumykukreti.learnforever.adapters.HomeFragmentNotesRecyclerViewAdapter;
 import com.saumykukreti.learnforever.dataManager.DataController;
 import com.saumykukreti.learnforever.modelClasses.dataTables.NoteTable;
@@ -41,6 +45,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         if (getArguments() != null) {
             //Get arguments here
         }
@@ -82,6 +87,7 @@ public class HomeFragment extends Fragment {
         //Initialise search view
         initialiseSearchView();
     }
+
 
     /**
      *  This method sets text watcher on the search view and
@@ -126,6 +132,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        mListener.updateActionBarForHomeFragment();
         initialiseNotesAdapter(true);
     }
 
@@ -143,7 +150,20 @@ public class HomeFragment extends Fragment {
         recyclerView.setAdapter(mHomeFragmentNotesRecyclerViewAdapter);
     }
 
-    public interface OnHomeFragmentInteractionListener {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.home_delete:
+                Toast.makeText(getContext(), "Delete home", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.home_send:
+                Toast.makeText(getContext(), "Send home", Toast.LENGTH_SHORT).show();
+                return true;
+        }
+        return true;
+    }
 
+    public interface OnHomeFragmentInteractionListener {
+        void updateActionBarForHomeFragment();
     }
 }

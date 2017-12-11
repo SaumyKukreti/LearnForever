@@ -12,6 +12,11 @@ import com.saumykukreti.learnforever.R;
 public class ReviseFragment extends Fragment {
     private OnReviseFragmentInteractionListener mListener;
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        mListener.updateActionBarForReviseFragment();
+    }
     public ReviseFragment() {
         // Required empty public constructor
     }
@@ -56,6 +61,6 @@ public class ReviseFragment extends Fragment {
     }
 
     public interface OnReviseFragmentInteractionListener {
-
+        void updateActionBarForReviseFragment();
     }
 }

@@ -3,7 +3,6 @@ package com.saumykukreti.learnforever.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -16,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.saumykukreti.learnforever.R;
 import com.saumykukreti.learnforever.fragments.CategoriesFragment;
@@ -32,6 +32,12 @@ public class NavigationDrawerActivity extends AppCompatActivity
 
     private Toolbar mToolbar;
 
+    final int MENU_FOR_HOME_FRAGMENT = R.menu.menu_for_home_fragment;
+    final int MENU_FOR_CATEGORIES_FRAGMENT = R.menu.menu_for_categories_fragment;
+    final int MENU_FOR_REVISE_FRAGMENT = R.menu.menu_for_revise_fragment;
+    final int MENU_FOR_SETTINGS_FRAGMENT = R.menu.menu_for_settings_fragment;
+
+
     //Fragments
     private static final String FRAGMENT_HOME = "FRAGMENT_HOME";
     private static final String FRAGMENT_CATEGORIES = "FRAGMENT_CATEGORIES";
@@ -39,6 +45,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
     private static final String FRAGMENT_SETTINGS = "FRAGMENT_SETTINGS";
     private int mCurrentItemId;
     private NavigationView mNavigationView;
+    private int mCurrentMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,15 +71,23 @@ public class NavigationDrawerActivity extends AppCompatActivity
         Fragment fragment = null;
         switch(fragmentName){
             case FRAGMENT_HOME:
+                mNavigationView.setCheckedItem(R.id.nav_home);
+                mCurrentItemId = R.id.nav_home;
                 fragment = createHomeFragment();
                 break;
             case FRAGMENT_CATEGORIES:
+                mNavigationView.setCheckedItem(R.id.nav_categories);
+                mCurrentItemId = R.id.nav_categories;
                 fragment = createCategoriesFragment();
                 break;
             case FRAGMENT_REVISE_:
+                mNavigationView.setCheckedItem(R.id.nav_revise);
+                mCurrentItemId = R.id.nav_revise;
                 fragment = createReviseFragment();
                 break;
             case FRAGMENT_SETTINGS:
+                mNavigationView.setCheckedItem(R.id.nav_settings);
+                mCurrentItemId = R.id.nav_settings;
                 fragment = createSettingsFragment();
                 break;
         }
@@ -108,6 +123,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
      */
     private void initialiseToolbar() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar.setTitle("Learn Forever");
         setSupportActionBar(mToolbar);
     }
 
@@ -136,6 +152,14 @@ public class NavigationDrawerActivity extends AppCompatActivity
                 startActivity(new Intent(NavigationDrawerActivity.this, NoteActivity.class));
             }
         });
+
+        fab.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                Toast.makeText(NavigationDrawerActivity.this, "Speaking", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
     }
 
     @Override
@@ -149,8 +173,6 @@ public class NavigationDrawerActivity extends AppCompatActivity
                     mCurrentItemId==R.id.nav_revise ||
                     mCurrentItemId==R.id.nav_settings){
 
-                mNavigationView.setCheckedItem(R.id.nav_home);
-                mCurrentItemId = R.id.nav_home;
                 creteAndLoadFragment(FRAGMENT_HOME);
             }
             else {
@@ -163,7 +185,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.navigation_drawer, menu);
+        getMenuInflater().inflate(mCurrentMenu, menu);
         return true;
     }
 
@@ -174,9 +196,10 @@ public class NavigationDrawerActivity extends AppCompatActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id){
+            case R.id.action_settings:
+                creteAndLoadFragment(FRAGMENT_SETTINGS);
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -211,4 +234,35 @@ public class NavigationDrawerActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    @Override
+    public void updateActionBarForHomeFragment() {
+        mToolbar.setTitle("Learn Forever");
+        mCurrentMenu = MENU_FOR_HOME_FRAGMENT;
+        invalidateOptionsMenu();
+    }
+
+    @Override
+    public void updateActionBarForCategoriesFragment() {
+        mToolbar.setTitle("Categories");
+        mCurrentMenu = MENU_FOR_CATEGORIES_FRAGMENT;
+        invalidateOptionsMenu();
+    }
+
+
+    @Override
+    public void updateActionBarForReviseFragment() {
+        mToolbar.setTitle("Revise");
+        mCurrentMenu = MENU_FOR_REVISE_FRAGMENT;
+        invalidateOptionsMenu();
+    }
+
+
+    @Override
+    public void updateActionBarForSettingsFragment() {
+        mToolbar.setTitle("Settings");
+        mCurrentMenu = MENU_FOR_SETTINGS_FRAGMENT;
+        invalidateOptionsMenu();
+    }
+
 }

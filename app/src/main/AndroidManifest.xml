@@ -19,9 +19,11 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".activities.NoteActivity">
+        <activity android:name=".activities.NoteActivity"
+                  android:parentActivityName=".activities.NavigationDrawerActivity">
         </activity>
-        <activity android:name=".activities.CategoryNotesActivity">
+        <activity android:name=".activities.CategoryNotesActivity"
+            android:parentActivityName=".activities.NavigationDrawerActivity">
         </activity>
     </application>
 
