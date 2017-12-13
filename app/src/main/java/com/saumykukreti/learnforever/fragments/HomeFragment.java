@@ -262,4 +262,10 @@ public class HomeFragment extends Fragment {
     public interface HomeFragmentAdapterInterationListener{
         void toggleSelectionMode(boolean on);
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mListener.toggleFabVisibility(true);
+    }
 }
