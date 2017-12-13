@@ -46,6 +46,8 @@ public class NavigationDrawerActivity extends AppCompatActivity
     private int mCurrentItemId;
     private NavigationView mNavigationView;
     private int mCurrentMenu;
+    private FloatingActionButton mFab;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,15 +147,15 @@ public class NavigationDrawerActivity extends AppCompatActivity
      *  This method initialises FAB
      */
     private void initialiseFab() {
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        mFab = (FloatingActionButton) findViewById(R.id.fab);
+        mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(NavigationDrawerActivity.this, NoteActivity.class));
             }
         });
 
-        fab.setOnLongClickListener(new View.OnLongClickListener() {
+        mFab.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
                 Toast.makeText(NavigationDrawerActivity.this, "Speaking", Toast.LENGTH_SHORT).show();
@@ -265,4 +267,13 @@ public class NavigationDrawerActivity extends AppCompatActivity
         invalidateOptionsMenu();
     }
 
+    @Override
+    public void toggleFabVisibility(boolean on) {
+        if(on){
+            mFab.setVisibility(View.VISIBLE);
+        }
+        else{
+            mFab.setVisibility(View.GONE);
+        }
+    }
 }

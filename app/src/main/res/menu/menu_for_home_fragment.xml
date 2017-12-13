@@ -5,7 +5,8 @@
         android:id="@+id/home_delete"
         android:orderInCategory="100"
         android:title="Delete Note"
-        app:showAsAction="never"/>
+        android:icon="@drawable/ic_delete_white"
+        app:showAsAction="always"/>
 
     <item
         android:id="@+id/home_send"
@@ -17,5 +18,12 @@
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:title="Settings"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/home_cancel"
+        android:orderInCategory="100"
+        android:title="Cancel"
+        android:visible="true"
         app:showAsAction="never"/>
 </menu>

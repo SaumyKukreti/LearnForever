@@ -9,6 +9,7 @@ import android.util.Log;
 import com.saumykukreti.learnforever.R;
 import com.saumykukreti.learnforever.adapters.HomeFragmentNotesRecyclerViewAdapter;
 import com.saumykukreti.learnforever.dataManager.DataController;
+import com.saumykukreti.learnforever.fragments.HomeFragment;
 import com.saumykukreti.learnforever.modelClasses.dataTables.NoteTable;
 
 import java.util.List;
@@ -34,7 +35,12 @@ public class CategoryNotesActivity extends AppCompatActivity {
     private void initialiseNotesAdapter() {
         RecyclerView recyclerView = findViewById(R.id.recycler_view_category_notes);
         getCategories();
-        HomeFragmentNotesRecyclerViewAdapter homeFragmentNotesRecyclerViewAdapter = new HomeFragmentNotesRecyclerViewAdapter(this, mNoteList);
+        HomeFragmentNotesRecyclerViewAdapter homeFragmentNotesRecyclerViewAdapter = new HomeFragmentNotesRecyclerViewAdapter(this, mNoteList, new HomeFragment.HomeFragmentAdapterInterationListener() {
+            @Override
+            public void toggleSelectionMode(boolean on) {
+               //Note required here
+            }
+        });
         recyclerView.setLayoutManager(new GridLayoutManager(this,2));
         recyclerView.setAdapter(homeFragmentNotesRecyclerViewAdapter);
     }

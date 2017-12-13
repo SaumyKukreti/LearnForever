@@ -117,6 +117,9 @@ public class DataController {
         return true;
     }
 
+    public void deleteNotes(List<NoteTable> notes){
+        mDatabase.noteDao().deleteNotes(notes);
+    }
 
     public void deleteNote(NoteTable noteTable){
         mDatabase.noteDao().deleteNote(noteTable);

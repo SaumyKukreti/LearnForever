@@ -44,4 +44,7 @@ public interface NoteDao {
 
     @Delete
     void deleteNote(NoteTable noteTable);
+
+    @Delete
+    void deleteNotes(List<NoteTable> noteTables);
 }

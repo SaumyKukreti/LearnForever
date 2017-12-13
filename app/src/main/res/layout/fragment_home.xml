@@ -1,24 +1,42 @@
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-              android:background="@color/gray_color"
-              android:orientation="vertical"
-             tools:context="com.saumykukreti.learnforever.fragments.HomeFragment">
-
-    <EditText
-        android:id="@+id/edit_search"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:layout_margin="10dp"
-        android:hint="Search"
-        android:background="@drawable/background_drawable_with_white_background_and_gray_border"/>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_notes"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingEnd="10dp"/>
-</LinearLayout>
+        android:background="@color/gray_color"
+        android:orientation="vertical"
+        tools:context="com.saumykukreti.learnforever.fragments.HomeFragment">
+
+        <EditText
+            android:id="@+id/edit_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/background_drawable_with_white_background_and_gray_border"
+            android:hint="Search"
+            android:padding="10dp"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_notes"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingEnd="10dp"/>
+    </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_cross_white"
+        android:layout_marginBottom="40dp"
+        android:visibility="gone"
+        android:backgroundTint="@android:color/darker_gray"
+        android:layout_gravity="bottom|center_horizontal"
+        app:srcCompat="@drawable/ic_cross_white"/>
+</android.support.design.widget.CoordinatorLayout>
+
