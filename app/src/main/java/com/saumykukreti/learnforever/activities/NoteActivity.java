@@ -21,7 +21,9 @@ import java.util.List;
 
 public class NoteActivity extends AppCompatActivity {
 
+    //Intent constants
     public static final String METADATA_NOTE = "metadata_note";
+
     private boolean isNewNote = false;
     private EditText mNoteTitleEdit;
     private EditText mNoteConetentInShortEdit;
@@ -30,7 +32,6 @@ public class NoteActivity extends AppCompatActivity {
     private NoteTable mNote;
     private Spinner mCategorySpinner;
     private List<String> mListOfCategories;
-    private ImageView mAddCatgoryImage;
     private boolean mNewCategory;
     private EditText mNewCategoryEdit;
 
@@ -43,22 +44,22 @@ public class NoteActivity extends AppCompatActivity {
 
         getCategories();
         initialiseViews();
+        setCategorySpinner();
 
-        if(getIntent().hasExtra(METADATA_NOTE)){
-            setData((NoteTable)getIntent().getParcelableExtra(METADATA_NOTE));
-        }
-        else{
+        if (getIntent().hasExtra(METADATA_NOTE)) {
+            //This means that it is an existing note and its data needs to be shown
+            setData((NoteTable) getIntent().getParcelableExtra(METADATA_NOTE));
+        } else {
             isNewNote = true;
         }
     }
 
     /**
-     *  This method initialises all the views that are needed across the activity
+     * This method initialises all the views that are needed across the activity and set on click listeners
      */
     private void initialiseViews() {
 
-        mAddCatgoryImage = findViewById(R.id.image_add_category);
-
+        ImageView addCatgoryImage = findViewById(R.id.image_add_category);
         mNoteTitleEdit = findViewById(R.id.edit_note_title);
         mNoteConetentInShortEdit = findViewById(R.id.edit_note_content_in_short);
         mNoteContentEdit = findViewById(R.id.edit_note_content);
@@ -66,55 +67,58 @@ public class NoteActivity extends AppCompatActivity {
 
         mNewCategoryEdit = findViewById(R.id.edit_category);
 
-        mAddCatgoryImage.setOnClickListener(new View.OnClickListener() {
+        addCatgoryImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(mNewCategoryEdit.getVisibility()==View.VISIBLE){
+                if (mNewCategoryEdit.getVisibility() == View.VISIBLE) {
                     mNewCategory = false;
                     mNewCategoryEdit.setVisibility(View.GONE);
-                }
-                else{
+                } else {
                     mNewCategory = true;
                     mNewCategoryEdit.setVisibility(View.VISIBLE);
                 }
             }
         });
+    }
 
-        //Adding default to the list
-        mListOfCategories.add(0,"Default");
-
+    /**
+     * This method initialises the category spinner
+     */
+    private void setCategorySpinner() {
         //Setting spinner
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,R.layout.note_activity_category_text_layout, mListOfCategories);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.note_activity_category_text_layout, mListOfCategories);
         arrayAdapter.setDropDownViewResource(R.layout.note_activity_category_list_text_layout);
         mCategorySpinner.setAdapter(arrayAdapter);
     }
 
     /**
-     *  This method sets the data to the views, in case of existing note
+     * This method sets the data to the views, in case of existing note
+     *
      * @param note
      */
     private void setData(NoteTable note) {
-        mNote = note;
-        mNoteTitleEdit.setText(note.getTitle());
-        mNoteConetentInShortEdit.setText(note.getContentInShort());
-        mNoteContentEdit.setText(note.getContent());
+        if (note != null) {
+            mNote = note;
+            mNoteTitleEdit.setText(note.getTitle());
+            mNoteConetentInShortEdit.setText(note.getContentInShort());
+            mNoteContentEdit.setText(note.getContent());
 
-        //Get category position that corresponds with current category
-        if(mNote.getCategory()!=null && !mNote.getCategory().equalsIgnoreCase("")){
-            int position = getCategoryPosition(note.getCategory());
-            if(position!=-1) {
-                mCategorySpinner.setSelection(position);
+            //Get category position that corresponds with current category
+            if (mNote.getCategory() != null && !mNote.getCategory().equalsIgnoreCase("")) {
+                int position = getCategoryPosition(note.getCategory());
+                if (position != -1) {
+                    mCategorySpinner.setSelection(position);
+                }
             }
+        } else {
+            isNewNote = true;
         }
-
-        //Set delete button
-
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
-        if(!isNewNote) {
+        if (!isNewNote) {
             menuInflater.inflate(R.menu.menu_for_note_activity, menu);
         }
         return true;
@@ -123,7 +127,7 @@ public class NoteActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.note_activity_delete:
 
                 //Ask for deletion
@@ -134,16 +138,17 @@ public class NoteActivity extends AppCompatActivity {
     }
 
     /**
-     *  This method gets the postion of category that corresponds with current category
+     * This method gets the postion of category that corresponds with current category
+     *
      * @param currentCategory
      */
     private int getCategoryPosition(String currentCategory) {
-        if(currentCategory.equalsIgnoreCase(""))
+        if (currentCategory.equalsIgnoreCase(""))
             return -1;
 
-        for(int i =0 ; i<mListOfCategories.size();i++){
+        for (int i = 0; i < mListOfCategories.size(); i++) {
             String category = mListOfCategories.get(i);
-            if(category.equalsIgnoreCase(currentCategory)){
+            if (category.equalsIgnoreCase(currentCategory)) {
                 return i;
             }
         }
@@ -153,9 +158,8 @@ public class NoteActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         //Saving note
-        if(isNewNote){
-
-            String category =getCategoryValue();
+        if (isNewNote) {
+            String category = getCategoryValue();
 
             //Create a new note
             mDataController.newNote(category,
@@ -164,7 +168,7 @@ public class NoteActivity extends AppCompatActivity {
                     mNoteContentEdit.getText().toString(),
                     "timing",
                     true);
-        }else{
+        } else {
             updateNoteValues();
             mDataController.updateNote(mNote);
         }
@@ -198,50 +202,48 @@ public class NoteActivity extends AppCompatActivity {
     }
 
     /**
-     *  This method gets the category value
+     * This method gets the category value
      */
     private String getCategoryValue() {
         String category = "";
 
         //Check if the user wants a new category, if so use the value from edit text but if that is empty use the current spinner value
-        if(mNewCategory){
-            if(!mNewCategoryEdit.getText().toString().equalsIgnoreCase("")){
+        if (mNewCategory) {
+            if (!mNewCategoryEdit.getText().toString().equalsIgnoreCase("")) {
                 category = mNewCategoryEdit.getText().toString();
             }
         }
 
-        if(category.equalsIgnoreCase("")){
+        //Getting value from spinner
+        if (category.equalsIgnoreCase("")) {
             if (mCategorySpinner.getSelectedItemPosition() != 0) {
                 //Do not set anything for default
                 category = mCategorySpinner.getSelectedItem().toString();
             }
         }
-
         return category;
     }
 
     /**
-     *  This method updates the values of mNote with updated values
+     * This method updates the values of mNote with updated values
      */
     private void updateNoteValues() {
-        String category =getCategoryValue();
+        String category = getCategoryValue();
 
         mNote.setCategory(category);
-//        if(mCategorySpinner.getSelectedItemPosition()!=0){
-//            //Do not set anything for default
-//            mNote.setCategory(mCategorySpinner.getSelectedItem().toString());
-//        }else{
-//            mNote.setCategory("");
-//        }
         mNote.setTitle(mNoteTitleEdit.getText().toString());
         mNote.setContentInShort(mNoteConetentInShortEdit.getText().toString());
         mNote.setContent(mNoteContentEdit.getText().toString());
     }
 
     /**
-     *  This method gets the list of categories from the database
+     * This method gets the list of categories from the database
      */
     private void getCategories() {
         mListOfCategories = mDataController.getListOfCategories();
+
+        //Adding default to the list
+        mListOfCategories.add(0, "Default");
+
     }
 }
