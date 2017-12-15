@@ -1,7 +1,12 @@
 package com.saumykukreti.learnforever.activities;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -101,6 +106,31 @@ public class NoteActivity extends AppCompatActivity {
                 mCategorySpinner.setSelection(position);
             }
         }
+
+        //Set delete button
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        if(!isNewNote) {
+            menuInflater.inflate(R.menu.menu_for_note_activity, menu);
+        }
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.note_activity_delete:
+
+                //Ask for deletion
+                askForConfirmationAndDeleteNote();
+                break;
+        }
+        return true;
     }
 
     /**
@@ -139,6 +169,32 @@ public class NoteActivity extends AppCompatActivity {
             mDataController.updateNote(mNote);
         }
         super.onBackPressed();
+    }
+
+
+    private void askForConfirmationAndDeleteNote() {
+
+        //Ask for confirmation
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+        dialog.setTitle("Are you sure you want to delete the selected notes");
+        dialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //Delete selected notes
+                mDataController.deleteNote(mNote);
+                NoteActivity.this.finish();
+            }
+        });
+
+        dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //Do nothing
+            }
+        });
+
+        dialog.show();
     }
 
     /**

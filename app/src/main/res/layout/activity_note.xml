@@ -36,6 +36,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:padding="10dp"
+                android:singleLine="true"
+                android:imeOptions="actionNext"
                 android:background="@drawable/background_drawable_with_white_background_and_gray_border"
                 android:hint="Note title"/>
 
@@ -57,6 +59,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:singleLine="true"
+                android:imeOptions="actionNext"
+                android:nextFocusDown="@id/edit_note_content"
                 android:padding="10dp"
                 android:background="@drawable/background_drawable_with_white_background_and_gray_border"
                 android:hint="Note content in short"/>

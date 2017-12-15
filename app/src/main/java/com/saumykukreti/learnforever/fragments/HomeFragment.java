@@ -215,6 +215,10 @@ public class HomeFragment extends Fragment {
 
             case R.id.home_cancel:
                 cancelAction();
+                return true;
+            case R.id.home_add_to_category:
+                //if()
+                return true;
         }
         return true;
     }
