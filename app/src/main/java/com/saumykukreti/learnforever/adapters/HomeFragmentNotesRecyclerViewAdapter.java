@@ -24,13 +24,13 @@ import java.util.List;
 
 public class HomeFragmentNotesRecyclerViewAdapter extends RecyclerView.Adapter<HomeFragmentNotesRecyclerViewAdapter.HomeFragmentNotesViewHolder>{
 
-    private final HomeFragment.HomeFragmentAdapterInterationListener mListener;
+    private final HomeFragment.HomeFragmentAdapterInteractionListener mListener;
     private Context mContext;
     private List<NoteTable> mNoteList;
     private boolean mSelectionMode;
     private List<NoteTable> mSelectedNoteList = new ArrayList<>();
 
-    public HomeFragmentNotesRecyclerViewAdapter(Context context, List<NoteTable> noteList, HomeFragment.HomeFragmentAdapterInterationListener homeFragmentAdapterInterationListener) {
+    public HomeFragmentNotesRecyclerViewAdapter(Context context, List<NoteTable> noteList, HomeFragment.HomeFragmentAdapterInteractionListener homeFragmentAdapterInterationListener) {
         mContext = context;
         mNoteList = noteList;
         mListener = homeFragmentAdapterInterationListener;

@@ -12,7 +12,6 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +19,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.saumykukreti.learnforever.R;
-import com.saumykukreti.learnforever.activities.NavigationDrawerActivity;
 import com.saumykukreti.learnforever.adapters.HomeFragmentNotesRecyclerViewAdapter;
 import com.saumykukreti.learnforever.dataManager.DataController;
 import com.saumykukreti.learnforever.modelClasses.dataTables.NoteTable;
@@ -50,6 +48,7 @@ public class HomeFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        datacontroller = DataController.getInstance(getActivity());
         if (getArguments() != null) {
             //Get arguments here
         }
@@ -85,9 +84,6 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
-        datacontroller = DataController.getInstance(getActivity());
-
         //Initialise search view
         initialiseSearchView();
     }
@@ -98,12 +94,9 @@ public class HomeFragment extends Fragment {
      */
     private void initialiseSearchView() {
         EditText searchEdit = getView().findViewById(R.id.edit_search);
-
-
         TextWatcher textWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
 
             @Override
@@ -126,10 +119,8 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
-
             }
         };
-
         searchEdit.addTextChangedListener(textWatcher);
     }
 
@@ -140,6 +131,11 @@ public class HomeFragment extends Fragment {
         initialiseNotesAdapter(true);
     }
 
+    /**
+     * Thie method
+     *
+     * @param turnOn - Pass true to show cancel button and vice versa
+     */
     private void toggleCancelFabVisibility(boolean turnOn){
         FloatingActionButton cancelFab = getView().findViewById(R.id.fab_cancel);
         if(turnOn) {
@@ -156,15 +152,18 @@ public class HomeFragment extends Fragment {
         });
     }
 
+    /**
+     *  This method is used to disable selection mode
+     */
     private void cancelAction(){
-        mSelectionModeOn = false;
-        mHomeFragmentNotesRecyclerViewAdapter.toggleSelectionMode(false);
+        setSelectionMode(false);
         initialiseNotesAdapter(false);
-        toggleFabVisiblity(false);
     }
 
     /**
-     *  This method initialises the recycler view with notes
+     * This method initialises the recycler view with notes
+     *
+     * @param updateNoteList - Pass true when you want the list data to be refreshed else pass false
      */
     private void initialiseNotesAdapter(boolean updateNoteList) {
         if(updateNoteList){
@@ -172,59 +171,91 @@ public class HomeFragment extends Fragment {
         }
         RecyclerView recyclerView = getView().findViewById(R.id.recycler_notes);
         recyclerView.removeAllViews();
-        mHomeFragmentNotesRecyclerViewAdapter = new HomeFragmentNotesRecyclerViewAdapter(getActivity(), mAllNotes, new HomeFragmentAdapterInterationListener() {
+        mHomeFragmentNotesRecyclerViewAdapter = new HomeFragmentNotesRecyclerViewAdapter(getActivity(), mAllNotes, new HomeFragmentAdapterInteractionListener() {
             @Override
             public void toggleSelectionMode(boolean on) {
-                mSelectionModeOn = on;
-                toggleFabVisiblity(true);
-
+                setSelectionMode(on);
             }
         });
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
         recyclerView.setAdapter(mHomeFragmentNotesRecyclerViewAdapter);
     }
 
-    public void toggleFabVisiblity(boolean turnOffFab){
+    /**
+     *  This method controls the fab button in the navigation drawer activity
+     *
+     * @param turnOn - Pass true to show fab and vice versa
+     */
+    public void toggleFabVisiblity(boolean turnOn){
         //When selection mode is on turn off fab visibility and vice versa
-        mListener.toggleFabVisibility(!turnOffFab);
-        toggleCancelFabVisibility(turnOffFab);
+        mListener.toggleFabVisibility(turnOn);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.home_delete:
-                Toast.makeText(getContext(), "Delete home", Toast.LENGTH_SHORT).show();
-                if(mSelectionModeOn){
-                    //This means that already some notes have been selected and those have to be deleted
-                    List<NoteTable> selectedNoteList = mHomeFragmentNotesRecyclerViewAdapter.getSelectedList();
-                    if(!selectedNoteList.isEmpty()){
-                        askForConfirmationAndDeleteNote(selectedNoteList);
-                    }
-                }
-                else{
-                    mSelectionModeOn = true;
-                    //This means selection mode is off, turn it on
-                    mHomeFragmentNotesRecyclerViewAdapter.toggleSelectionMode(true);
-                    toggleFabVisiblity(true);
-                }
+                handleDeleteButtonPress();
                 return true;
             case R.id.home_send:
                 Toast.makeText(getContext(), "Send home", Toast.LENGTH_SHORT).show();
                 return true;
-
             case R.id.home_cancel:
                 cancelAction();
                 return true;
             case R.id.home_add_to_category:
-                //if()
                 return true;
         }
         return true;
     }
 
-    private void askForConfirmationAndDeleteNote(final List<NoteTable> selectedNoteList) {
+    /**
+     *  This method handles the case when delete button is pressed
+     */
+    private void handleDeleteButtonPress() {
+        if(mSelectionModeOn){
+            //This means that already some notes have been selected and those have to be deleted
+            List<NoteTable> selectedNoteList = mHomeFragmentNotesRecyclerViewAdapter.getSelectedList();
+            if(!selectedNoteList.isEmpty()){
+                askForConfirmationAndDeleteNote(selectedNoteList);
+            }
+        }
+        else{
+            setSelectionMode(true);
+        }
+    }
 
+    /**
+     *  This method controls the visibility of buttons
+     * @param turnOn
+     */
+    private void setSelectionMode(boolean turnOn){
+        mSelectionModeOn = turnOn;
+
+        if(turnOn){
+            //Notifying the adapter
+            mHomeFragmentNotesRecyclerViewAdapter.toggleSelectionMode(true);
+
+            //Changing the visisblity of fabs
+            toggleFabVisiblity(false);
+            toggleCancelFabVisibility(true);
+        }
+        else{
+            //Notifying the adapter
+            mHomeFragmentNotesRecyclerViewAdapter.toggleSelectionMode(false);
+
+            //Changing the visisblity of fabs
+            toggleFabVisiblity(true);
+            toggleCancelFabVisibility(false);
+        }
+    }
+
+    /**
+     *  This method shows a dialog asking the user to delete the current note or not
+     *
+     * @param selectedNoteList
+     */
+    private void askForConfirmationAndDeleteNote(final List<NoteTable> selectedNoteList) {
         //Ask for confirmation
         AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
 
@@ -234,26 +265,18 @@ public class HomeFragment extends Fragment {
             public void onClick(DialogInterface dialogInterface, int i) {
                 //Delete selected notes
                 datacontroller.deleteNotes(selectedNoteList);
-
                 //Refresh data list
                 initialiseNotesAdapter(true);
-                //After deleting turn it off
-                mHomeFragmentNotesRecyclerViewAdapter.toggleSelectionMode(false);
-                toggleFabVisiblity(false);
+                setSelectionMode(false);
             }
         });
 
         dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                //Refresh data list
-                initialiseNotesAdapter(true);
-                //After deleting turn it off
-                mHomeFragmentNotesRecyclerViewAdapter.toggleSelectionMode(false);
-                toggleFabVisiblity(false);
+                cancelAction();
             }
         });
-
         dialog.show();
     }
 
@@ -263,7 +286,7 @@ public class HomeFragment extends Fragment {
     }
 
 
-    public interface HomeFragmentAdapterInterationListener{
+    public interface HomeFragmentAdapterInteractionListener {
         void toggleSelectionMode(boolean on);
     }
 

@@ -35,7 +35,7 @@ public class CategoryNotesActivity extends AppCompatActivity {
     private void initialiseNotesAdapter() {
         RecyclerView recyclerView = findViewById(R.id.recycler_view_category_notes);
         getCategories();
-        HomeFragmentNotesRecyclerViewAdapter homeFragmentNotesRecyclerViewAdapter = new HomeFragmentNotesRecyclerViewAdapter(this, mNoteList, new HomeFragment.HomeFragmentAdapterInterationListener() {
+        HomeFragmentNotesRecyclerViewAdapter homeFragmentNotesRecyclerViewAdapter = new HomeFragmentNotesRecyclerViewAdapter(this, mNoteList, new HomeFragment.HomeFragmentAdapterInteractionListener() {
             @Override
             public void toggleSelectionMode(boolean on) {
                //Note required here

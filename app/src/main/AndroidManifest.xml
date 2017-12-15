@@ -9,6 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity
             android:name=".activities.NavigationDrawerActivity"
             android:label="@string/title_activity_navigation_drawer"
@@ -19,12 +20,15 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".activities.NoteActivity"
-                  android:parentActivityName=".activities.NavigationDrawerActivity">
-        </activity>
-        <activity android:name=".activities.CategoryNotesActivity"
-            android:parentActivityName=".activities.NavigationDrawerActivity">
-        </activity>
+
+        <activity
+            android:name=".activities.NoteActivity"
+            android:parentActivityName=".activities.NavigationDrawerActivity"/>
+
+        <activity
+            android:name=".activities.CategoryNotesActivity"
+            android:parentActivityName=".activities.NavigationDrawerActivity"/>
+
     </application>
 
 </manifest>
