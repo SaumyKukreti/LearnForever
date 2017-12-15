@@ -165,7 +165,7 @@ public class HomeFragment extends Fragment {
      *
      * @param updateNoteList - Pass true when you want the list data to be refreshed else pass false
      */
-    private void initialiseNotesAdapter(boolean updateNoteList) {
+    public void initialiseNotesAdapter(boolean updateNoteList) {
         if(updateNoteList){
             mAllNotes = datacontroller.getAllNotes();
         }
@@ -229,7 +229,7 @@ public class HomeFragment extends Fragment {
      *  This method controls the visibility of buttons
      * @param turnOn
      */
-    private void setSelectionMode(boolean turnOn){
+    public void setSelectionMode(boolean turnOn){
         mSelectionModeOn = turnOn;
 
         if(turnOn){
@@ -294,5 +294,13 @@ public class HomeFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         mListener.toggleFabVisibility(true);
+    }
+
+    public boolean getSelectionMode(){
+        return mSelectionModeOn;
+    }
+
+    public void onNavigationFabLongClick(){
+        Toast.makeText(getContext(), "awehfuihawuiehfui", Toast.LENGTH_SHORT).show();
     }
 }

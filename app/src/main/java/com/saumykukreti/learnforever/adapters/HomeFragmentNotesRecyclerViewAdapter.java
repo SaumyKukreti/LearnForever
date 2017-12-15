@@ -75,7 +75,6 @@ public class HomeFragmentNotesRecyclerViewAdapter extends RecyclerView.Adapter<H
             @Override
             public boolean onLongClick(View view) {
                 // Start selection mode
-                Toast.makeText(mContext, "Selection mode on", Toast.LENGTH_SHORT).show();
                 mSelectionMode = true;
                 mListener.toggleSelectionMode(true);
                 mSelectedNoteList.add(note);

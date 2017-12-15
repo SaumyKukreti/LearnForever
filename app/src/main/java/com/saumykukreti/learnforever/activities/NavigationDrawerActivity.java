@@ -47,6 +47,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
     private NavigationView mNavigationView;
     private int mCurrentMenu;
     private FloatingActionButton mFab;
+    private Fragment mCurrentFragment;
 
 
     @Override
@@ -70,33 +71,33 @@ public class NavigationDrawerActivity extends AppCompatActivity
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
 
-        Fragment fragment = null;
+        mCurrentFragment = null;
         switch(fragmentName){
             case FRAGMENT_HOME:
                 mNavigationView.setCheckedItem(R.id.nav_home);
                 mCurrentItemId = R.id.nav_home;
-                fragment = createHomeFragment();
+                mCurrentFragment = createHomeFragment();
                 break;
             case FRAGMENT_CATEGORIES:
                 mNavigationView.setCheckedItem(R.id.nav_categories);
                 mCurrentItemId = R.id.nav_categories;
-                fragment = createCategoriesFragment();
+                mCurrentFragment = createCategoriesFragment();
                 break;
             case FRAGMENT_REVISE_:
                 mNavigationView.setCheckedItem(R.id.nav_revise);
                 mCurrentItemId = R.id.nav_revise;
-                fragment = createReviseFragment();
+                mCurrentFragment = createReviseFragment();
                 break;
             case FRAGMENT_SETTINGS:
                 mNavigationView.setCheckedItem(R.id.nav_settings);
                 mCurrentItemId = R.id.nav_settings;
-                fragment = createSettingsFragment();
+                mCurrentFragment = createSettingsFragment();
                 break;
         }
 
         //If fragment is null then do not replace else replace
-        if(fragment!=null){
-            fragmentTransaction.replace(R.id.navigation_drawer_fragment_container,fragment).commit();
+        if(mCurrentFragment !=null){
+            fragmentTransaction.replace(R.id.navigation_drawer_fragment_container, mCurrentFragment).commit();
         }
     }
 
@@ -158,7 +159,9 @@ public class NavigationDrawerActivity extends AppCompatActivity
         mFab.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                Toast.makeText(NavigationDrawerActivity.this, "Speaking", Toast.LENGTH_SHORT).show();
+                if(mCurrentFragment instanceof HomeFragment){
+                    ((HomeFragment)mCurrentFragment).onNavigationFabLongClick();
+                }
                 return true;
             }
         });
@@ -178,10 +181,32 @@ public class NavigationDrawerActivity extends AppCompatActivity
                 creteAndLoadFragment(FRAGMENT_HOME);
             }
             else {
-                super.onBackPressed();
+                //This means it should be home_fragment
+                
+                if(mCurrentFragment instanceof HomeFragment){
+                    if(!handleBackPressForHomeFragment()){
+                        super.onBackPressed();
+                    }
+                }
             }
-
         }
+    }
+
+    /**
+     *  This method handles back press for home fragment
+     *
+     *  Returns true if back press is handled else returns false
+     */
+    private boolean handleBackPressForHomeFragment() {
+        if(((HomeFragment)mCurrentFragment).getSelectionMode()){
+            ((HomeFragment)mCurrentFragment).setSelectionMode(false);
+            ((HomeFragment)mCurrentFragment).initialiseNotesAdapter(false);
+            return true;
+        }
+        else{
+            return false;
+        }
+
     }
 
     @Override
