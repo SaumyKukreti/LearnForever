@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,16 +24,21 @@ import com.saumykukreti.learnforever.R;
 import com.saumykukreti.learnforever.adapters.HomeFragmentNotesRecyclerViewAdapter;
 import com.saumykukreti.learnforever.dataManager.DataController;
 import com.saumykukreti.learnforever.modelClasses.dataTables.NoteTable;
+import com.saumykukreti.learnforever.util.TextCreator;
+import com.saumykukreti.learnforever.util.TextReader;
 
 import java.util.List;
+import java.util.Locale;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements
+        TextToSpeech.OnInitListener{
     private OnHomeFragmentInteractionListener mListener;
     private DataController datacontroller;
     private List<NoteTable> mAllNotes;
     private HomeFragmentNotesRecyclerViewAdapter mHomeFragmentNotesRecyclerViewAdapter;
     private boolean mNoteListUpdated;
     private boolean mSelectionModeOn;
+    private TextToSpeech mTts;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -47,6 +54,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mTts = new TextToSpeech(getContext(), this);
         setHasOptionsMenu(true);
         datacontroller = DataController.getInstance(getActivity());
         if (getArguments() != null) {
@@ -197,6 +205,9 @@ public class HomeFragment extends Fragment {
             case R.id.home_delete:
                 handleDeleteButtonPress();
                 return true;
+            case R.id.home_read:
+                readSelectedNotes();
+                return true;
             case R.id.home_send:
                 Toast.makeText(getContext(), "Send home", Toast.LENGTH_SHORT).show();
                 return true;
@@ -280,6 +291,27 @@ public class HomeFragment extends Fragment {
         dialog.show();
     }
 
+    /**
+     * TTS Init
+     *
+     * @param status
+     */
+    @Override
+    public void onInit(int status) {
+        if (status == TextToSpeech.SUCCESS) {
+
+            //Setting language
+            int result = mTts.setLanguage(Locale.US);
+
+            if (result == TextToSpeech.LANG_MISSING_DATA
+                    || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                Log.e("TTS", "This Language is not supported");
+            }
+        } else {
+            Log.e("TTS", "Initilization Failed!");
+        }
+    }
+
     public interface OnHomeFragmentInteractionListener {
         void updateActionBarForHomeFragment();
         void toggleFabVisibility(boolean on);
@@ -301,6 +333,18 @@ public class HomeFragment extends Fragment {
     }
 
     public void onNavigationFabLongClick(){
-        Toast.makeText(getContext(), "awehfuihawuiehfui", Toast.LENGTH_SHORT).show();
+    }
+
+
+    private void readSelectedNotes() {
+        //Check if some notes are selected
+        if(mSelectionModeOn){
+            List<NoteTable> listOfSelectedNotes = mHomeFragmentNotesRecyclerViewAdapter.getSelectedList();
+            TextReader textReader = new TextReader(mTts);
+            textReader.readAloud(TextCreator.getNoteText(listOfSelectedNotes));
+        }
+        else{
+            Toast.makeText(getContext(), "Please choose some notes first!", Toast.LENGTH_SHORT).show();
+        }
     }
 }

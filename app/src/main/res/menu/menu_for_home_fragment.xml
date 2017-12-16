@@ -1,12 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <item
         android:id="@+id/home_delete"
         android:orderInCategory="100"
         android:title="Delete Note"
         android:icon="@drawable/ic_delete_white"
         app:showAsAction="always"/>
+
+
+    <item
+        android:id="@+id/home_read"
+        android:orderInCategory="100"
+        android:title="Read out"
+        app:showAsAction="never"/>
+
 
     <item
         android:id="@+id/home_add_to_category"
