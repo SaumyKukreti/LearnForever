@@ -1,19 +1,23 @@
 package com.saumykukreti.learnforever.util;
 
+import android.content.Context;
 import android.speech.tts.TextToSpeech;
+import android.util.Log;
 
 import com.saumykukreti.learnforever.constants.Constants;
+
+import java.util.Locale;
 
 /**
  * Created by saumy on 12/16/2017.
  */
 
-public class TextReader {
+public class TextReader implements TextToSpeech.OnInitListener{
 
     private TextToSpeech mTts;
 
-    public TextReader(TextToSpeech tts) {
-        mTts = tts;
+    public TextReader(Context context) {
+        mTts = new TextToSpeech(context, this);
     }
 
     public void readAloud(String speech) {
@@ -40,6 +44,27 @@ public class TextReader {
     public void addPause(int milliSecond){
         if(mTts.isSpeaking()){
             mTts.playSilence(milliSecond, android.speech.tts.TextToSpeech.QUEUE_ADD, null);
+        }
+    }
+
+    /**
+     * TTS Init
+     *
+     * @param status
+     */
+    @Override
+    public void onInit(int status) {
+        if (status == TextToSpeech.SUCCESS) {
+
+            //Setting language
+            int result = mTts.setLanguage(Locale.US);
+
+            if (result == TextToSpeech.LANG_MISSING_DATA
+                    || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                Log.e("TTS", "This Language is not supported");
+            }
+        } else {
+            Log.e("TTS", "Initilization Failed!");
         }
     }
 }

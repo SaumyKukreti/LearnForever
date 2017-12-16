@@ -30,8 +30,7 @@ import com.saumykukreti.learnforever.util.TextReader;
 import java.util.List;
 import java.util.Locale;
 
-public class HomeFragment extends Fragment implements
-        TextToSpeech.OnInitListener{
+public class HomeFragment extends Fragment{
     private OnHomeFragmentInteractionListener mListener;
     private DataController datacontroller;
     private List<NoteTable> mAllNotes;
@@ -39,6 +38,7 @@ public class HomeFragment extends Fragment implements
     private boolean mNoteListUpdated;
     private boolean mSelectionModeOn;
     private TextToSpeech mTts;
+    private TextReader mTextReader;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -54,7 +54,7 @@ public class HomeFragment extends Fragment implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mTts = new TextToSpeech(getContext(), this);
+        mTextReader = new TextReader(getContext());
         setHasOptionsMenu(true);
         datacontroller = DataController.getInstance(getActivity());
         if (getArguments() != null) {
@@ -291,27 +291,6 @@ public class HomeFragment extends Fragment implements
         dialog.show();
     }
 
-    /**
-     * TTS Init
-     *
-     * @param status
-     */
-    @Override
-    public void onInit(int status) {
-        if (status == TextToSpeech.SUCCESS) {
-
-            //Setting language
-            int result = mTts.setLanguage(Locale.US);
-
-            if (result == TextToSpeech.LANG_MISSING_DATA
-                    || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                Log.e("TTS", "This Language is not supported");
-            }
-        } else {
-            Log.e("TTS", "Initilization Failed!");
-        }
-    }
-
     public interface OnHomeFragmentInteractionListener {
         void updateActionBarForHomeFragment();
         void toggleFabVisibility(boolean on);
@@ -340,8 +319,7 @@ public class HomeFragment extends Fragment implements
         //Check if some notes are selected
         if(mSelectionModeOn){
             List<NoteTable> listOfSelectedNotes = mHomeFragmentNotesRecyclerViewAdapter.getSelectedList();
-            TextReader textReader = new TextReader(mTts);
-            textReader.readAloud(TextCreator.getNoteText(listOfSelectedNotes));
+            mTextReader.readAloud(TextCreator.getNoteText(listOfSelectedNotes));
         }
         else{
             Toast.makeText(getContext(), "Please choose some notes first!", Toast.LENGTH_SHORT).show();
