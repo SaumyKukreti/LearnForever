@@ -96,7 +96,6 @@ public class HomeFragment extends Fragment{
         initialiseSearchView();
     }
 
-
     /**
      *  This method sets text watcher on the search view and
      */
@@ -164,6 +163,7 @@ public class HomeFragment extends Fragment{
      *  This method is used to disable selection mode
      */
     private void cancelAction(){
+        mTextReader.stopReading();
         setSelectionMode(false);
         initialiseNotesAdapter(false);
     }

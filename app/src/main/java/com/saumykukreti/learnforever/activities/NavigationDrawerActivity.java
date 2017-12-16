@@ -15,8 +15,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
+import android.widget.TextView;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.saumykukreti.learnforever.R;
 import com.saumykukreti.learnforever.fragments.CategoriesFragment;
 import com.saumykukreti.learnforever.fragments.HomeFragment;
@@ -48,6 +50,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
     private int mCurrentMenu;
     private FloatingActionButton mFab;
     private Fragment mCurrentFragment;
+    private GoogleSignInAccount mAccount;
 
 
     @Override
@@ -55,12 +58,20 @@ public class NavigationDrawerActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation_drawer);
 
+        getAccountInformation();
         initialiseToolbar();
         initialiseFab();
         initialiseDrawer();
 
         //Load home fragment
         creteAndLoadFragment(FRAGMENT_HOME);
+    }
+
+    /**
+     *  This method gets the account information and displays it on the UI
+     */
+    private void getAccountInformation() {
+        mAccount = GoogleSignIn.getLastSignedInAccount(this);
     }
 
     /**
@@ -142,6 +153,15 @@ public class NavigationDrawerActivity extends AppCompatActivity
 
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
         mNavigationView.setNavigationItemSelectedListener(this);
+
+        if(mAccount !=null) {
+            TextView nameTV = mNavigationView.getHeaderView(0).findViewById(R.id.tv_name);
+            TextView emailTV = mNavigationView.getHeaderView(0).findViewById(R.id.tv_email);
+
+            nameTV.setText(mAccount.getDisplayName());
+            emailTV.setText(mAccount.getEmail());
+        }
+
     }
 
     /**

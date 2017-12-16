@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "877469951697",
+    "firebase_url": "https://learnforever-15dde.firebaseio.com",
+    "project_id": "learnforever-15dde",
+    "storage_bucket": "learnforever-15dde.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:877469951697:android:f4be0ff0dd3aab28",
+        "android_client_info": {
+          "package_name": "com.saumykukreti.learnforever"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "877469951697-at3p7ot84jdiddntamfs4s5ecplsp02c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.saumykukreti.learnforever",
+            "certificate_hash": "dc3f7a77bcf69e24761a76a3c694b3f29f5ac05f"
+          }
+        },
+        {
+          "client_id": "877469951697-111d7vbsshf28gha4rjqg5tglbsuike6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDC6Q9WVoR0TXd2a6pC0cUYIQG1TyqxqiI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "877469951697-111d7vbsshf28gha4rjqg5tglbsuike6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

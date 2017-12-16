@@ -47,6 +47,12 @@ public class TextReader implements TextToSpeech.OnInitListener{
         }
     }
 
+    public void stopReading(){
+        if(mTts.isSpeaking()){
+            mTts.stop();
+        }
+    }
+
     /**
      * TTS Init
      *
