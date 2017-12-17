@@ -73,4 +73,6 @@ public class TextReader implements TextToSpeech.OnInitListener{
             Log.e("TTS", "Initilization Failed!");
         }
     }
+
+
 }

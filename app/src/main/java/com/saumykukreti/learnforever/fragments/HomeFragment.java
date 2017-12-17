@@ -37,7 +37,6 @@ public class HomeFragment extends Fragment{
     private HomeFragmentNotesRecyclerViewAdapter mHomeFragmentNotesRecyclerViewAdapter;
     private boolean mNoteListUpdated;
     private boolean mSelectionModeOn;
-    private TextToSpeech mTts;
     private TextReader mTextReader;
 
     public HomeFragment() {
@@ -54,7 +53,6 @@ public class HomeFragment extends Fragment{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mTextReader = new TextReader(getContext());
         setHasOptionsMenu(true);
         datacontroller = DataController.getInstance(getActivity());
         if (getArguments() != null) {
@@ -74,6 +72,7 @@ public class HomeFragment extends Fragment{
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        mTextReader = new TextReader(getContext());
         if (context instanceof OnHomeFragmentInteractionListener) {
             mListener = (OnHomeFragmentInteractionListener) context;
         } else {
@@ -86,6 +85,7 @@ public class HomeFragment extends Fragment{
     public void onDetach() {
         super.onDetach();
         mListener = null;
+        mTextReader =null;
     }
 
     @Override
@@ -324,5 +324,11 @@ public class HomeFragment extends Fragment{
         else{
             Toast.makeText(getContext(), "Please choose some notes first!", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mTextReader = null;
     }
 }

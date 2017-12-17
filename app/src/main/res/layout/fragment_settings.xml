@@ -48,11 +48,24 @@
                     android:layout_gravity="center"/>
 
 
-
             </LinearLayout>
             <Button
                 android:id="@+id/buttton_categories"
                 android:text="categories"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"/>
+
+            <Button
+                android:id="@+id/insert_into_firebase"
+                android:text="firebase"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"/>
+
+            <Button
+                android:id="@+id/start_sync"
+                android:text="start sync"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"/>

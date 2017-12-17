@@ -12,8 +12,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.saumykukreti.learnforever.LearnForeverApplication;
 import com.saumykukreti.learnforever.R;
 import com.saumykukreti.learnforever.dataManager.DataController;
+import com.saumykukreti.learnforever.jobs.DataSyncJob;
 import com.saumykukreti.learnforever.modelClasses.dataTables.NoteTable;
 
 import java.util.List;
@@ -82,6 +86,8 @@ public class SettingsFragment extends Fragment {
         Button update = view.findViewById(R.id.buttton_update);
         Button delete = view.findViewById(R.id.buttton_delete);
         Button categories = view.findViewById(R.id.buttton_categories);
+        Button firebase = view.findViewById(R.id.insert_into_firebase);
+        Button sync = view.findViewById(R.id.start_sync);
 
         final EditText noteToUpdate = view.findViewById(R.id.noteToUpdate);
 
@@ -167,6 +173,25 @@ public class SettingsFragment extends Fragment {
                 textview.setText(srrr);
             }
 
+        });
+
+
+        firebase.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                DatabaseReference myRef = database.getReference();
+
+                
+                myRef.setValue("Hello, World!");
+            }
+        });
+
+        sync.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                LearnForeverApplication.getInstance().getJobManager().addJobInBackground(new DataSyncJob(null));
+            }
         });
     }
 
