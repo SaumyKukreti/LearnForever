@@ -20,9 +20,11 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.saumykukreti.learnforever.LearnForeverApplication;
 import com.saumykukreti.learnforever.R;
 import com.saumykukreti.learnforever.adapters.HomeFragmentNotesRecyclerViewAdapter;
 import com.saumykukreti.learnforever.dataManager.DataController;
+import com.saumykukreti.learnforever.jobs.DataSyncJob;
 import com.saumykukreti.learnforever.modelClasses.dataTables.NoteTable;
 import com.saumykukreti.learnforever.util.TextCreator;
 import com.saumykukreti.learnforever.util.TextReader;
@@ -134,8 +136,16 @@ public class HomeFragment extends Fragment{
     @Override
     public void onResume() {
         super.onResume();
+        syncData();
         mListener.updateActionBarForHomeFragment();
         initialiseNotesAdapter(true);
+    }
+
+    /**
+     *  This method starts a job that sync data to firebase
+     */
+    private void syncData() {
+        LearnForeverApplication.getInstance().getJobManager().addJobInBackground(new DataSyncJob(getContext(),null));
     }
 
     /**

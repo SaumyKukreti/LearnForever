@@ -9,7 +9,13 @@ import android.util.Log;
 import com.birbit.android.jobqueue.Job;
 import com.birbit.android.jobqueue.Params;
 import com.birbit.android.jobqueue.RetryConstraint;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.saumykukreti.learnforever.constants.Constants;
+import com.saumykukreti.learnforever.dataManager.DataController;
+import com.saumykukreti.learnforever.modelClasses.dataTables.NoteTable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,9 +29,14 @@ public class DataSyncJob extends Job {
 
     private static final int PRIORITY = 1;
     private static final String TAG = DataSyncJob.class.getSimpleName();
+    private final Context mContext;
+    private GoogleSignInAccount mAccount;
+    private DataController mDataController;
+    private SharedPreferences mPreference;
 
-    public DataSyncJob(Params params) {
+    public DataSyncJob(Context context, Params params) {
         super(new Params(PRIORITY).requireNetwork());
+        mContext = context;
     }
 
     @Override
@@ -35,34 +46,81 @@ public class DataSyncJob extends Job {
     @Override
     public void onRun() throws Throwable {
         //Check if there are any notes that are pending for sync
-        SharedPreferences preference = getApplicationContext().getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE, Context.MODE_PRIVATE);
-        Set<String> setOfNoteIds = preference.getStringSet(Constants.LEARN_FOREVER_PREFERENCE_SYNC_PENDING_NOTE_IDS, null);
+        mPreference = getApplicationContext().getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE, Context.MODE_PRIVATE);
+        Set<String> setOfNoteIds = mPreference.getStringSet(Constants.LEARN_FOREVER_PREFERENCE_SYNC_PENDING_NOTE_IDS, null);
+        Set<String> setOfNoteIdsToDelete = mPreference.getStringSet(Constants.LEARN_FOREVER_PREFERENCE_SYNC_PENDING_NOTE_IDS_TO_DELETE, null);
 
+        syncNotes(setOfNoteIds, false);
+        syncNotes(setOfNoteIdsToDelete, true);
+    }
+
+    private void syncNotes(Set<String> setOfNoteIds, boolean toDelete) {
         List<String> listOfNoteIds = new ArrayList<>();
 
-        if(setOfNoteIds!=null && !setOfNoteIds.isEmpty()){
+        if (setOfNoteIds != null && !setOfNoteIds.isEmpty()) {
             listOfNoteIds = new ArrayList<>(setOfNoteIds);
         }
 
-        if(!listOfNoteIds.isEmpty()){
-            while(!listOfNoteIds.isEmpty()){
-                syncNoteWithId(listOfNoteIds.get(0));
-                listOfNoteIds.remove(0);
+        if (!listOfNoteIds.isEmpty()) {
+            //Get account information
+            mAccount = GoogleSignIn.getLastSignedInAccount(mContext);
+            mDataController = DataController.getInstance(mContext);
+
+            if(mAccount !=null){
+                //If account is null, no need to sync
+
+                while (!listOfNoteIds.isEmpty()) {
+                    if(toDelete){
+                        deleteNoteWithId(listOfNoteIds.get(0));
+                        setOfNoteIds.remove(listOfNoteIds.get(0));
+                        saveToDeletePreference(setOfNoteIds);
+                    }
+                    else {
+                        syncNoteWithId(listOfNoteIds.get(0));
+                        setOfNoteIds.remove(listOfNoteIds.get(0));
+                        saveToPreference(setOfNoteIds);
+                    }
+                    listOfNoteIds.remove(0);
+                }
             }
-        }
-        else{
+
+        } else {
             Log.e(TAG, "No notes to sync");
         }
     }
 
-    private void syncNoteWithId(String id){
-        //Sync here
+    private void deleteNoteWithId(String id) {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference(mAccount.getId());
+
+
+        myRef.child("Notes").child(id).removeValue();
+
+    }
+
+    private void saveToDeletePreference(Set<String> setOfNoteIds) {
+        mPreference.edit().putStringSet(Constants.LEARN_FOREVER_PREFERENCE_SYNC_PENDING_NOTE_IDS_TO_DELETE,setOfNoteIds).commit();
+    }
+
+    private void saveToPreference(Set<String> setOfNoteIds) {
+        mPreference.edit().putStringSet(Constants.LEARN_FOREVER_PREFERENCE_SYNC_PENDING_NOTE_IDS,setOfNoteIds).commit();
+    }
+
+
+    private void syncNoteWithId(String id) {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference(mAccount.getId());
+
+
+        List<NoteTable> note = mDataController.getNoteWithId(Long.parseLong(id));
+        if(!note.isEmpty()) {
+            myRef.child("Notes").child(String.valueOf(note.get(0).getId())).setValue(note.get(0));
+        }
     }
 
 
     @Override
     protected void onCancel(int cancelReason, @Nullable Throwable throwable) {
-
     }
 
     @Override

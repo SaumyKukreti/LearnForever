@@ -2,13 +2,16 @@ package com.saumykukreti.learnforever.dataManager;
 
 import android.arch.persistence.room.Room;
 import android.content.Context;
+import android.content.SharedPreferences;
 
+import com.saumykukreti.learnforever.constants.Constants;
 import com.saumykukreti.learnforever.modelClasses.dataTables.NoteTable;
 import com.saumykukreti.learnforever.util.AppDatabase;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by saumy on 12/3/2017.
@@ -17,9 +20,11 @@ public class DataController {
 
     static DataController mDataController = null;
     private final AppDatabase mDatabase;
+    private final Context mContext;
 
     private DataController(Context context) {
         //TODO - REMOVE ALLOW MAIN THREAD QUERIES
+        mContext = context;
         mDatabase = Room.databaseBuilder(context,
                 AppDatabase.class, "learnForever").allowMainThreadQueries().build();
     }
@@ -77,12 +82,50 @@ public class DataController {
             return false;
         }
 
-        mDatabase.noteDao().insertNote(new NoteTable(category,noteTitle,contentInShort, content,timeStamp,learn));
+        long noteId = mDatabase.noteDao().insertNote(new NoteTable(category,noteTitle,contentInShort, content,timeStamp,learn));
+        saveToSyncQueue(noteId, false);
         return true;
+    }
+
+    public void newNotes(List<NoteTable> notes){
+        mDatabase.noteDao().insertNote(notes);
+    }
+
+    /**
+     *  This method saves the note id that is created to be synced. If the note id passed needs to be deleted pass true as the
+     *  second parameter
+     *
+     * @param
+     * noteId
+     * toDelete - Pass true to delete
+     */
+    private void saveToSyncQueue(long noteId, boolean toDelete) {
+
+        String listName = "";
+        if(toDelete){
+            listName = Constants.LEARN_FOREVER_PREFERENCE_SYNC_PENDING_NOTE_IDS_TO_DELETE;
+        }
+        else{
+            listName = Constants.LEARN_FOREVER_PREFERENCE_SYNC_PENDING_NOTE_IDS;
+        }
+
+        SharedPreferences preference = mContext.getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE, Context.MODE_PRIVATE);
+        Set<String> setOfNoteIds = preference.getStringSet(listName, null);
+
+        if(setOfNoteIds==null){
+            setOfNoteIds = new HashSet<String>();
+            setOfNoteIds.add(String.valueOf(noteId));
+        }
+        else{
+            setOfNoteIds.add(String.valueOf(noteId));
+        }
+
+        preference.edit().putStringSet(listName, setOfNoteIds).apply();
     }
 
     public boolean updateNote(NoteTable noteTable){
         mDatabase.noteDao().updateNote(noteTable);
+        saveToSyncQueue(noteTable.getId(), false);
         return true;
     }
 
@@ -114,15 +157,23 @@ public class DataController {
         note.setLearn(learn);
 
         mDatabase.noteDao().updateNote(note);
+        saveToSyncQueue(note.getId(),false);
         return true;
     }
 
     public void deleteNotes(List<NoteTable> notes){
         mDatabase.noteDao().deleteNotes(notes);
+
+        //Delete notes from server
+        for(NoteTable note : notes){
+            saveToSyncQueue(note.getId(),true);
+        }
     }
+
 
     public void deleteNote(NoteTable noteTable){
         mDatabase.noteDao().deleteNote(noteTable);
+        saveToSyncQueue(noteTable.getId(), true);
     }
 
     public boolean deleteNote(long id){

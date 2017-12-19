@@ -37,7 +37,10 @@ public interface NoteDao {
 
     //onConflict = OnConflictStrategy.REPLACE
     @Insert
-    void insertNote(NoteTable noteTable);
+    long insertNote(NoteTable noteTable);
+
+    @Insert
+    void insertNote(List<NoteTable> noteTables);
 
     @Update
     void updateNote(NoteTable noteTable);

@@ -190,7 +190,7 @@ public class SettingsFragment extends Fragment {
         sync.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                LearnForeverApplication.getInstance().getJobManager().addJobInBackground(new DataSyncJob(null));
+                LearnForeverApplication.getInstance().getJobManager().addJobInBackground(new DataSyncJob(getContext(),null));
             }
         });
     }

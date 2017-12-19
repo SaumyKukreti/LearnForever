@@ -1,6 +1,8 @@
 package com.saumykukreti.learnforever.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -17,20 +19,29 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.birbit.android.jobqueue.JobManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.saumykukreti.learnforever.LearnForeverApplication;
 import com.saumykukreti.learnforever.R;
+import com.saumykukreti.learnforever.constants.Constants;
 import com.saumykukreti.learnforever.fragments.CategoriesFragment;
 import com.saumykukreti.learnforever.fragments.HomeFragment;
 import com.saumykukreti.learnforever.fragments.ReviseFragment;
 import com.saumykukreti.learnforever.fragments.SettingsFragment;
+import com.saumykukreti.learnforever.jobs.DataInitializerJob;
+import com.saumykukreti.learnforever.jobs.DataSyncJob;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 
 public class NavigationDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         HomeFragment.OnHomeFragmentInteractionListener,
         CategoriesFragment.OnCategoriesFragmentInteractionListener,
         ReviseFragment.OnReviseFragmentInteractionListener,
-        SettingsFragment.OnSettingsFragmentInteractionListener{
+        SettingsFragment.OnSettingsFragmentInteractionListener {
 
     private Toolbar mToolbar;
 
@@ -62,13 +73,28 @@ public class NavigationDrawerActivity extends AppCompatActivity
         initialiseToolbar();
         initialiseFab();
         initialiseDrawer();
+        checkIfOpeningForFirstTimeThenSyncData();
 
         //Load home fragment
         creteAndLoadFragment(FRAGMENT_HOME);
     }
 
     /**
-     *  This method gets the account information and displays it on the UI
+     *  This method checks, if there are notes in the cloud, if so, it fills the local database with them
+     *
+     */
+    private void checkIfOpeningForFirstTimeThenSyncData() {
+        SharedPreferences preference = getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE,Context.MODE_PRIVATE);
+        boolean initalSyncDone = preference.getBoolean(Constants.LEARN_FOREVER_PREFERENCE_INITIAL_SYNC, false);
+
+        if(!initalSyncDone){
+            //If initial sync is not done, sync data
+            LearnForeverApplication.getInstance().getJobManager().addJobInBackground(new DataInitializerJob(this,null));
+        }
+    }
+
+    /**
+     * This method gets the account information and displays it on the UI
      */
     private void getAccountInformation() {
         mAccount = GoogleSignIn.getLastSignedInAccount(this);
@@ -76,14 +102,15 @@ public class NavigationDrawerActivity extends AppCompatActivity
 
     /**
      * Thie method loads up fragment
+     *
      * @param fragmentName -  Name of the fragment to be replaced
      */
     private void creteAndLoadFragment(String fragmentName) {
         FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
         mCurrentFragment = null;
-        switch(fragmentName){
+        switch (fragmentName) {
             case FRAGMENT_HOME:
                 mNavigationView.setCheckedItem(R.id.nav_home);
                 mCurrentItemId = R.id.nav_home;
@@ -107,7 +134,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
         }
 
         //If fragment is null then do not replace else replace
-        if(mCurrentFragment !=null){
+        if (mCurrentFragment != null) {
             fragmentTransaction.replace(R.id.navigation_drawer_fragment_container, mCurrentFragment).commit();
         }
     }
@@ -133,7 +160,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
     }
 
     /**
-     *  Thie method sets the toolbar
+     * Thie method sets the toolbar
      */
     private void initialiseToolbar() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -154,7 +181,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
         mNavigationView.setNavigationItemSelectedListener(this);
 
-        if(mAccount !=null) {
+        if (mAccount != null) {
             TextView nameTV = mNavigationView.getHeaderView(0).findViewById(R.id.tv_name);
             TextView emailTV = mNavigationView.getHeaderView(0).findViewById(R.id.tv_email);
 
@@ -165,7 +192,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
     }
 
     /**
-     *  This method initialises FAB
+     * This method initialises FAB
      */
     private void initialiseFab() {
         mFab = (FloatingActionButton) findViewById(R.id.fab);
@@ -179,8 +206,8 @@ public class NavigationDrawerActivity extends AppCompatActivity
         mFab.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                if(mCurrentFragment instanceof HomeFragment){
-                    ((HomeFragment)mCurrentFragment).onNavigationFabLongClick();
+                if (mCurrentFragment instanceof HomeFragment) {
+                    ((HomeFragment) mCurrentFragment).onNavigationFabLongClick();
                 }
                 return true;
             }
@@ -194,17 +221,16 @@ public class NavigationDrawerActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else {
             //Check whihc fragment is open, if its a fragment other than home fragment then open home fragment
-            if(mCurrentItemId==R.id.nav_categories ||
-                    mCurrentItemId==R.id.nav_revise ||
-                    mCurrentItemId==R.id.nav_settings){
+            if (mCurrentItemId == R.id.nav_categories ||
+                    mCurrentItemId == R.id.nav_revise ||
+                    mCurrentItemId == R.id.nav_settings) {
 
                 creteAndLoadFragment(FRAGMENT_HOME);
-            }
-            else {
+            } else {
                 //This means it should be home_fragment
-                
-                if(mCurrentFragment instanceof HomeFragment){
-                    if(!handleBackPressForHomeFragment()){
+
+                if (mCurrentFragment instanceof HomeFragment) {
+                    if (!handleBackPressForHomeFragment()) {
                         super.onBackPressed();
                     }
                 }
@@ -213,17 +239,16 @@ public class NavigationDrawerActivity extends AppCompatActivity
     }
 
     /**
-     *  This method handles back press for home fragment
-     *
-     *  Returns true if back press is handled else returns false
+     * This method handles back press for home fragment
+     * <p>
+     * Returns true if back press is handled else returns false
      */
     private boolean handleBackPressForHomeFragment() {
-        if(((HomeFragment)mCurrentFragment).getSelectionMode()){
-            ((HomeFragment)mCurrentFragment).setSelectionMode(false);
-            ((HomeFragment)mCurrentFragment).initialiseNotesAdapter(false);
+        if (((HomeFragment) mCurrentFragment).getSelectionMode()) {
+            ((HomeFragment) mCurrentFragment).setSelectionMode(false);
+            ((HomeFragment) mCurrentFragment).initialiseNotesAdapter(false);
             return true;
-        }
-        else{
+        } else {
             return false;
         }
 
@@ -243,7 +268,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        switch (id){
+        switch (id) {
             case R.id.action_settings:
                 creteAndLoadFragment(FRAGMENT_SETTINGS);
                 return true;
@@ -258,7 +283,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         mCurrentItemId = item.getItemId();
 
-        switch (mCurrentItemId){
+        switch (mCurrentItemId) {
             case R.id.nav_home:
                 creteAndLoadFragment(FRAGMENT_HOME);
                 break;
@@ -314,10 +339,9 @@ public class NavigationDrawerActivity extends AppCompatActivity
 
     @Override
     public void toggleFabVisibility(boolean on) {
-        if(on){
+        if (on) {
             mFab.setVisibility(View.VISIBLE);
-        }
-        else{
+        } else {
             mFab.setVisibility(View.GONE);
         }
     }
