@@ -19,7 +19,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.saumykukreti.learnforever.constants.Constants;
 import com.saumykukreti.learnforever.dataManager.DataController;
+import com.saumykukreti.learnforever.events.InitializationCompleteEvent;
 import com.saumykukreti.learnforever.modelClasses.dataTables.NoteTable;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,10 +52,12 @@ public class DataInitializerJob extends Job {
 
     @Override
     public void onRun() throws Throwable {
+        mAccount = GoogleSignIn.getLastSignedInAccount(mContext);
+        mDataController = DataController.getInstance(mContext);
+
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference(mAccount.getId());
-        mDataController = DataController.getInstance(mContext);
-        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        myRef.child("Notes").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -62,6 +67,7 @@ public class DataInitializerJob extends Job {
                         listOfNotes.add(data.getValue(NoteTable.class));
                     }
                     mDataController.newNotes(listOfNotes);
+                    EventBus.getDefault().post(new InitializationCompleteEvent());
                 }
             }
 

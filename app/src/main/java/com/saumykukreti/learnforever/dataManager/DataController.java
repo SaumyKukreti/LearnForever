@@ -61,7 +61,7 @@ public class DataController {
 
         //Making the list unique
         for(String category : listOfCategories){
-            if(!category.equalsIgnoreCase("")){
+            if(category!=null && !category.equalsIgnoreCase("")){
                 setOfCategories.add(category);
             }
         }

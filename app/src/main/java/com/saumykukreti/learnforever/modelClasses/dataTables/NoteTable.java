@@ -38,6 +38,9 @@ public class NoteTable implements Parcelable{
 
     //private String isLocal
 
+    public NoteTable(){
+
+    }
 
     public NoteTable(String category, String title, String contentInShort, String content, String timeStamp, boolean learn) {
         mCategory = category;

@@ -73,24 +73,9 @@ public class NavigationDrawerActivity extends AppCompatActivity
         initialiseToolbar();
         initialiseFab();
         initialiseDrawer();
-        checkIfOpeningForFirstTimeThenSyncData();
 
         //Load home fragment
         creteAndLoadFragment(FRAGMENT_HOME);
-    }
-
-    /**
-     *  This method checks, if there are notes in the cloud, if so, it fills the local database with them
-     *
-     */
-    private void checkIfOpeningForFirstTimeThenSyncData() {
-        SharedPreferences preference = getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE,Context.MODE_PRIVATE);
-        boolean initalSyncDone = preference.getBoolean(Constants.LEARN_FOREVER_PREFERENCE_INITIAL_SYNC, false);
-
-        if(!initalSyncDone){
-            //If initial sync is not done, sync data
-            LearnForeverApplication.getInstance().getJobManager().addJobInBackground(new DataInitializerJob(this,null));
-        }
     }
 
     /**
