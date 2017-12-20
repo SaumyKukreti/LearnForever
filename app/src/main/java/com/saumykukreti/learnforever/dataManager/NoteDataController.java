@@ -4,7 +4,10 @@ import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.birbit.android.jobqueue.Params;
+import com.saumykukreti.learnforever.LearnForeverApplication;
 import com.saumykukreti.learnforever.constants.Constants;
+import com.saumykukreti.learnforever.jobs.ReminderJob;
 import com.saumykukreti.learnforever.modelClasses.dataTables.NoteTable;
 import com.saumykukreti.learnforever.modelClasses.dataTables.ReminderTable;
 import com.saumykukreti.learnforever.util.AppDatabase;
@@ -85,7 +88,7 @@ public class NoteDataController {
 
         long noteId = mDatabase.noteDao().insertNote(new NoteTable(category,noteTitle,contentInShort, content,timeStamp,learn));
         if(learn){
-            ReminderDataController.getInstance(mContext).saveNoteIdInReminderTable(noteId);
+            LearnForeverApplication.getInstance().getJobManager().addJobInBackground(new ReminderJob(mContext, noteId, null));
         }
         saveToSyncQueue(noteId, false);
         return true;
@@ -132,7 +135,8 @@ public class NoteDataController {
         mDatabase.noteDao().updateNote(noteTable);
         saveToSyncQueue(noteTable.getId(), false);
         if(noteTable.isLearn())
-            ReminderDataController.getInstance(mContext).saveNoteIdInReminderTable(noteTable.getId());
+            LearnForeverApplication.getInstance().getJobManager().addJobInBackground(new ReminderJob(mContext, noteTable.getId(), null));
+
         return true;
     }
 
@@ -166,7 +170,7 @@ public class NoteDataController {
         mDatabase.noteDao().updateNote(note);
         saveToSyncQueue(note.getId(),false);
         if(note.isLearn())
-            ReminderDataController.getInstance(mContext).saveNoteIdInReminderTable(note.getId());
+            LearnForeverApplication.getInstance().getJobManager().addJobInBackground(new ReminderJob(mContext, note.getId(), null));
 
         return true;
     }
