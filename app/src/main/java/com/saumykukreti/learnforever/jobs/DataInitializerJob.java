@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.birbit.android.jobqueue.Job;
 import com.birbit.android.jobqueue.Params;
@@ -17,8 +16,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.saumykukreti.learnforever.constants.Constants;
-import com.saumykukreti.learnforever.dataManager.DataController;
+import com.saumykukreti.learnforever.dataManager.NoteDataController;
 import com.saumykukreti.learnforever.events.InitializationCompleteEvent;
 import com.saumykukreti.learnforever.modelClasses.dataTables.NoteTable;
 
@@ -26,7 +24,6 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by saumy on 12/17/2017.
@@ -38,7 +35,7 @@ public class DataInitializerJob extends Job {
     private static final String TAG = DataSyncJob.class.getSimpleName();
     private final Context mContext;
     private GoogleSignInAccount mAccount;
-    private DataController mDataController;
+    private NoteDataController mDataController;
     private SharedPreferences mPreference;
 
     public DataInitializerJob(Context context, Params params) {
@@ -53,7 +50,7 @@ public class DataInitializerJob extends Job {
     @Override
     public void onRun() throws Throwable {
         mAccount = GoogleSignIn.getLastSignedInAccount(mContext);
-        mDataController = DataController.getInstance(mContext);
+        mDataController = NoteDataController.getInstance(mContext);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference(mAccount.getId());

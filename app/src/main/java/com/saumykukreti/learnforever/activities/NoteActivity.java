@@ -14,7 +14,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 
 import com.saumykukreti.learnforever.R;
-import com.saumykukreti.learnforever.dataManager.DataController;
+import com.saumykukreti.learnforever.dataManager.NoteDataController;
 import com.saumykukreti.learnforever.modelClasses.dataTables.NoteTable;
 
 import java.util.List;
@@ -28,7 +28,7 @@ public class NoteActivity extends AppCompatActivity {
     private EditText mNoteTitleEdit;
     private EditText mNoteConetentInShortEdit;
     private EditText mNoteContentEdit;
-    private DataController mDataController;
+    private NoteDataController mDataController;
     private NoteTable mNote;
     private Spinner mCategorySpinner;
     private List<String> mListOfCategories;
@@ -40,7 +40,7 @@ public class NoteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note);
 
-        mDataController = DataController.getInstance(this);
+        mDataController = NoteDataController.getInstance(this);
 
         getCategories();
         initialiseViews();

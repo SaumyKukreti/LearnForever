@@ -14,7 +14,7 @@ import android.widget.ListView;
 
 import com.saumykukreti.learnforever.R;
 import com.saumykukreti.learnforever.activities.CategoryNotesActivity;
-import com.saumykukreti.learnforever.dataManager.DataController;
+import com.saumykukreti.learnforever.dataManager.NoteDataController;
 
 import java.util.List;
 
@@ -66,7 +66,7 @@ public class CategoriesFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        DataController dataController = DataController.getInstance(getActivity());
+        NoteDataController dataController = NoteDataController.getInstance(getActivity());
 
         //Getting list of categories
         final List<String> listOfCategories = dataController.getListOfCategories();

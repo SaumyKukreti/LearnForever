@@ -8,7 +8,7 @@ import android.util.Log;
 
 import com.saumykukreti.learnforever.R;
 import com.saumykukreti.learnforever.adapters.HomeFragmentNotesRecyclerViewAdapter;
-import com.saumykukreti.learnforever.dataManager.DataController;
+import com.saumykukreti.learnforever.dataManager.NoteDataController;
 import com.saumykukreti.learnforever.fragments.HomeFragment;
 import com.saumykukreti.learnforever.modelClasses.dataTables.NoteTable;
 
@@ -50,7 +50,7 @@ public class CategoryNotesActivity extends AppCompatActivity {
      */
     private void getCategories() {
 
-        DataController dataController = DataController.getInstance(this);
+        NoteDataController dataController = NoteDataController.getInstance(this);
 
         if(getIntent().hasExtra(METADATA_CATEGORY)){
             mNoteList = dataController.getNoteWithCategory(getIntent().getStringExtra(METADATA_CATEGORY));

@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.speech.tts.TextToSpeech;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -12,7 +11,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,18 +21,17 @@ import android.widget.Toast;
 import com.saumykukreti.learnforever.LearnForeverApplication;
 import com.saumykukreti.learnforever.R;
 import com.saumykukreti.learnforever.adapters.HomeFragmentNotesRecyclerViewAdapter;
-import com.saumykukreti.learnforever.dataManager.DataController;
+import com.saumykukreti.learnforever.dataManager.NoteDataController;
 import com.saumykukreti.learnforever.jobs.DataSyncJob;
 import com.saumykukreti.learnforever.modelClasses.dataTables.NoteTable;
 import com.saumykukreti.learnforever.util.TextCreator;
 import com.saumykukreti.learnforever.util.TextReader;
 
 import java.util.List;
-import java.util.Locale;
 
 public class HomeFragment extends Fragment{
     private OnHomeFragmentInteractionListener mListener;
-    private DataController datacontroller;
+    private NoteDataController datacontroller;
     private List<NoteTable> mAllNotes;
     private HomeFragmentNotesRecyclerViewAdapter mHomeFragmentNotesRecyclerViewAdapter;
     private boolean mNoteListUpdated;
@@ -56,7 +53,7 @@ public class HomeFragment extends Fragment{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        datacontroller = DataController.getInstance(getActivity());
+        datacontroller = NoteDataController.getInstance(getActivity());
         if (getArguments() != null) {
             //Get arguments here
         }

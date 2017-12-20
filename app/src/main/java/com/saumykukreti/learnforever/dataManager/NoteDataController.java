@@ -16,22 +16,22 @@ import java.util.Set;
 /**
  * Created by saumy on 12/3/2017.
  */
-public class DataController {
+public class NoteDataController {
 
-    static DataController mDataController = null;
+    static NoteDataController mDataController = null;
     private final AppDatabase mDatabase;
     private final Context mContext;
 
-    private DataController(Context context) {
+    private NoteDataController(Context context) {
         //TODO - REMOVE ALLOW MAIN THREAD QUERIES
         mContext = context;
         mDatabase = Room.databaseBuilder(context,
                 AppDatabase.class, "learnForever").allowMainThreadQueries().build();
     }
 
-    public static DataController getInstance(Context context){
+    public static NoteDataController getInstance(Context context){
         if(mDataController == null){
-            mDataController = new DataController(context);
+            mDataController = new NoteDataController(context);
             return mDataController;
         }else{
             return mDataController;

@@ -14,7 +14,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.saumykukreti.learnforever.constants.Constants;
-import com.saumykukreti.learnforever.dataManager.DataController;
+import com.saumykukreti.learnforever.dataManager.NoteDataController;
 import com.saumykukreti.learnforever.modelClasses.dataTables.NoteTable;
 
 import java.util.ArrayList;
@@ -31,7 +31,7 @@ public class DataSyncJob extends Job {
     private static final String TAG = DataSyncJob.class.getSimpleName();
     private final Context mContext;
     private GoogleSignInAccount mAccount;
-    private DataController mDataController;
+    private NoteDataController mDataController;
     private SharedPreferences mPreference;
 
     public DataSyncJob(Context context, Params params) {
@@ -64,7 +64,7 @@ public class DataSyncJob extends Job {
         if (!listOfNoteIds.isEmpty()) {
             //Get account information
             mAccount = GoogleSignIn.getLastSignedInAccount(mContext);
-            mDataController = DataController.getInstance(mContext);
+            mDataController = NoteDataController.getInstance(mContext);
 
             if(mAccount !=null){
                 //If account is null, no need to sync
