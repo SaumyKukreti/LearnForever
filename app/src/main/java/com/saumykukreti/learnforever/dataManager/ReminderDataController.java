@@ -3,10 +3,12 @@ package com.saumykukreti.learnforever.dataManager;
 import android.arch.persistence.room.Room;
 import android.content.Context;
 
+import com.saumykukreti.learnforever.modelClasses.dataTables.ReminderTable;
 import com.saumykukreti.learnforever.util.AppDatabase;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by saumy on 12/20/2017.
@@ -37,10 +39,12 @@ public class ReminderDataController {
     public String getNotesForToday(Date date){
         SimpleDateFormat dateFormat = new SimpleDateFormat("DD/mm/YY");
         String dateInString = dateFormat.format(date);
-
-        String notesForDate = mDatabase.reminderDao().getNoteIdsForDate(dateInString);
-        return notesForDate;
-
+        List<ReminderTable> notesForDate = mDatabase.reminderDao().getNoteIdsForDate(dateInString);
+        if(!notesForDate.isEmpty()) {
+            ReminderTable reminderTable = notesForDate.get(0);
+            return reminderTable.getNoteIds();
+        }
+        return null;
     }
 
 }

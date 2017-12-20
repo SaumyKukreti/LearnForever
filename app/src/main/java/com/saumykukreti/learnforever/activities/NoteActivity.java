@@ -4,14 +4,18 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Switch;
+import android.widget.Toast;
 
 import com.saumykukreti.learnforever.R;
 import com.saumykukreti.learnforever.dataManager.NoteDataController;
@@ -34,6 +38,8 @@ public class NoteActivity extends AppCompatActivity {
     private List<String> mListOfCategories;
     private boolean mNewCategory;
     private EditText mNewCategoryEdit;
+    private Switch mLearnSwitch;
+    private boolean mLearnState = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +48,7 @@ public class NoteActivity extends AppCompatActivity {
 
         mDataController = NoteDataController.getInstance(this);
 
+        initialiseToolbar();
         getCategories();
         initialiseViews();
         setCategorySpinner();
@@ -55,6 +62,21 @@ public class NoteActivity extends AppCompatActivity {
     }
 
     /**
+     * This method intialises the toolbar for this activity
+     */
+    private void initialiseToolbar() {
+        Toolbar toolbar = findViewById(R.id.note_activity_toolbar);
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+
+        if(getSupportActionBar()!=null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back_arrow_white);
+        }
+    }
+
+
+    /**
      * This method initialises all the views that are needed across the activity and set on click listeners
      */
     private void initialiseViews() {
@@ -64,6 +86,7 @@ public class NoteActivity extends AppCompatActivity {
         mNoteConetentInShortEdit = findViewById(R.id.edit_note_content_in_short);
         mNoteContentEdit = findViewById(R.id.edit_note_content);
         mCategorySpinner = findViewById(R.id.categorySpinner);
+        mLearnSwitch = findViewById(R.id.learn_switch);
 
         mNewCategoryEdit = findViewById(R.id.edit_category);
 
@@ -77,6 +100,13 @@ public class NoteActivity extends AppCompatActivity {
                     mNewCategory = true;
                     mNewCategoryEdit.setVisibility(View.VISIBLE);
                 }
+            }
+        });
+
+        mLearnSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean on) {
+                mLearnState = on;
             }
         });
     }
@@ -102,6 +132,7 @@ public class NoteActivity extends AppCompatActivity {
             mNoteTitleEdit.setText(note.getTitle());
             mNoteConetentInShortEdit.setText(note.getContentInShort());
             mNoteContentEdit.setText(note.getContent());
+            mLearnSwitch.setChecked(note.isLearn());
 
             //Get category position that corresponds with current category
             if (mNote.getCategory() != null && !mNote.getCategory().equalsIgnoreCase("")) {
@@ -129,9 +160,11 @@ public class NoteActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.note_activity_delete:
-
                 //Ask for deletion
                 askForConfirmationAndDeleteNote();
+                break;
+            case android.R.id.home:
+                onBackPressed();
                 break;
         }
         return true;
@@ -167,7 +200,7 @@ public class NoteActivity extends AppCompatActivity {
                     mNoteConetentInShortEdit.getText().toString(),
                     mNoteContentEdit.getText().toString(),
                     "timing",
-                    true);
+                    mLearnState);
         } else {
             updateNoteValues();
             mDataController.updateNote(mNote);
@@ -234,6 +267,7 @@ public class NoteActivity extends AppCompatActivity {
         mNote.setTitle(mNoteTitleEdit.getText().toString());
         mNote.setContentInShort(mNoteConetentInShortEdit.getText().toString());
         mNote.setContent(mNoteContentEdit.getText().toString());
+        mNote.setLearn(mLearnState);
     }
 
     /**

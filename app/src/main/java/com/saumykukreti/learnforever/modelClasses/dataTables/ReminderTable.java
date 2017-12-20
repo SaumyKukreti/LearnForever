@@ -28,34 +28,34 @@ public class ReminderTable {
         //Empty constructor for firebase
     }
 
-    private ReminderTable(@NonNull long id, String date, String noteIds) {
+    public ReminderTable(@NonNull long id, String date, String noteIds) {
         mId = id;
         mDate = date;
         mNoteIds = noteIds;
     }
 
     @NonNull
-    private long getId() {
+    public long getId() {
         return mId;
     }
 
-    private void setId(@NonNull long id) {
+    public void setId(@NonNull long id) {
         mId = id;
     }
 
-    private String getDate() {
+    public String getDate() {
         return mDate;
     }
 
-    private void setDate(String date) {
+    public void setDate(String date) {
         mDate = date;
     }
 
-    private String getNoteIds() {
+    public String getNoteIds() {
         return mNoteIds;
     }
 
-    private void setNoteIds(String noteIds) {
+    public void setNoteIds(String noteIds) {
         mNoteIds = noteIds;
     }
 }
