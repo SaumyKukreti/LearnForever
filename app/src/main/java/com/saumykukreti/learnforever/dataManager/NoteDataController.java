@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 
 import com.saumykukreti.learnforever.constants.Constants;
 import com.saumykukreti.learnforever.modelClasses.dataTables.NoteTable;
+import com.saumykukreti.learnforever.modelClasses.dataTables.ReminderTable;
 import com.saumykukreti.learnforever.util.AppDatabase;
 
 import java.util.ArrayList;
@@ -83,9 +84,13 @@ public class NoteDataController {
         }
 
         long noteId = mDatabase.noteDao().insertNote(new NoteTable(category,noteTitle,contentInShort, content,timeStamp,learn));
+        if(learn){
+            ReminderDataController.getInstance(mContext).saveNoteIdInReminderTable(noteId);
+        }
         saveToSyncQueue(noteId, false);
         return true;
     }
+
 
     public void newNotes(List<NoteTable> notes){
         mDatabase.noteDao().insertNote(notes);
@@ -126,6 +131,8 @@ public class NoteDataController {
     public boolean updateNote(NoteTable noteTable){
         mDatabase.noteDao().updateNote(noteTable);
         saveToSyncQueue(noteTable.getId(), false);
+        if(noteTable.isLearn())
+            ReminderDataController.getInstance(mContext).saveNoteIdInReminderTable(noteTable.getId());
         return true;
     }
 
@@ -158,6 +165,9 @@ public class NoteDataController {
 
         mDatabase.noteDao().updateNote(note);
         saveToSyncQueue(note.getId(),false);
+        if(note.isLearn())
+            ReminderDataController.getInstance(mContext).saveNoteIdInReminderTable(note.getId());
+
         return true;
     }
 

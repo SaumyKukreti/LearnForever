@@ -15,7 +15,7 @@ import java.util.Date;
 public class ReminderTable {
 
     @NonNull
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     private long mId;
 
     @ColumnInfo(name = "date")
@@ -28,8 +28,7 @@ public class ReminderTable {
         //Empty constructor for firebase
     }
 
-    public ReminderTable(@NonNull long id, String date, String noteIds) {
-        mId = id;
+    public ReminderTable(String date, String noteIds) {
         mDate = date;
         mNoteIds = noteIds;
     }
