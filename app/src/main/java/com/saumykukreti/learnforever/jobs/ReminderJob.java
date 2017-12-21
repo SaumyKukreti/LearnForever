@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.birbit.android.jobqueue.Job;
 import com.birbit.android.jobqueue.Params;
@@ -13,22 +12,17 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.saumykukreti.learnforever.LearnForeverApplication;
 import com.saumykukreti.learnforever.constants.Constants;
 import com.saumykukreti.learnforever.dataManager.NoteDataController;
 import com.saumykukreti.learnforever.dataManager.ReminderDataController;
 import com.saumykukreti.learnforever.modelClasses.dataTables.NoteTable;
 import com.saumykukreti.learnforever.modelClasses.dataTables.ReminderTable;
-import com.saumykukreti.learnforever.util.AppDatabase;
+import com.saumykukreti.learnforever.util.Converter;
 import com.saumykukreti.learnforever.util.DateHandler;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by saumy on 12/17/2017.
@@ -41,7 +35,8 @@ public class ReminderJob extends Job {
     private final Context mContext;
     private final long mNoteId;
     private GoogleSignInAccount mAccount;
-    private ReminderDataController mDataController;
+    private ReminderDataController mReminderDataController;
+    private NoteDataController mNoteDataController;
     private SharedPreferences mPreference;
 
     public ReminderJob(Context context, long noteId, Params params) {
@@ -57,7 +52,8 @@ public class ReminderJob extends Job {
     @Override
     public void onRun() throws Throwable {
         mAccount = GoogleSignIn.getLastSignedInAccount(mContext);
-        mDataController = ReminderDataController.getInstance(mContext);
+        mReminderDataController = ReminderDataController.getInstance(mContext);
+        mNoteDataController = NoteDataController.getInstance(mContext);
         saveNoteIdInReminderTable(mNoteId);
     }
 
@@ -71,21 +67,20 @@ public class ReminderJob extends Job {
 
         //Check if the note is already saved or not, if yes then ignore
         if(savedNoteString.length()>0){
-            String[] savedNoteArray = savedNoteString.split(",");
-            List<String> listOfNotes = Arrays.asList(savedNoteArray);
+            List<String> listOfNotes = Converter.convertStringToList(savedNoteString);
 
             if(!listOfNotes.contains(String.valueOf(noteId))){
                 saveNoteIdInPreferenceAndUpdateReminderTable(noteId, savedNoteString);
             }
             //else ignore
         }else{
+            //Else, its a new list
             saveNoteIdInPreferenceAndUpdateReminderTable(noteId, "");
         }
     }
 
     private void saveNoteIdInPreferenceAndUpdateReminderTable(long noteId, String savedNoteString) {
         //Saving data in preference
-        //TODO - SAVE THIS PREFERENCE IN FIREBASE
         SharedPreferences preference = mContext.getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE, Context.MODE_PRIVATE);
         if(savedNoteString.isEmpty()){
             preference.edit().putString(Constants.LEARN_FOREVER_PREFERENCE_SAVED_NOTES_LIST, String.valueOf(noteId)).apply();
@@ -96,10 +91,14 @@ public class ReminderJob extends Job {
 
         Date currentDate = new Date();
 
+        String reminderDates = "";
+
         for(int days : Constants.DAY_INTERVAL_ONE){
             Calendar cal = Calendar.getInstance();
             cal.add(Calendar.DATE, days);
             Date date = cal.getTime();
+
+            reminderDates = reminderDates + DateHandler.convertDateToString(date)+",";
 
             //Check if the date is in another year, if so break
             if(date.getYear()> currentDate.getYear()){
@@ -107,14 +106,14 @@ public class ReminderJob extends Job {
             }
             {
                 //Else check if database already have a field with date required, if so get update the database row, else create a new one
-                ReminderTable reminder = mDataController.getNotesForDate(date);
+                ReminderTable reminder = mReminderDataController.getNotesForDate(date);
 
                 if(reminder == null){
                     //Means there is not entry for this date
 
                     //Make a new entry in the database
                     ReminderTable reminderTable = new ReminderTable(DateHandler.convertDateToString(date),String.valueOf(noteId));
-                    mDataController.insertReminder(reminderTable);
+                    mReminderDataController.insertReminder(reminderTable);
                 }
                 else{
 
@@ -122,12 +121,24 @@ public class ReminderJob extends Job {
                     String reminderNotes = reminder.getNoteIds();
                     reminderNotes = reminderNotes + ","+noteId;
                     reminder.setNoteIds(reminderNotes);
-                    mDataController.updateReminder(reminder);
+                    mReminderDataController.updateReminder(reminder);
                 }
             }
         }
 
+        saveReminderDatesToNote(noteId, reminderDates);
         syncReminderDataToFirebase();
+    }
+
+    private void saveReminderDatesToNote(long noteId, String reminderDates) {
+        List<NoteTable> listOfNotes = mNoteDataController.getNoteWithId(noteId);
+
+        if(listOfNotes!=null && !listOfNotes.isEmpty()){
+            NoteTable noteTable = listOfNotes.get(0);
+
+            noteTable.setReminderDates(reminderDates);
+            mNoteDataController.updateNoteInDatabseOnly(noteTable);
+        }
     }
 
     void syncReminderDataToFirebase(){

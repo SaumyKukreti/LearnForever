@@ -53,6 +53,18 @@ public class ReminderDataController {
         }
     }
 
+    public ReminderTable getNotesForDate(String date){
+        List<ReminderTable> notesForDate = mDatabase.reminderDao().getNoteIdsForDate(date);
+        if(!notesForDate.isEmpty()) {
+            ReminderTable reminderTable = notesForDate.get(0);
+            return reminderTable;
+        }
+        else {
+            //No notes found
+            return null;
+        }
+    }
+
     public List<ReminderTable> getAllEntries(){
         return mDatabase.reminderDao().getAllEntries();
     }
@@ -63,5 +75,9 @@ public class ReminderDataController {
 
     public void updateReminder(ReminderTable reminderTable) {
         mDatabase.reminderDao().updateReminder(reminderTable);
+    }
+
+    public void deleteReminder(ReminderTable reminderTable) {
+        mDatabase.reminderDao().deleteReminder(reminderTable);
     }
 }

@@ -4,12 +4,11 @@ import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.birbit.android.jobqueue.Params;
 import com.saumykukreti.learnforever.LearnForeverApplication;
 import com.saumykukreti.learnforever.constants.Constants;
+import com.saumykukreti.learnforever.jobs.DeleteReminderJob;
 import com.saumykukreti.learnforever.jobs.ReminderJob;
 import com.saumykukreti.learnforever.modelClasses.dataTables.NoteTable;
-import com.saumykukreti.learnforever.modelClasses.dataTables.ReminderTable;
 import com.saumykukreti.learnforever.util.AppDatabase;
 
 import java.util.ArrayList;
@@ -86,7 +85,7 @@ public class NoteDataController {
             return false;
         }
 
-        long noteId = mDatabase.noteDao().insertNote(new NoteTable(category,noteTitle,contentInShort, content,timeStamp,learn));
+        long noteId = mDatabase.noteDao().insertNote(new NoteTable(category,noteTitle,contentInShort, content,timeStamp,learn,"", "1"));
         if(learn){
             LearnForeverApplication.getInstance().getJobManager().addJobInBackground(new ReminderJob(mContext, noteId, null));
         }
@@ -134,10 +133,18 @@ public class NoteDataController {
     public boolean updateNote(NoteTable noteTable){
         mDatabase.noteDao().updateNote(noteTable);
         saveToSyncQueue(noteTable.getId(), false);
-        if(noteTable.isLearn())
+        if(noteTable.isLearn()) {
             LearnForeverApplication.getInstance().getJobManager().addJobInBackground(new ReminderJob(mContext, noteTable.getId(), null));
+        }else{
+            LearnForeverApplication.getInstance().getJobManager().addJobInBackground(new DeleteReminderJob(mContext, noteTable.getId(), null));
+        }
 
         return true;
+    }
+
+    public void updateNoteInDatabseOnly(NoteTable noteTable){
+        mDatabase.noteDao().updateNote(noteTable);
+        saveToSyncQueue(noteTable.getId(), false);
     }
 
     public boolean updateNote(long noteId, String category, String noteTitle, String contentInShort, String content ,String timeStamp, boolean learn){
@@ -164,13 +171,16 @@ public class NoteDataController {
         note.setTitle(noteTitle);
         note.setContentInShort(contentInShort);
         note.setContent(content);
-        note.setTimeStamp(timeStamp);
+        note.setDateOfCreation(timeStamp);
         note.setLearn(learn);
 
         mDatabase.noteDao().updateNote(note);
         saveToSyncQueue(note.getId(),false);
-        if(note.isLearn())
+        if(note.isLearn()) {
             LearnForeverApplication.getInstance().getJobManager().addJobInBackground(new ReminderJob(mContext, note.getId(), null));
+        }else{
+            LearnForeverApplication.getInstance().getJobManager().addJobInBackground(new DeleteReminderJob(mContext, note.getId(), null));
+        }
 
         return true;
     }

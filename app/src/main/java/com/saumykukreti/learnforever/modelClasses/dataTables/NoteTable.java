@@ -30,11 +30,17 @@ public class NoteTable implements Parcelable{
     @ColumnInfo (name = "content")
     private String mContent;
 
-    @ColumnInfo (name = "timeStamp")
-    private String mTimeStamp;
+    @ColumnInfo (name = "dateCreated")
+    private String mDateOfCreation;
 
     @ColumnInfo (name = "learn")
     private boolean mLearn;
+
+    @ColumnInfo (name = "reminderDates")
+    private String mReminderDates;
+
+    @ColumnInfo (name = "reminderSequence")
+    private String mReminderSequence;
 
     //private String isLocal
 
@@ -42,13 +48,15 @@ public class NoteTable implements Parcelable{
 
     }
 
-    public NoteTable(String category, String title, String contentInShort, String content, String timeStamp, boolean learn) {
+    public NoteTable(String category, String title, String contentInShort, String content, String dateOfCreation, boolean learn,String reminderDates, String reminderSequence) {
         mCategory = category;
         mTitle = title;
         mContentInShort = contentInShort;
         mContent = content;
-        mTimeStamp = timeStamp;
+        mDateOfCreation = dateOfCreation;
         mLearn = learn;
+        mReminderDates = reminderDates;
+        mReminderSequence = reminderSequence;
     }
 
     protected NoteTable(Parcel in) {
@@ -57,8 +65,10 @@ public class NoteTable implements Parcelable{
         mTitle = in.readString();
         mContentInShort = in.readString();
         mContent = in.readString();
-        mTimeStamp = in.readString();
+        mDateOfCreation = in.readString();
         mLearn = in.readByte() != 0;
+        mReminderDates = in.readString();
+        mReminderSequence = in.readString();
     }
 
     public static final Creator<NoteTable> CREATOR = new Creator<NoteTable>() {
@@ -113,12 +123,12 @@ public class NoteTable implements Parcelable{
         mContent = content;
     }
 
-    public String getTimeStamp() {
-        return mTimeStamp;
+    public String getDateOfCreation() {
+        return mDateOfCreation;
     }
 
-    public void setTimeStamp(String timeStamp) {
-        mTimeStamp = timeStamp;
+    public void setDateOfCreation(String dateOfCreation) {
+        mDateOfCreation = dateOfCreation;
     }
 
     public boolean isLearn() {
@@ -127,6 +137,22 @@ public class NoteTable implements Parcelable{
 
     public void setLearn(boolean learn) {
         mLearn = learn;
+    }
+
+    public String getReminderDates() {
+        return mReminderDates;
+    }
+
+    public void setReminderDates(String reminderDates) {
+        mReminderDates = reminderDates;
+    }
+
+    public String getReminderSequence() {
+        return mReminderSequence;
+    }
+
+    public void setReminderSequence(String reminderSequence) {
+        mReminderSequence = reminderSequence;
     }
 
     @Override
@@ -152,8 +178,10 @@ public class NoteTable implements Parcelable{
         parcel.writeString(mTitle);
         parcel.writeString(mContentInShort);
         parcel.writeString(mContent);
-        parcel.writeString(mTimeStamp);
+        parcel.writeString(mDateOfCreation);
         parcel.writeByte((byte) (mLearn ? 1 : 0));
+        parcel.writeString(mReminderDates);
+        parcel.writeString(mReminderSequence);
     }
 
 
