@@ -57,4 +57,13 @@ public class ReminderTable {
     public void setNoteIds(String noteIds) {
         mNoteIds = noteIds;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder value = new StringBuilder();
+        value.append("UID = "+mId).append("\n");
+        value.append("Date = "+mDate).append("\n");
+        value.append("NoteIds = "+mNoteIds).append("\n\n\n");
+        return value.toString();
+    }
 }

@@ -69,6 +69,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"/>
+
+            <Button
+                android:id="@+id/show_reminder"
+                android:text="show reminder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"/>
+
             <EditText
                 android:id="@+id/noteToUpdate"
                 android:hint="Noteidtoupdate"

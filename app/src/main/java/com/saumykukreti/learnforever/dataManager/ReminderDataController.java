@@ -41,16 +41,20 @@ public class ReminderDataController {
         }
     }
 
-    public String getNotesForDate(Date date){
+    public ReminderTable getNotesForDate(Date date){
         List<ReminderTable> notesForDate = mDatabase.reminderDao().getNoteIdsForDate(DateHandler.convertDateToString(date));
         if(!notesForDate.isEmpty()) {
             ReminderTable reminderTable = notesForDate.get(0);
-            return reminderTable.getNoteIds();
+            return reminderTable;
         }
         else {
             //No notes found
             return null;
         }
+    }
+
+    public List<ReminderTable> getAllEntries(){
+        return mDatabase.reminderDao().getAllEntries();
     }
 
     public void insertReminder(ReminderTable reminderTable) {

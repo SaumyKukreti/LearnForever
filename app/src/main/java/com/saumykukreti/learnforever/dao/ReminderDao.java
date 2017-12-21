@@ -19,6 +19,10 @@ public interface ReminderDao {
     @Query("SELECT * FROM ReminderTable WHERE date = :date")
     List<ReminderTable> getNoteIdsForDate(String date);
 
+    @Query("SELECT * FROM ReminderTable")
+    List<ReminderTable> getAllEntries();
+
+
     @Insert
     long insertReminder(ReminderTable reminderTable);
 

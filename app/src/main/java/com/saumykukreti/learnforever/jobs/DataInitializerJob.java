@@ -64,8 +64,9 @@ public class DataInitializerJob extends Job {
                         listOfNotes.add(data.getValue(NoteTable.class));
                     }
                     mDataController.newNotes(listOfNotes);
-                    EventBus.getDefault().post(new InitializationCompleteEvent());
                 }
+                EventBus.getDefault().post(new InitializationCompleteEvent());
+
             }
 
             @Override

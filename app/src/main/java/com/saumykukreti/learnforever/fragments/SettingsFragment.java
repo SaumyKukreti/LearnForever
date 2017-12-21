@@ -17,8 +17,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.saumykukreti.learnforever.LearnForeverApplication;
 import com.saumykukreti.learnforever.R;
 import com.saumykukreti.learnforever.dataManager.NoteDataController;
+import com.saumykukreti.learnforever.dataManager.ReminderDataController;
 import com.saumykukreti.learnforever.jobs.DataSyncJob;
 import com.saumykukreti.learnforever.modelClasses.dataTables.NoteTable;
+import com.saumykukreti.learnforever.modelClasses.dataTables.ReminderTable;
 
 import java.util.List;
 
@@ -88,6 +90,7 @@ public class SettingsFragment extends Fragment {
         Button categories = view.findViewById(R.id.buttton_categories);
         Button firebase = view.findViewById(R.id.insert_into_firebase);
         Button sync = view.findViewById(R.id.start_sync);
+        Button showReminder = view.findViewById(R.id.show_reminder);
 
         final EditText noteToUpdate = view.findViewById(R.id.noteToUpdate);
 
@@ -191,6 +194,22 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 LearnForeverApplication.getInstance().getJobManager().addJobInBackground(new DataSyncJob(getContext(),null));
+            }
+        });
+
+        showReminder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                List<ReminderTable> listOfData = ReminderDataController.getInstance(getContext()).getAllEntries();
+
+                StringBuffer str = new StringBuffer();
+
+                for (ReminderTable i : listOfData){
+                    str.append(i);
+                }
+
+                textview.setText(str);
+
             }
         });
     }

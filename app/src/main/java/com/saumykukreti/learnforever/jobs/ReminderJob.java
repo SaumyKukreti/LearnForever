@@ -107,9 +107,9 @@ public class ReminderJob extends Job {
             }
             {
                 //Else check if database already have a field with date required, if so get update the database row, else create a new one
-                String notesOnThatDate = mDataController.getNotesForDate(date);
+                ReminderTable reminder = mDataController.getNotesForDate(date);
 
-                if(notesOnThatDate == null){
+                if(reminder == null){
                     //Means there is not entry for this date
 
                     //Make a new entry in the database
@@ -119,10 +119,10 @@ public class ReminderJob extends Job {
                 else{
 
                     //Else get the note list and add the note to that list
-                    notesOnThatDate = notesOnThatDate + ","+noteId;
-
-                    ReminderTable reminderTable = new ReminderTable(DateHandler.convertDateToString(date),notesOnThatDate);
-                    mDataController.updateReminder(reminderTable);
+                    String reminderNotes = reminder.getNoteIds();
+                    reminderNotes = reminderNotes + ","+noteId;
+                    reminder.setNoteIds(reminderNotes);
+                    mDataController.updateReminder(reminder);
                 }
             }
         }
