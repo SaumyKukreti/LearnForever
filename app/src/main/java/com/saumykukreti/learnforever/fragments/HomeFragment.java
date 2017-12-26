@@ -1,6 +1,7 @@
 package com.saumykukreti.learnforever.fragments;
 
 import android.app.AlertDialog;
+import android.arch.lifecycle.LifecycleOwner;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -71,7 +72,7 @@ public class HomeFragment extends Fragment{
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        mTextReader = new TextReader(getContext());
+        mTextReader = new TextReader(getContext(), getLifecycle());
         if (context instanceof OnHomeFragmentInteractionListener) {
             mListener = (OnHomeFragmentInteractionListener) context;
         } else {

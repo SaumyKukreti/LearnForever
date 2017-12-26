@@ -1,5 +1,8 @@
 package com.saumykukreti.learnforever.util;
 
+import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.LifecycleObserver;
+import android.arch.lifecycle.OnLifecycleEvent;
 import android.content.Context;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
@@ -12,13 +15,29 @@ import java.util.Locale;
  * Created by saumy on 12/16/2017.
  */
 
-public class TextReader implements TextToSpeech.OnInitListener{
+public class TextReader implements TextToSpeech.OnInitListener, LifecycleObserver {
 
+    private final Context mContext;
     private TextToSpeech mTts;
 
-    public TextReader(Context context) {
-        mTts = new TextToSpeech(context, this);
+    public TextReader(Context context, Lifecycle lifecycle) {
+       mContext = context;
+       lifecycle.addObserver(this);
     }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_START)
+    void onStart(){
+        mTts = new TextToSpeech(mContext, this);
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+    void onDestroy(){
+        //Freeing memory
+        stopReading();
+        mTts = null;
+    }
+
+
 
     public void readAloud(String speech) {
         String[] splitspeech = speech.split(Constants.PAUSE_LINE_SEPARATOR);
@@ -48,7 +67,7 @@ public class TextReader implements TextToSpeech.OnInitListener{
     }
 
     public void stopReading(){
-        if(mTts.isSpeaking()){
+        if(mTts!=null && mTts.isSpeaking()){
             mTts.stop();
         }
     }
