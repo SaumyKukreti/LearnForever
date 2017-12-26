@@ -150,19 +150,6 @@ public class SettingsFragment extends Fragment {
             }
         });
 
-        delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (datacontroller.deleteNote(Long.parseLong(noteToUpdate.getText().toString()))) {
-                    Toast.makeText(getContext(), "Note deleted", Toast.LENGTH_SHORT).show();
-                }
-                else{
-                    Toast.makeText(getContext(), "Note not deleted", Toast.LENGTH_SHORT).show();
-
-                }
-            }
-        });
-
         categories.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

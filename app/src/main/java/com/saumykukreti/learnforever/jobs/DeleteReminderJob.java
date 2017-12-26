@@ -35,15 +35,17 @@ public class DeleteReminderJob extends Job {
     private static final String TAG = DataSyncJob.class.getSimpleName();
     private final Context mContext;
     private final long mNoteId;
+    private final boolean mDeleteNote;
     private GoogleSignInAccount mAccount;
     private ReminderDataController mReminderDataController;
     private SharedPreferences mPreference;
     private NoteDataController mNoteDataController;
 
-    public DeleteReminderJob(Context context, long noteId, Params params) {
+    public DeleteReminderJob(Context context, long noteId, boolean deleteNote, Params params) {
         super(new Params(PRIORITY).requireNetwork());
         mContext = context;
         mNoteId = noteId;
+        mDeleteNote = deleteNote;
     }
 
     @Override
@@ -58,7 +60,6 @@ public class DeleteReminderJob extends Job {
         if(deleteNoteFromPreferenceList(mNoteId)){
             //Means the note was previously saved and all reminder data must be removed
             deleteReminderDatesFromNoteAndDeleteEntriesFromReminderTable();
-
         }
     }
 
@@ -73,9 +74,16 @@ public class DeleteReminderJob extends Job {
 
             deleteEntriesFromReminderTable(note.getReminderDates());
 
-            //Saving nothing
-            note.setReminderDates("");
-            mNoteDataController.updateNoteInDatabseOnly(note);
+            //Check if the note is being deleted or updated
+            //If the note is being deleted, delete the note else update the note
+            if(mDeleteNote){
+                mNoteDataController.deleteNoteFromDatabase(note);
+            }
+            else {
+                //Saving nothing
+                note.setReminderDates("");
+                mNoteDataController.updateNoteInDatabseOnly(note);
+            }
         }
     }
 
@@ -92,19 +100,21 @@ public class DeleteReminderJob extends Job {
                 //Removing the note id from each reminder date
                 ReminderTable reminderTable = mReminderDataController.getNotesForDate(rem);
 
-                String noteIds = reminderTable.getNoteIds();
+                if(reminderTable!=null) {
+                    String noteIds = reminderTable.getNoteIds();
 
-                List<String> listOfNotes = Converter.convertStringToList(noteIds);
+                    List<String> listOfNotes = Converter.convertStringToList(noteIds);
 
-                //Remove note to be deleted from note list
-                listOfNotes.remove(String.valueOf(mNoteId));
+                    //Remove note to be deleted from note list
+                    listOfNotes.remove(String.valueOf(mNoteId));
 
-                if(Converter.convertListToString(listOfNotes).equalsIgnoreCase("")){
-                    //The note was the only id that was stored, hence deleting the entry
-                    mReminderDataController.deleteReminder(reminderTable);
-                }else{
-                    reminderTable.setNoteIds(Converter.convertListToString(listOfNotes));
-                    mReminderDataController.updateReminder(reminderTable);
+                    if (Converter.convertListToString(listOfNotes).equalsIgnoreCase("")) {
+                        //The note was the only id that was stored, hence deleting the entry
+                        mReminderDataController.deleteReminder(reminderTable);
+                    } else {
+                        reminderTable.setNoteIds(Converter.convertListToString(listOfNotes));
+                        mReminderDataController.updateReminder(reminderTable);
+                    }
                 }
             }
         }

@@ -98,12 +98,13 @@ public class ReminderJob extends Job {
             cal.add(Calendar.DATE, days);
             Date date = cal.getTime();
 
-            reminderDates = reminderDates + DateHandler.convertDateToString(date)+",";
-
             //Check if the date is in another year, if so break
             if(date.getYear()> currentDate.getYear()){
                 break;
             }
+
+            reminderDates = reminderDates + DateHandler.convertDateToString(date)+",";
+
             {
                 //Else check if database already have a field with date required, if so get update the database row, else create a new one
                 ReminderTable reminder = mReminderDataController.getNotesForDate(date);
