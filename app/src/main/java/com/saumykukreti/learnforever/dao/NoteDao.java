@@ -1,5 +1,6 @@
 package com.saumykukreti.learnforever.dao;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
@@ -19,6 +20,9 @@ public interface NoteDao {
 
     @Query("SELECT * FROM NoteTable")
     List<NoteTable> getAllNotes();
+
+    @Query("SELECT * FROM NoteTable")
+    LiveData<List<NoteTable>> getLiveAllNotes();
 
     @Query("SELECT category FROM NoteTable")
     List<String> getAllCategories();

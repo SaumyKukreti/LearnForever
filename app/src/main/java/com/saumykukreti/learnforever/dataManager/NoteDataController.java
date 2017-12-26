@@ -32,6 +32,10 @@ public class NoteDataController {
                 AppDatabase.class, "learnForever").allowMainThreadQueries().build();
     }
 
+    public AppDatabase getDatabase() {
+        return mDatabase;
+    }
+
     public static NoteDataController getInstance(Context context) {
         if (mDataController == null) {
             mDataController = new NoteDataController(context);

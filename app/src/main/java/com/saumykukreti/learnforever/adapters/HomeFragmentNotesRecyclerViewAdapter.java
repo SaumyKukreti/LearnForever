@@ -49,6 +49,12 @@ public class HomeFragmentNotesRecyclerViewAdapter extends RecyclerView.Adapter<H
         holder.noteTitle.setText(note.getTitle());
         holder.noteContentInShort.setText(note.getContentInShort());
 
+        if(mSelectedNoteList.contains(note)){
+            holder.noteCardView.setCardBackgroundColor(mContext.getResources().getColor(android.R.color.darker_gray));
+        }else{
+            holder.noteCardView.setCardBackgroundColor(mContext.getResources().getColor(android.R.color.white));
+        }
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -94,6 +100,9 @@ public class HomeFragmentNotesRecyclerViewAdapter extends RecyclerView.Adapter<H
         }
     }
 
+    public void clearSelectedList(){
+        mSelectedNoteList.clear();
+    }
     @Override
     public int getItemCount() {
         return mNoteList.size();
@@ -124,5 +133,11 @@ public class HomeFragmentNotesRecyclerViewAdapter extends RecyclerView.Adapter<H
         }
     }
 
+
+    public void setNoteTableList(List<NoteTable> noteTableList){
+        mSelectedNoteList.clear();
+        mNoteList.clear();
+        mNoteList.addAll(noteTableList);
+    }
 
 }

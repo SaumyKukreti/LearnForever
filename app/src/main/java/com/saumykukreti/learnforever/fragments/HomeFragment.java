@@ -2,6 +2,8 @@ package com.saumykukreti.learnforever.fragments;
 
 import android.app.AlertDialog;
 import android.arch.lifecycle.LifecycleOwner;
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Observer;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -92,8 +94,23 @@ public class HomeFragment extends Fragment{
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        initialiseNotesAdapter(true);
+
+        //Initialise live data on list
+        initialiseList();
+
         //Initialise search view
         initialiseSearchView();
+    }
+
+    private void initialiseList() {
+        LiveData<List<NoteTable>> livenotes = datacontroller.getDatabase().noteDao().getLiveAllNotes();
+        livenotes.observe(this, new Observer<List<NoteTable>>() {
+            @Override
+            public void onChanged(@Nullable List<NoteTable> noteTables) {
+                mHomeFragmentNotesRecyclerViewAdapter.setNoteTableList(noteTables);
+                mHomeFragmentNotesRecyclerViewAdapter.notifyDataSetChanged();
+            }});
     }
 
     /**
@@ -136,7 +153,6 @@ public class HomeFragment extends Fragment{
         super.onResume();
         syncData();
         mListener.updateActionBarForHomeFragment();
-        initialiseNotesAdapter(true);
     }
 
     /**
@@ -173,7 +189,8 @@ public class HomeFragment extends Fragment{
     private void cancelAction(){
         mTextReader.stopReading();
         setSelectionMode(false);
-        initialiseNotesAdapter(false);
+        mHomeFragmentNotesRecyclerViewAdapter.clearSelectedList();
+        mHomeFragmentNotesRecyclerViewAdapter.notifyDataSetChanged();
     }
 
     /**
@@ -284,8 +301,6 @@ public class HomeFragment extends Fragment{
             public void onClick(DialogInterface dialogInterface, int i) {
                 //Delete selected notes
                 datacontroller.deleteNotes(selectedNoteList);
-                //Refresh data list
-                initialiseNotesAdapter(true);
                 setSelectionMode(false);
             }
         });
