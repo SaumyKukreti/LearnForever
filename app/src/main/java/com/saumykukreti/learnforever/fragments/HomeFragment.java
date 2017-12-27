@@ -110,6 +110,7 @@ public class HomeFragment extends Fragment{
             public void onChanged(@Nullable List<NoteTable> noteTables) {
                 mHomeFragmentNotesRecyclerViewAdapter.setNoteTableList(noteTables);
                 mHomeFragmentNotesRecyclerViewAdapter.notifyDataSetChanged();
+                syncData();
             }});
     }
 

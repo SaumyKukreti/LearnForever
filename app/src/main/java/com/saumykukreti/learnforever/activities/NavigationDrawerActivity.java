@@ -1,5 +1,7 @@
 package com.saumykukreti.learnforever.activities;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,6 +10,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -24,6 +27,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.saumykukreti.learnforever.LearnForeverApplication;
 import com.saumykukreti.learnforever.R;
+import com.saumykukreti.learnforever.brodcastReceiver.NotificationBuilder;
 import com.saumykukreti.learnforever.constants.Constants;
 import com.saumykukreti.learnforever.fragments.CategoriesFragment;
 import com.saumykukreti.learnforever.fragments.HomeFragment;
@@ -35,6 +39,7 @@ import com.saumykukreti.learnforever.jobs.DataSyncJob;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.util.Calendar;
 
 public class NavigationDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -69,6 +74,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation_drawer);
 
+        setRepeatingAlarm();
         getAccountInformation();
         initialiseToolbar();
         initialiseFab();
@@ -76,6 +82,27 @@ public class NavigationDrawerActivity extends AppCompatActivity
 
         //Load home fragment
         creteAndLoadFragment(FRAGMENT_HOME);
+    }
+
+    /**
+     * This method sets an alarm if it is not already set
+     */
+    private void setRepeatingAlarm() {
+        SharedPreferences preference = getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE,Context.MODE_PRIVATE);
+        boolean isAlarmSet = preference.getBoolean(Constants.LEARN_FOREVER_PREFERENCE_IS_ALARM_SET, false);
+
+        if(!isAlarmSet){
+            //Alarm is not se, setting an alarm
+            Calendar calendar = Calendar.getInstance();
+            //TODO- SET TIME HERE
+            calendar.add(Calendar.MINUTE,1);
+            Intent intent = new Intent(getApplicationContext(), NotificationBuilder.class);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),Constants.NOTIFICATION_ALARM_REQUEST_CODE,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+
+            AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY,pendingIntent);
+        }
     }
 
     /**
