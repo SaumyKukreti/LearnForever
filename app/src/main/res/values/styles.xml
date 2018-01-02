@@ -22,4 +22,8 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="AppThemeWithNoActionBarAndBlackStatusBar" parent="AppThemeWithNoActionBar">
+        <item name="colorPrimaryDark">@android:color/black</item>
+    </style>
+
 </resources>

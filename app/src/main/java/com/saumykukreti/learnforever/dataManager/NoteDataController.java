@@ -55,6 +55,11 @@ public class NoteDataController {
         return mDatabase.noteDao().getNoteWithId(id);
     }
 
+    public List<NoteTable> getNoteWithIds(List<String> ids) {
+        //Return note with selected id
+        return mDatabase.noteDao().getNoteWithIds(ids);
+    }
+
     public List<NoteTable> getNoteWithCategory(String category) {
         //Return notes with given category
         return mDatabase.noteDao().getNotesWithCategory(category);

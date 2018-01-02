@@ -25,6 +25,11 @@ public class TextReader implements TextToSpeech.OnInitListener, LifecycleObserve
        lifecycle.addObserver(this);
     }
 
+    public TextReader(Context context){
+        mContext = context;
+        mTts = new TextToSpeech(mContext, this);
+    }
+
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     void onStart(){
         mTts = new TextToSpeech(mContext, this);
