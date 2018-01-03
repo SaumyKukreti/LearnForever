@@ -7,7 +7,11 @@ import java.util.ArrayList;
  */
 
 public class Constants {
-    public static final String PAUSE_LINE_SEPARATOR = "&&&&&&&&&&&&&";
+    public static final String PAUSE_FOR_TWO_HUNDERED_MILISECONDS = "&%&22&&&&&&&&&&&";
+    public static final String PAUSE_FOR_THREE_HUNDERED_MILISECONDS = "&%&33&&&&&&&&&&&";
+    public static final String PAUSE_FOR_FOUR_HUNDERED_MILISECONDS = "&%&44&&&&&&&&&&&";
+    public static final String PAUSE_FOR_FIVE_HUNDERED_MILISECONDS = "&%&55&&&&&&&&&&&";
+    public static final String PAUSE_FOR_SIX_HUNDERED_MILISECONDS = "&%&66&&&&&&&&&&&";
 
     public static final String LEARN_FOREVER_PREFERENCE = "lf_preference";
 

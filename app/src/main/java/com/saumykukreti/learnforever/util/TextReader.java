@@ -41,14 +41,44 @@ public class TextReader implements TextToSpeech.OnInitListener, LifecycleObserve
 
 
     public void readAloud(String speech) {
-        String[] splitspeech = speech.split(Constants.PAUSE_LINE_SEPARATOR);
-        for (int i = 0; i < splitspeech.length; i++) {
-            if (i == 0) { // Use for the first splited text to flush on audio stream
-                mTts.speak(splitspeech[i].toString().trim(), TextToSpeech.QUEUE_FLUSH, null);
-            } else { // add the new test on previous then play the TTS
-                mTts.speak(splitspeech[i].toString().trim(), android.speech.tts.TextToSpeech.QUEUE_ADD,null);
+//        String[] splitspeech = speech.split(Constants.PAUSE_FOR_TWO_HUNDERED_MILISECONDS);
+//        for (int i = 0; i < splitspeech.length; i++) {
+//            if (i == 0) { // Use for the first splited text to flush on audio stream
+//                mTts.speak(splitspeech[i].toString().trim(), TextToSpeech.QUEUE_FLUSH, null);
+//            } else { // add the new test on previous then play the TTS
+//                mTts.speak(splitspeech[i].toString().trim(), android.speech.tts.TextToSpeech.QUEUE_ADD, null);
+//            }
+//            mTts.playSilence(750, android.speech.tts.TextToSpeech.QUEUE_ADD, null);
+//        }
+
+        //If speech contains some breaks
+        if(speech.contains("&%&")) {
+            int index = 1;
+            boolean speechStarted = false;
+            while (index > 0) {
+                index = speech.indexOf("&%&");
+                if (index != -1) {
+                    if (!speechStarted) {
+                        speechStarted = true;
+                        mTts.speak(speech.substring(0, index).trim(), TextToSpeech.QUEUE_FLUSH, null);
+                    } else {
+                        mTts.speak(speech.substring(0, index).trim(), android.speech.tts.TextToSpeech.QUEUE_ADD, null);
+                    }
+
+                    //Playing silence
+                    int silenceDuration = Integer.parseInt(String.valueOf(speech.charAt(index + 3))) * 100;
+                    mTts.playSilence(silenceDuration, android.speech.tts.TextToSpeech.QUEUE_ADD, null);
+
+                    speech = speech.substring(index + Constants.PAUSE_FOR_TWO_HUNDERED_MILISECONDS.length(), speech.length());
+                }
+                else{
+                    //Reading remaining part
+                    mTts.speak(speech, android.speech.tts.TextToSpeech.QUEUE_ADD, null);
+                }
             }
-            mTts.playSilence(750, android.speech.tts.TextToSpeech.QUEUE_ADD, null);
+        }
+        else{
+            mTts.speak(speech.trim(), TextToSpeech.QUEUE_FLUSH, null);
         }
     }
 
