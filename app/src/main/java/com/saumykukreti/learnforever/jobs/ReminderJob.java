@@ -98,11 +98,6 @@ public class ReminderJob extends Job {
             cal.add(Calendar.DATE, days);
             Date date = cal.getTime();
 
-            //Check if the date is in another year, if so break
-            if(date.getYear()> currentDate.getYear()){
-                break;
-            }
-
             reminderDates = reminderDates + DateHandler.convertDateToString(date)+",";
 
             {

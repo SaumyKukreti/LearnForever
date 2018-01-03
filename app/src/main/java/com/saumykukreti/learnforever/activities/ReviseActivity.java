@@ -1,10 +1,11 @@
 package com.saumykukreti.learnforever.activities;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 
 import com.saumykukreti.learnforever.R;
 import com.saumykukreti.learnforever.adapters.RevisePagerAdapter;
+import com.saumykukreti.learnforever.constants.Constants;
 import com.saumykukreti.learnforever.dataManager.NoteDataController;
 import com.saumykukreti.learnforever.dataManager.ReminderDataController;
 import com.saumykukreti.learnforever.modelClasses.dataTables.NoteTable;
@@ -30,7 +32,7 @@ public class ReviseActivity extends AppCompatActivity {
     private List<NoteTable> mNoteList;
     private int mCurrentPage=0;
     private TextReader mTextReader;
-    private boolean mIsVolumeOn = true;
+    private boolean mIsSpeechOn = true;
     private boolean mIsSpeechIconVisible = false;
 
     @Override
@@ -43,6 +45,7 @@ public class ReviseActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        getValuesFromPreference();
         initialiseViews();
         getNotesToRevise();
         if(mNoteList!=null && !mNoteList.isEmpty()) {
@@ -54,6 +57,11 @@ public class ReviseActivity extends AppCompatActivity {
         }
     }
 
+    private void getValuesFromPreference() {
+        SharedPreferences preference = getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE, Context.MODE_PRIVATE);
+        mIsSpeechOn = preference.getBoolean(Constants.LEARN_FOREVER_PREFERENCE_IS_SPEECH_ON, true);
+    }
+
     /**
      *  This method initialises the views and sets on click listeners on them
      */
@@ -61,6 +69,14 @@ public class ReviseActivity extends AppCompatActivity {
         LinearLayout settingLinearLayout = findViewById(R.id.linear_index_container);
         final ImageView noSpeechImage = findViewById(R.id.image_speech_off);
         final ImageView arrowImage = findViewById(R.id.image_up_arrow);
+
+        //Setting speech icon
+        if(mIsSpeechOn){
+            noSpeechImage.setBackground(getResources().getDrawable(R.drawable.ic_volume_on_white));
+        }
+        else{
+            noSpeechImage.setBackground(getResources().getDrawable(R.drawable.ic_volume_off_white));
+        }
 
         settingLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,9 +96,9 @@ public class ReviseActivity extends AppCompatActivity {
         noSpeechImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(mIsVolumeOn){
+                if(mIsSpeechOn){
                     //Turing volume/ speech off
-                    mIsVolumeOn = false;
+                    mIsSpeechOn = false;
                     noSpeechImage.setBackground(getResources().getDrawable(R.drawable.ic_volume_off_white));
                     Toast.makeText(ReviseActivity.this, "Speech off", Toast.LENGTH_SHORT).show();
 
@@ -90,7 +106,7 @@ public class ReviseActivity extends AppCompatActivity {
                     mTextReader.stopReading();
                 }
                 else{
-                    mIsVolumeOn = true;
+                    mIsSpeechOn = true;
                     noSpeechImage.setBackground(getResources().getDrawable(R.drawable.ic_volume_on_white));
                     Toast.makeText(ReviseActivity.this, "Speech on", Toast.LENGTH_SHORT).show();
                 }
@@ -114,7 +130,12 @@ public class ReviseActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                mTextReader.readAloud(TextCreator.getNoteText(mNoteList.get(0)));
+                if(mIsSpeechOn) {
+                    mTextReader.readAloud(TextCreator.getNoteText(mNoteList.get(0)));
+                }
+                else{
+                    Toast.makeText(ReviseActivity.this, "Speech is off!!", Toast.LENGTH_SHORT).show();
+                }
             }
         },1000);
     }
@@ -140,7 +161,7 @@ public class ReviseActivity extends AppCompatActivity {
             public void onPageSelected(int position) {
                 mCurrentPage = position;
                 setPageNumber(position);
-                if(mIsVolumeOn) {
+                if(mIsSpeechOn) {
                     mTextReader.readAloud(TextCreator.getNoteText(mNoteList.get(position)));
                 }
             }
@@ -166,5 +187,13 @@ public class ReviseActivity extends AppCompatActivity {
             //Getting the notes
             mNoteList = NoteDataController.getInstance(this).getNoteWithIds(notesToRemind);
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        //Save speech preference in shared preference
+        SharedPreferences preference = getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE, Context.MODE_PRIVATE);
+        preference.edit().putBoolean(Constants.LEARN_FOREVER_PREFERENCE_IS_SPEECH_ON, mIsSpeechOn).apply();
     }
 }

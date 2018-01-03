@@ -28,11 +28,11 @@
             android:name=".activities.SplashActivity"
             android:label="@string/title_activity_splash"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN"/>-->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
 
-                <!--<category android:name="android.intent.category.LAUNCHER"/>-->
-            <!--</intent-filter>-->
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
         </activity>
         <activity android:name=".activities.LoginActivity">
         </activity>
@@ -55,13 +55,7 @@
             android:exported="true"/>
 
         <activity android:name=".activities.ReviseActivity"
-                  android:theme="@style/AppThemeWithNoActionBarAndBlackStatusBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
-        </activity>
+                  android:theme="@style/AppThemeWithNoActionBarAndBlackStatusBar"/>
     </application>
 
 </manifest>

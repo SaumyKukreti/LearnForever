@@ -47,7 +47,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"/>
 
-
             </LinearLayout>
             <Button
                 android:id="@+id/buttton_categories"
@@ -73,6 +72,13 @@
             <Button
                 android:id="@+id/show_reminder"
                 android:text="show reminder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"/>
+
+            <Button
+                android:id="@+id/buttton_revise"
+                android:text="Revise"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"/>

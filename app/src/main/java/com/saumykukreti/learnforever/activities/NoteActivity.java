@@ -1,5 +1,6 @@
 package com.saumykukreti.learnforever.activities;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
@@ -79,6 +81,7 @@ public class NoteActivity extends AppCompatActivity {
     /**
      * This method initialises all the views that are needed across the activity and set on click listeners
      */
+    @SuppressLint("ClickableViewAccessibility")
     private void initialiseViews() {
 
         ImageView addCatgoryImage = findViewById(R.id.image_add_category);
@@ -103,12 +106,43 @@ public class NoteActivity extends AppCompatActivity {
             }
         });
 
-        mLearnSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+        mLearnSwitch.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean on) {
-                mLearnState = on;
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if(motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                    if (mLearnState) {
+                        //Is on currently, turning off
+
+                        AlertDialog.Builder dialog = new AlertDialog.Builder(NoteActivity.this);
+
+                        dialog.setTitle("Turning learn off will delete all reminders. Do you want to continue?");
+                        dialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                //Delete selected notes
+                                mLearnState = false;
+                                mLearnSwitch.performClick();
+                            }
+                        });
+
+                        dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                //Do nothing
+                            }
+                        });
+
+                        dialog.show();
+                    } else {
+                        mLearnState = true;
+                        mLearnSwitch.performClick();
+                    }
+                }
+                return true;
             }
-        });
+        } );
+
     }
 
     /**
@@ -133,6 +167,7 @@ public class NoteActivity extends AppCompatActivity {
             mNoteConetentInShortEdit.setText(note.getContentInShort());
             mNoteContentEdit.setText(note.getContent());
             mLearnSwitch.setChecked(note.isLearn());
+            mLearnState = note.isLearn();
 
             //Get category position that corresponds with current category
             if (mNote.getCategory() != null && !mNote.getCategory().equalsIgnoreCase("")) {
