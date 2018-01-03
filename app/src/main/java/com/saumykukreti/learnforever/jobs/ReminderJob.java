@@ -34,15 +34,25 @@ public class ReminderJob extends Job {
     private static final String TAG = DataSyncJob.class.getSimpleName();
     private final Context mContext;
     private final long mNoteId;
+    private final String mDateOfCreation;
     private GoogleSignInAccount mAccount;
     private ReminderDataController mReminderDataController;
     private NoteDataController mNoteDataController;
     private SharedPreferences mPreference;
 
-    public ReminderJob(Context context, long noteId, Params params) {
+    /**
+     * Constructor
+     *
+     * @param context
+     * @param noteId
+     * @param dateOfCreation - Pass date of creation in dd/mm/yy format during data initialisation only else pass null
+     * @param params
+     */
+    public ReminderJob(Context context, long noteId, String dateOfCreation, Params params) {
         super(new Params(PRIORITY).requireNetwork());
         mContext = context;
         mNoteId = noteId;
+        mDateOfCreation = dateOfCreation;
     }
 
     @Override
@@ -88,8 +98,13 @@ public class ReminderJob extends Job {
         else{
             preference.edit().putString(Constants.LEARN_FOREVER_PREFERENCE_SAVED_NOTES_LIST, savedNoteString+","+noteId).apply();
         }
-
-        Date currentDate = new Date();
+        Date currentDate;
+        if(mDateOfCreation!=null){
+            currentDate = DateHandler.convertStringToDate(mDateOfCreation);
+        }
+        else {
+             currentDate = new Date();
+        }
 
         String reminderDates = "";
 

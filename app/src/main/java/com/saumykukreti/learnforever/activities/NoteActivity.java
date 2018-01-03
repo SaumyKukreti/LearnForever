@@ -22,7 +22,9 @@ import android.widget.Toast;
 import com.saumykukreti.learnforever.R;
 import com.saumykukreti.learnforever.dataManager.NoteDataController;
 import com.saumykukreti.learnforever.modelClasses.dataTables.NoteTable;
+import com.saumykukreti.learnforever.util.DateHandler;
 
+import java.util.Date;
 import java.util.List;
 
 public class NoteActivity extends AppCompatActivity {
@@ -234,7 +236,7 @@ public class NoteActivity extends AppCompatActivity {
                     mNoteTitleEdit.getText().toString(),
                     mNoteConetentInShortEdit.getText().toString(),
                     mNoteContentEdit.getText().toString(),
-                    "timing",
+                    DateHandler.convertDateToString(new Date()),
                     mLearnState);
         } else {
             updateNoteValues();

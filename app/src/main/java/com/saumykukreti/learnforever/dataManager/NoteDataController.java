@@ -96,7 +96,7 @@ public class NoteDataController {
 
         long noteId = mDatabase.noteDao().insertNote(new NoteTable(category, noteTitle, contentInShort, content, timeStamp, learn, "", "1"));
         if (learn) {
-            LearnForeverApplication.getInstance().getJobManager().addJobInBackground(new ReminderJob(mContext, noteId, null));
+            LearnForeverApplication.getInstance().getJobManager().addJobInBackground(new ReminderJob(mContext, noteId,null, null));
         }
         saveToSyncQueue(noteId, false);
         return true;
@@ -139,7 +139,7 @@ public class NoteDataController {
         mDatabase.noteDao().updateNote(noteTable);
         saveToSyncQueue(noteTable.getId(), false);
         if (noteTable.isLearn()) {
-            LearnForeverApplication.getInstance().getJobManager().addJobInBackground(new ReminderJob(mContext, noteTable.getId(), null));
+            LearnForeverApplication.getInstance().getJobManager().addJobInBackground(new ReminderJob(mContext, noteTable.getId(), null, null));
         } else {
             LearnForeverApplication.getInstance().getJobManager().addJobInBackground(new DeleteReminderJob(mContext, noteTable.getId(),false, null));
         }
@@ -182,7 +182,7 @@ public class NoteDataController {
         mDatabase.noteDao().updateNote(note);
         saveToSyncQueue(note.getId(), false);
         if (note.isLearn()) {
-            LearnForeverApplication.getInstance().getJobManager().addJobInBackground(new ReminderJob(mContext, note.getId(), null));
+            LearnForeverApplication.getInstance().getJobManager().addJobInBackground(new ReminderJob(mContext, note.getId(),null, null));
         } else {
             LearnForeverApplication.getInstance().getJobManager().addJobInBackground(new DeleteReminderJob(mContext, note.getId(),false, null));
         }

@@ -16,6 +16,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.saumykukreti.learnforever.LearnForeverApplication;
 import com.saumykukreti.learnforever.dataManager.NoteDataController;
 import com.saumykukreti.learnforever.events.InitializationCompleteEvent;
 import com.saumykukreti.learnforever.modelClasses.dataTables.NoteTable;
@@ -57,22 +58,35 @@ public class DataInitializerJob extends Job {
         myRef.child("Notes").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
+                List<NoteTable> listOfNotes = new ArrayList<>();
                 if(dataSnapshot.getChildrenCount()>0) {
-                    List<NoteTable> listOfNotes = new ArrayList<>();
                     for (DataSnapshot data : dataSnapshot.getChildren()) {
-                        listOfNotes.add(data.getValue(NoteTable.class));
+                        NoteTable note = data.getValue(NoteTable.class);
+                        listOfNotes.add(note);
                     }
                     mDataController.newNotes(listOfNotes);
                 }
                 EventBus.getDefault().post(new InitializationCompleteEvent());
 
+                //Initialisation of note table complete, initialising reminder table in the background
+                if(!listOfNotes.isEmpty()) {
+                    initialiseReminderTable(listOfNotes);
+                }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
             }
         });
+    }
+
+    private void initialiseReminderTable(List<NoteTable> listOfNotes) {
+        //Iterating over the list of notes and using the date created field of notes to set reminders
+        for(NoteTable note : listOfNotes){
+            if(note.isLearn() && note.getDateOfCreation()!=null && !note.getDateOfCreation().isEmpty()){
+                LearnForeverApplication.getInstance().getJobManager().addJobInBackground(new ReminderJob(mContext, note.getId(),note.getDateOfCreation(), null));
+            }
+        }
     }
 
 
