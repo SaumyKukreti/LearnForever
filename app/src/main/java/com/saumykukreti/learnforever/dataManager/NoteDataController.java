@@ -87,9 +87,7 @@ public class NoteDataController {
         //Validate data
 
         //Mandatory fields
-        if (category == null || noteTitle == null || noteTitle.equalsIgnoreCase("") ||
-                contentInShort == null || contentInShort.equalsIgnoreCase("") ||
-                content == null || content.equalsIgnoreCase("")) {
+        if (content == null || content.equalsIgnoreCase("")) {
             //A mandatory field is null/blank, note cannot be added
             return false;
         }

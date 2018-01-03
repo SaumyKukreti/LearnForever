@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,8 +47,43 @@ public class HomeFragmentNotesRecyclerViewAdapter extends RecyclerView.Adapter<H
     public void onBindViewHolder(final HomeFragmentNotesViewHolder holder, int position) {
         final NoteTable note = mNoteList.get(position);
 
-        holder.noteTitle.setText(note.getTitle());
-        holder.noteContentInShort.setText(note.getContentInShort());
+        //Setting views according to content available
+        String noteTitle = "";
+        String noteDescription = "";
+        if(!note.getTitle().isEmpty() && !note.getContentInShort().isEmpty()){
+            //Display only title and content
+            noteTitle = note.getTitle();
+            noteDescription = note.getContentInShort();
+        }
+        else if(!note.getTitle().isEmpty() && note.getContentInShort().isEmpty()){
+            //Display title and content
+            noteTitle = note.getTitle();
+            noteDescription = note.getContent();
+        }
+        else if(note.getTitle().isEmpty() && !note.getContentInShort().isEmpty()){
+            //Display content in short and content
+            noteTitle = note.getContentInShort();
+            noteDescription = note.getContent();
+        }else{
+            //Display only content
+            noteDescription = note.getContent();
+        }
+
+        if(noteTitle.equalsIgnoreCase("")){
+            // Show only content
+            //Hiding line and title
+            holder.noteTitle.setVisibility(View.GONE);
+            holder.line.setVisibility(View.GONE);
+            holder.noteContentInShort.setText(noteDescription);
+        }
+        else{
+            //Show both the content and description
+            holder.noteTitle.setVisibility(View.VISIBLE);
+            holder.line.setVisibility(View.VISIBLE);
+            holder.noteTitle.setText(noteTitle);
+            holder.noteContentInShort.setText(noteDescription);
+
+        }
 
         if(mSelectedNoteList.contains(note)){
             holder.noteCardView.setCardBackgroundColor(mContext.getResources().getColor(android.R.color.darker_gray));
@@ -113,12 +149,14 @@ public class HomeFragmentNotesRecyclerViewAdapter extends RecyclerView.Adapter<H
         TextView noteTitle;
         TextView noteContentInShort;
         CardView noteCardView;
+        ImageView line;
 
         public HomeFragmentNotesViewHolder(View itemView) {
             super(itemView);
             noteTitle= itemView.findViewById(R.id.text_note_title);
             noteContentInShort= itemView.findViewById(R.id.text_note_content_in_short);
             noteCardView = itemView.findViewById(R.id.card_view_home_fragment_note);
+            line = itemView.findViewById(R.id.line);
             this.itemView=itemView;
         }
     }
