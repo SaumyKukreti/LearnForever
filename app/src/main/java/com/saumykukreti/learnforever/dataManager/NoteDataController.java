@@ -83,6 +83,25 @@ public class NoteDataController {
         return listOfCategories;
     }
 
+
+    public List<String> getListOfCategoriesWithValue(String text) {
+        //Return list of categories
+        List<String> listOfCategories = mDatabase.noteDao().getCategoriesWithValue(text);
+
+        HashSet<String> setOfCategories = new HashSet<>();
+
+        //Making the list unique
+        for (String category : listOfCategories) {
+            if (category != null && !category.equalsIgnoreCase("")) {
+                setOfCategories.add(category);
+            }
+        }
+
+        listOfCategories = new ArrayList<>();
+        listOfCategories.addAll(setOfCategories);
+        return listOfCategories;
+    }
+
     public boolean newNote(String category, String noteTitle, String contentInShort, String content, String timeStamp, boolean learn) {
         //Validate data
 

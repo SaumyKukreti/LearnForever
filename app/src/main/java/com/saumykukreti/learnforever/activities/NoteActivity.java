@@ -3,27 +3,30 @@ package com.saumykukreti.learnforever.activities;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.CompoundButton;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Switch;
-import android.widget.Toast;
 
 import com.saumykukreti.learnforever.R;
 import com.saumykukreti.learnforever.dataManager.NoteDataController;
 import com.saumykukreti.learnforever.modelClasses.dataTables.NoteTable;
 import com.saumykukreti.learnforever.util.DateHandler;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -39,11 +42,13 @@ public class NoteActivity extends AppCompatActivity {
     private NoteDataController mDataController;
     private NoteTable mNote;
     private Spinner mCategorySpinner;
-    private List<String> mListOfCategories;
+    private List<String> mListOfCategories = new ArrayList<>();
     private boolean mNewCategory;
     private EditText mNewCategoryEdit;
     private Switch mLearnSwitch;
     private boolean mLearnState = false;
+    private AutoCompleteTextView mCategoryAutoComplete;
+    private ArrayAdapter<String> mAutoCompleteAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,9 +58,7 @@ public class NoteActivity extends AppCompatActivity {
         mDataController = NoteDataController.getInstance(this);
 
         initialiseToolbar();
-        getCategories();
         initialiseViews();
-        setCategorySpinner();
 
         if (getIntent().hasExtra(METADATA_NOTE)) {
             //This means that it is an existing note and its data needs to be shown
@@ -63,6 +66,64 @@ public class NoteActivity extends AppCompatActivity {
         } else {
             isNewNote = true;
         }
+
+        setCategoryAutoComplete();
+    }
+
+    private void setCategoryAutoComplete() {
+        mCategoryAutoComplete.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                //Do nothing
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if(!mCategoryAutoComplete.isPerformingCompletion()) {
+                    if (editable.length() > 0) {
+                        setDateInCategoryAutoComplete(editable.toString());
+                    } else {
+                        setDateInCategoryAutoComplete("");
+                    }
+                }
+            }
+        });
+    }
+
+    private void setDateInCategoryAutoComplete(String value){
+        if(value.isEmpty()){
+            //Show all categories
+            //Refreshing category list
+            getAllCategories();
+        }
+        else{
+            getCategoryWithValue(value);
+        }
+
+        //Check if adapter already made
+        if(mCategoryAutoComplete.getAdapter()==null){
+            //Create a new adapter
+            mAutoCompleteAdapter = new ArrayAdapter<String>(this,
+                    android.R.layout.simple_dropdown_item_1line, mListOfCategories);
+            mCategoryAutoComplete.setAdapter(mAutoCompleteAdapter);
+        }
+        else{
+            mAutoCompleteAdapter.notifyDataSetChanged();
+        }
+
+        if(mListOfCategories!=null){
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mCategoryAutoComplete.showDropDown();
+                }
+            },200);
+        }
+
     }
 
     /**
@@ -86,28 +147,12 @@ public class NoteActivity extends AppCompatActivity {
     @SuppressLint("ClickableViewAccessibility")
     private void initialiseViews() {
 
-        ImageView addCatgoryImage = findViewById(R.id.image_add_category);
         mNoteTitleEdit = findViewById(R.id.edit_note_title);
         mNoteConetentInShortEdit = findViewById(R.id.edit_note_content_in_short);
         mNoteContentEdit = findViewById(R.id.edit_note_content);
-        mCategorySpinner = findViewById(R.id.categorySpinner);
         mLearnSwitch = findViewById(R.id.learn_switch);
-
+        mCategoryAutoComplete = findViewById(R.id.autocomplete_category);
         mNewCategoryEdit = findViewById(R.id.edit_category);
-
-        addCatgoryImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mNewCategoryEdit.getVisibility() == View.VISIBLE) {
-                    mNewCategory = false;
-                    mNewCategoryEdit.setVisibility(View.GONE);
-                } else {
-                    mNewCategory = true;
-                    mNewCategoryEdit.setVisibility(View.VISIBLE);
-                }
-            }
-        });
-
 
         mLearnSwitch.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -145,16 +190,20 @@ public class NoteActivity extends AppCompatActivity {
             }
         } );
 
-    }
+        mCategoryAutoComplete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setDateInCategoryAutoComplete("");
+            }
+        });
 
-    /**
-     * This method initialises the category spinner
-     */
-    private void setCategorySpinner() {
-        //Setting spinner
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.note_activity_category_text_layout, mListOfCategories);
-        arrayAdapter.setDropDownViewResource(R.layout.note_activity_category_list_text_layout);
-        mCategorySpinner.setAdapter(arrayAdapter);
+        mCategoryAutoComplete.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                setDateInCategoryAutoComplete("");
+            }
+        });
+
     }
 
     /**
@@ -170,14 +219,6 @@ public class NoteActivity extends AppCompatActivity {
             mNoteContentEdit.setText(note.getContent());
             mLearnSwitch.setChecked(note.isLearn());
             mLearnState = note.isLearn();
-
-            //Get category position that corresponds with current category
-            if (mNote.getCategory() != null && !mNote.getCategory().equalsIgnoreCase("")) {
-                int position = getCategoryPosition(note.getCategory());
-                if (position != -1) {
-                    mCategorySpinner.setSelection(position);
-                }
-            }
         } else {
             isNewNote = true;
         }
@@ -275,23 +316,7 @@ public class NoteActivity extends AppCompatActivity {
      * This method gets the category value
      */
     private String getCategoryValue() {
-        String category = "";
-
-        //Check if the user wants a new category, if so use the value from edit text but if that is empty use the current spinner value
-        if (mNewCategory) {
-            if (!mNewCategoryEdit.getText().toString().equalsIgnoreCase("")) {
-                category = mNewCategoryEdit.getText().toString();
-            }
-        }
-
-        //Getting value from spinner
-        if (category.equalsIgnoreCase("")) {
-            if (mCategorySpinner.getSelectedItemPosition() != 0) {
-                //Do not set anything for default
-                category = mCategorySpinner.getSelectedItem().toString();
-            }
-        }
-        return category;
+        return mCategoryAutoComplete.getText().toString();
     }
 
     /**
@@ -310,11 +335,17 @@ public class NoteActivity extends AppCompatActivity {
     /**
      * This method gets the list of categories from the database
      */
-    private void getCategories() {
+    private void getAllCategories() {
         mListOfCategories = mDataController.getListOfCategories();
+    }
 
-        //Adding default to the list
-        mListOfCategories.add(0, "Default");
+    /**
+     * This method gets the list of categories from the database
+     */
+    private void getCategoryWithValue(String text) {
+        List<String> listOfCategories = mDataController.getListOfCategoriesWithValue(text);
 
+        mListOfCategories.clear();
+        mListOfCategories.addAll(listOfCategories);
     }
 }

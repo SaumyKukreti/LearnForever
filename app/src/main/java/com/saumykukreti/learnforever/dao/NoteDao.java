@@ -27,6 +27,9 @@ public interface NoteDao {
     @Query("SELECT category FROM NoteTable")
     List<String> getAllCategories();
 
+    @Query("SELECT category FROM NoteTable WHERE category LIKE :text")
+    List<String> getCategoriesWithValue(String text);
+
     @Query("SELECT title FROM NoteTable")
     List<String> getAllTitles();
 

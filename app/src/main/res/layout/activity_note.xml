@@ -5,8 +5,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:cardBackgroundColor="@color/gray_color"
+    app:cardBackgroundColor="@android:color/white"
     android:orientation="vertical">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -41,10 +42,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:padding="10dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
                     android:singleLine="true"
                     android:imeOptions="actionNext"
-                    android:background="@drawable/background_drawable_with_white_background_and_gray_border"
+                    android:background="@android:color/white"
                     android:hint="Note title"/>
 
                 <TextView
@@ -68,8 +70,10 @@
                     android:singleLine="true"
                     android:imeOptions="actionNext"
                     android:nextFocusDown="@id/edit_note_content"
-                    android:padding="10dp"
-                    android:background="@drawable/background_drawable_with_white_background_and_gray_border"
+
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:background="@android:color/white"
                     android:hint="Note content in short"/>
 
                 <TextView
@@ -85,35 +89,22 @@
                     android:layout_marginTop="10dp"
                     android:background="@android:color/darker_gray"/>
 
-                <LinearLayout
+                <AutoCompleteTextView
+                    android:id="@+id/autocomplete_category"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:layout_marginTop="20dp"
-                    android:weightSum="105">
+                    android:layout_height="wrap_content"
+                    android:layout_weight="90"/>
 
-                    <Spinner
-                        android:id="@+id/categorySpinner"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="90"/>
-
-                    <ImageView
-                        android:id="@+id/image_add_category"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="10"
-                        android:layout_gravity="center_vertical"
-                        android:background="@drawable/circle_background_drawable_with_white_background"/>
-                </LinearLayout>
 
                 <EditText
                     android:id="@+id/edit_category"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:padding="10dp"
-                    android:background="@drawable/background_drawable_with_white_background_and_gray_border"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:background="@android:color/white"
                     android:hint="New Category"
                     android:visibility="gone"/>
 
@@ -136,11 +127,12 @@
                     android:id="@+id/edit_note_content"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
                     android:minHeight="300dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="20dp"
-                    android:background="@drawable/background_drawable_with_white_background_and_gray_border"
+                    android:background="@android:color/white"
                     android:gravity="top"
                     android:hint="Content"/>
             </LinearLayout>
