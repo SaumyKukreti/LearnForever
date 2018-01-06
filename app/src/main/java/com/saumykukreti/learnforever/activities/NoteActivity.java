@@ -218,6 +218,7 @@ public class NoteActivity extends AppCompatActivity {
             mNoteConetentInShortEdit.setText(note.getContentInShort());
             mNoteContentEdit.setText(note.getContent());
             mLearnSwitch.setChecked(note.isLearn());
+            mCategoryAutoComplete.setText(note.getCategory());
             mLearnState = note.isLearn();
         } else {
             isNewNote = true;
