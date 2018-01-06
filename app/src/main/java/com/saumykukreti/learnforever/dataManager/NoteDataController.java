@@ -246,6 +246,12 @@ public class NoteDataController {
             return new ArrayList<>();
         }
     }
+
+    public List<NoteTable> searchNoteWithStringAndCategory(String searchString, String category) {
+        searchString = '%' + searchString + '%';
+        List<NoteTable> noteList = mDatabase.noteDao().searchNoteWithStringAndCategory(searchString, category);
+        return noteList;
+    }
 }
 
 

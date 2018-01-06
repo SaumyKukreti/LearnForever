@@ -70,12 +70,12 @@ public class CategoryActivity extends AppCompatActivity implements HomeFragment.
 
     @Override
     public void updateActionBarForHomeFragment() {
-
+        //Not required
     }
 
     @Override
     public void toggleFabVisibility(boolean on) {
-
+        //Not required
     }
 
     @Override

@@ -24,6 +24,10 @@ public interface NoteDao {
     @Query("SELECT * FROM NoteTable")
     LiveData<List<NoteTable>> getLiveAllNotes();
 
+    @Query("SELECT * FROM NoteTable WHERE category = :category")
+    LiveData<List<NoteTable>> getLiveAllNotesWithCategory(String category);
+
+
     @Query("SELECT category FROM NoteTable")
     List<String> getAllCategories();
 
@@ -41,6 +45,9 @@ public interface NoteDao {
 
     @Query("SELECT * FROM NOTETABLE WHERE title LIKE :searchString OR CONTENT LIKE :searchString OR contentInShort LIKE :searchString")
     List<NoteTable> searchNoteWithString(String searchString);
+
+    @Query("SELECT * FROM NOTETABLE WHERE (title LIKE :searchString OR CONTENT LIKE :searchString OR contentInShort LIKE :searchString) AND category LIKE :category")
+    List<NoteTable> searchNoteWithStringAndCategory(String searchString, String category);
 
     @Query("SELECT * FROM notetable WHERE category = :category")
     List<NoteTable> getNotesWithCategory(String category);
@@ -60,4 +67,5 @@ public interface NoteDao {
 
     @Delete
     void deleteNotes(List<NoteTable> noteTables);
+
 }

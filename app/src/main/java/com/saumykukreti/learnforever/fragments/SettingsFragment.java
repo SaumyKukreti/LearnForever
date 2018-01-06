@@ -27,7 +27,12 @@ import com.saumykukreti.learnforever.modelClasses.dataTables.ReminderTable;
 
 import java.util.List;
 
+import static android.app.Activity.RESULT_OK;
+
 public class SettingsFragment extends Fragment {
+
+    private final int METADATA_CATEGORIES_ACTIVITY_REQUEST_CODE = 10101;
+
     private OnSettingsFragmentInteractionListener mListener;
 
     public SettingsFragment() {
@@ -113,7 +118,7 @@ public class SettingsFragment extends Fragment {
         category.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getContext(), CategoryActivity.class));
+                startActivityForResult(new Intent(getContext(), CategoryActivity.class), METADATA_CATEGORIES_ACTIVITY_REQUEST_CODE);
             }
         });
         insert.setOnClickListener(new View.OnClickListener() {
@@ -220,5 +225,16 @@ public class SettingsFragment extends Fragment {
 
     public interface OnSettingsFragmentInteractionListener {
         void updateActionBarForSettingsFragment();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == METADATA_CATEGORIES_ACTIVITY_REQUEST_CODE){
+            if(resultCode == RESULT_OK){
+                //Refreshing activity
+
+            }
+            //else do nothing
+        }
     }
 }

@@ -106,11 +106,7 @@ public class HomeFragment extends Fragment{
             initialiseNotesAdapter(false);
 
             //Hide search view
-            getView().findViewById(R.id.edit_search).setVisibility(View.GONE);
-
-//            setLiveDataForCategory
-
-
+            setLiveDataForCategory();
         }
         else{
             //Modify fragment to show all notes
@@ -118,13 +114,24 @@ public class HomeFragment extends Fragment{
 
             //Initialise live data on list
             setLiveData();
-
-            //Initialise search view
-            initialiseSearchView();
         }
+
+
+        //Initialise search view
+        initialiseSearchView();
 
     }
 
+    private void setLiveDataForCategory() {
+        LiveData<List<NoteTable>> livenotes = datacontroller.getDatabase().noteDao().getLiveAllNotesWithCategory(mCategory);
+        livenotes.observe(this, new Observer<List<NoteTable>>() {
+            @Override
+            public void onChanged(@Nullable List<NoteTable> noteTables) {
+                mHomeFragmentNotesRecyclerViewAdapter.setNoteTableList(noteTables);
+                mHomeFragmentNotesRecyclerViewAdapter.notifyDataSetChanged();
+                syncData();
+            }});
+    }
 
 
     private void setLiveData() {
@@ -153,15 +160,25 @@ public class HomeFragment extends Fragment{
                 if(charSequence.length()>2){
                     //Boolean to keep track if the current list is updated or not to avoid unnecessary database calls
                     mNoteListUpdated = true;
-                    mAllNotes = datacontroller.searchNoteWithString(charSequence.toString());
+                    if(mCategory!=null && !mCategory.isEmpty()){
+                        mAllNotes = datacontroller.searchNoteWithStringAndCategory(charSequence.toString(), mCategory);
+                    }
+                    else {
+                        mAllNotes = datacontroller.searchNoteWithString(charSequence.toString());
+                    }
                     initialiseNotesAdapter(false);
                 }
                 else{
                     //Show all notes
                     if(mNoteListUpdated) {
                         mNoteListUpdated = false;
-                        mAllNotes = datacontroller.getAllNotes();
-                        initialiseNotesAdapter(true);
+                        if(mCategory!=null && !mCategory.isEmpty()){
+                            mAllNotes = datacontroller.getNoteWithCategory(mCategory);
+                        }
+                        else {
+                            mAllNotes = datacontroller.getAllNotes();
+                        }
+                        initialiseNotesAdapter(false);
                     }
                 }
             }
