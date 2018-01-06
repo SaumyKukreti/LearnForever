@@ -54,8 +54,14 @@
             android:enabled="true"
             android:exported="true"/>
 
-        <activity android:name=".activities.ReviseActivity"
-                  android:theme="@style/AppThemeWithNoActionBarAndBlackStatusBar"/>
+        <activity
+            android:name=".activities.ReviseActivity"
+            android:theme="@style/AppThemeWithNoActionBarAndBlackStatusBar"/>
+        <activity
+            android:name=".activities.CategoryActivity"
+            android:label="@string/title_activity_category"
+            android:parentActivityName=".activities.NavigationDrawerActivity"
+            android:theme="@style/AppThemeWithNoActionBar"/>
     </application>
 
 </manifest>

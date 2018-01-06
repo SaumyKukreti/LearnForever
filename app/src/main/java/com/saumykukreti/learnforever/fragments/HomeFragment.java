@@ -1,7 +1,6 @@
 package com.saumykukreti.learnforever.fragments;
 
 import android.app.AlertDialog;
-import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.content.Context;
@@ -41,13 +40,17 @@ public class HomeFragment extends Fragment{
     private boolean mSelectionModeOn;
     private TextReader mTextReader;
 
+    private static final String METADATA_CATEGORY = "metadata_category";
+    private String mCategory;
+
     public HomeFragment() {
         // Required empty public constructor
     }
 
-    public static HomeFragment newInstance() {
+    public static HomeFragment newInstance(String categoryName) {
         HomeFragment fragment = new HomeFragment();
         Bundle args = new Bundle();
+        args.putString(METADATA_CATEGORY, categoryName);
         fragment.setArguments(args);
         return fragment;
     }
@@ -58,7 +61,7 @@ public class HomeFragment extends Fragment{
         setHasOptionsMenu(true);
         datacontroller = NoteDataController.getInstance(getActivity());
         if (getArguments() != null) {
-            //Get arguments here
+            mCategory = getArguments().getString(METADATA_CATEGORY);
         }
     }
 
@@ -94,16 +97,37 @@ public class HomeFragment extends Fragment{
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        initialiseNotesAdapter(true);
+        if(mCategory!=null && !mCategory.isEmpty()){
+            //Means this activity shows notes of a particular category
 
-        //Initialise live data on list
-        initialiseList();
+            //Update mNotesList and initialise adapter
+            mAllNotes = datacontroller.getNoteWithCategory(mCategory);
 
-        //Initialise search view
-        initialiseSearchView();
+            initialiseNotesAdapter(false);
+
+            //Hide search view
+            getView().findViewById(R.id.edit_search).setVisibility(View.GONE);
+
+//            setLiveDataForCategory
+
+
+        }
+        else{
+            //Modify fragment to show all notes
+            initialiseNotesAdapter(true);
+
+            //Initialise live data on list
+            setLiveData();
+
+            //Initialise search view
+            initialiseSearchView();
+        }
+
     }
 
-    private void initialiseList() {
+
+
+    private void setLiveData() {
         LiveData<List<NoteTable>> livenotes = datacontroller.getDatabase().noteDao().getLiveAllNotes();
         livenotes.observe(this, new Observer<List<NoteTable>>() {
             @Override

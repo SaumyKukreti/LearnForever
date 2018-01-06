@@ -13,7 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.saumykukreti.learnforever.R;
-import com.saumykukreti.learnforever.activities.CategoryNotesActivity;
+import com.saumykukreti.learnforever.activities.CategoryActivity;
 import com.saumykukreti.learnforever.dataManager.NoteDataController;
 
 import java.util.List;
@@ -81,8 +81,8 @@ public class CategoriesFragment extends Fragment {
         categoriesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(getActivity(), CategoryNotesActivity.class);
-                intent.putExtra(CategoryNotesActivity.METADATA_CATEGORY,listOfCategories.get(i));
+                Intent intent = new Intent(getActivity(), CategoryActivity.class);
+                intent.putExtra(CategoryActivity.METADATA_CATEGORY,listOfCategories.get(i));
                 startActivity(intent);
             }
         });

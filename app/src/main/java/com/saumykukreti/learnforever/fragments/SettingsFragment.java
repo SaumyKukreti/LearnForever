@@ -17,6 +17,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.saumykukreti.learnforever.LearnForeverApplication;
 import com.saumykukreti.learnforever.R;
+import com.saumykukreti.learnforever.activities.CategoryActivity;
 import com.saumykukreti.learnforever.activities.ReviseActivity;
 import com.saumykukreti.learnforever.dataManager.NoteDataController;
 import com.saumykukreti.learnforever.dataManager.ReminderDataController;
@@ -94,6 +95,7 @@ public class SettingsFragment extends Fragment {
         Button sync = view.findViewById(R.id.start_sync);
         Button showReminder = view.findViewById(R.id.show_reminder);
         Button revise = view.findViewById(R.id.buttton_revise);
+        Button category = view.findViewById(R.id.button_category);
 
         final EditText noteToUpdate = view.findViewById(R.id.noteToUpdate);
 
@@ -105,6 +107,13 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getContext(), ReviseActivity.class));
+            }
+        });
+
+        category.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getContext(), CategoryActivity.class));
             }
         });
         insert.setOnClickListener(new View.OnClickListener() {

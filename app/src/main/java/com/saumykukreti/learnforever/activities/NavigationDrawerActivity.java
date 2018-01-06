@@ -152,7 +152,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
     }
 
     private Fragment createHomeFragment() {
-        HomeFragment fragment = HomeFragment.newInstance();
+        HomeFragment fragment = HomeFragment.newInstance("");
         return fragment;
     }
 
