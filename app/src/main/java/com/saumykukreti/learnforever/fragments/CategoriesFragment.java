@@ -16,10 +16,13 @@ import com.saumykukreti.learnforever.R;
 import com.saumykukreti.learnforever.activities.CategoryActivity;
 import com.saumykukreti.learnforever.dataManager.NoteDataController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CategoriesFragment extends Fragment {
     private OnCategoriesFragmentInteractionListener mListener;
+    private List<String> mListOfCategories = new ArrayList<>();
+    private ArrayAdapter<String> mArrayAdapter;
 
     public CategoriesFragment() {
         // Required empty public constructor
@@ -62,30 +65,44 @@ public class CategoriesFragment extends Fragment {
     public void onResume() {
         super.onResume();
         mListener.updateActionBarForCategoriesFragment();
+
+        //Refreshing adapter
+        getListOfCategories();
+
+        mArrayAdapter.notifyDataSetChanged();
+
     }
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        NoteDataController dataController = NoteDataController.getInstance(getActivity());
 
         //Getting list of categories
-        final List<String> listOfCategories = dataController.getListOfCategories();
+        getListOfCategories();
 
         //Creating and setting an adapter for categories
-
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1,listOfCategories);
+        mArrayAdapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1,mListOfCategories);
 
         ListView categoriesListView = getView().findViewById(R.id.category_fragment_categories_list_view);
-        categoriesListView.setAdapter(arrayAdapter);
+        categoriesListView.setAdapter(mArrayAdapter);
 
         categoriesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(getActivity(), CategoryActivity.class);
-                intent.putExtra(CategoryActivity.METADATA_CATEGORY,listOfCategories.get(i));
+                intent.putExtra(CategoryActivity.METADATA_CATEGORY,mListOfCategories.get(i));
                 startActivity(intent);
             }
         });
+    }
+
+    private void getListOfCategories() {
+        NoteDataController dataController = NoteDataController.getInstance(getActivity());
+        List<String> listOfCategories = dataController.getListOfCategories();
+        mListOfCategories.clear();
+        mListOfCategories.addAll(listOfCategories);
+
+        //TODO - If no categories are found show appropriate error message
+
     }
 
     @Override

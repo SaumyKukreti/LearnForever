@@ -21,6 +21,7 @@ public class CategoryActivity extends AppCompatActivity implements HomeFragment.
     private String mCategoryName = null;
     private String TAG = CategoryActivity.class.getSimpleName();
     private Toolbar mToolbar;
+    private HomeFragment mHomeFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,8 +65,8 @@ public class CategoryActivity extends AppCompatActivity implements HomeFragment.
         android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        HomeFragment fragment = HomeFragment.newInstance(mCategoryName);
-        fragmentTransaction.replace(R.id.fragment_container, fragment).commit();
+        mHomeFragment = HomeFragment.newInstance(mCategoryName);
+        fragmentTransaction.replace(R.id.fragment_container, mHomeFragment).commit();
     }
 
     @Override
@@ -92,4 +93,5 @@ public class CategoryActivity extends AppCompatActivity implements HomeFragment.
         }
         return false;
     }
+
 }
