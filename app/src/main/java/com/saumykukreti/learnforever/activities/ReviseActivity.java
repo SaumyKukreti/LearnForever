@@ -29,11 +29,13 @@ import java.util.List;
 
 public class ReviseActivity extends AppCompatActivity {
 
+    public static final String METADATA_POSITION = "metadata_position";
     private List<NoteTable> mNoteList;
-    private int mCurrentPage=0;
     private TextReader mTextReader;
     private boolean mIsSpeechOn = true;
     private boolean mIsSpeechIconVisible = false;
+    private int mPageNumber;
+    private boolean mTtsInitialised = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,11 +51,23 @@ public class ReviseActivity extends AppCompatActivity {
         initialiseViews();
         getNotesToRevise();
         if(mNoteList!=null && !mNoteList.isEmpty()) {
+            getPosition();
             setViewPager();
-            setPageNumber(0);
+            setPageNumber(mPageNumber);
             startReadingFirstNote();
         }else{
             //Show some error
+        }
+    }
+
+    /**
+     *  This method checks if any position has been sent, if not returns one
+     */
+    private void getPosition() {
+        if(getIntent().hasExtra(METADATA_POSITION)){
+            mPageNumber = getIntent().getIntExtra(METADATA_POSITION,0);
+        }else{
+            mPageNumber = 0;
         }
     }
 
@@ -127,17 +141,19 @@ public class ReviseActivity extends AppCompatActivity {
      *  This method starts reading the first note
      */
     private void startReadingFirstNote() {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if(mIsSpeechOn) {
-                    mTextReader.readAloud(TextCreator.getNoteText(mNoteList.get(0)));
+        if(mPageNumber==0) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (mIsSpeechOn) {
+                        mTextReader.readAloud(TextCreator.getNoteText(mNoteList.get(mPageNumber)));
+                    } else {
+                        Toast.makeText(ReviseActivity.this, "Speech is off!!", Toast.LENGTH_SHORT).show();
+                    }
                 }
-                else{
-                    Toast.makeText(ReviseActivity.this, "Speech is off!!", Toast.LENGTH_SHORT).show();
-                }
-            }
-        },1000);
+            }, 1000);
+        }
+        mTtsInitialised = true;
     }
 
     private void setViewPager() {
@@ -158,11 +174,23 @@ public class ReviseActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onPageSelected(int position) {
-                mCurrentPage = position;
+            public void onPageSelected(final int position) {
                 setPageNumber(position);
                 if(mIsSpeechOn) {
-                    mTextReader.readAloud(TextCreator.getNoteText(mNoteList.get(position)));
+                    if(mTtsInitialised) {
+                        mTextReader.readAloud(TextCreator.getNoteText(mNoteList.get(position)));
+                    }
+                    else{
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (mIsSpeechOn) {
+                                    mTextReader.readAloud(TextCreator.getNoteText(mNoteList.get(position)));
+                                }
+                            }
+                        }, 1000);
+                        mTtsInitialised=true;
+                    }
                 }
             }
 
@@ -171,6 +199,10 @@ public class ReviseActivity extends AppCompatActivity {
 
             }
         });
+
+        if(mPageNumber!=0){
+            notesViewPager.setCurrentItem(mPageNumber);
+        }
 
     }
 

@@ -2,12 +2,24 @@ package com.saumykukreti.learnforever.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.saumykukreti.learnforever.R;
+import com.saumykukreti.learnforever.adapters.ReviseNotesAdapter;
+import com.saumykukreti.learnforever.dataManager.NoteDataController;
+import com.saumykukreti.learnforever.dataManager.ReminderDataController;
+import com.saumykukreti.learnforever.modelClasses.dataTables.NoteTable;
+import com.saumykukreti.learnforever.modelClasses.dataTables.ReminderTable;
+import com.saumykukreti.learnforever.util.Converter;
+
+import java.util.Date;
+import java.util.List;
 
 public class ReviseFragment extends Fragment {
     private OnReviseFragmentInteractionListener mListener;
@@ -41,6 +53,30 @@ public class ReviseFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_revise, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        RecyclerView recyclerView = view.findViewById(R.id.recycler_notes);
+
+        ReminderTable todaysReminder = ReminderDataController.getInstance(getContext()).getNotesForDate(new Date());
+        List<NoteTable> noteList = null;
+        if(todaysReminder!=null){
+            String notesIdsToRemind = todaysReminder.getNoteIds();
+            List<String> notesToRemind = Converter.convertStringToList(notesIdsToRemind);
+
+            //Getting the notes
+            noteList = NoteDataController.getInstance(getContext()).getNoteWithIds(notesToRemind);
+        }
+
+        if(noteList!=null && !noteList.isEmpty()){
+            ReviseNotesAdapter adapter = new ReviseNotesAdapter(getContext(), noteList);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            recyclerView.setAdapter(adapter);
+        }else{
+            recyclerView.setVisibility(View.GONE);
+            view.findViewById(R.id.text_no_notes).setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

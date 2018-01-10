@@ -15,11 +15,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "877469951697-at3p7ot84jdiddntamfs4s5ecplsp02c.apps.googleusercontent.com",
+          "client_id": "877469951697-15dbgc590uur7bboq7ho7a5ee7fmulo9.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.saumykukreti.learnforever",
-            "certificate_hash": "dc3f7a77bcf69e24761a76a3c694b3f29f5ac05f"
+            "certificate_hash": "af21a3aae8f841f6b6595545d469e90bc63bc812"
           }
         },
         {

@@ -22,9 +22,6 @@
             android:parentActivityName=".activities.NavigationDrawerActivity"
             android:theme="@style/AppThemeWithNoActionBar"/>
         <activity
-            android:name=".activities.CategoryNotesActivity"
-            android:parentActivityName=".activities.NavigationDrawerActivity"/>
-        <activity
             android:name=".activities.SplashActivity"
             android:label="@string/title_activity_splash"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen">

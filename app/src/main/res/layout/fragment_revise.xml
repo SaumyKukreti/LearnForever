@@ -4,10 +4,17 @@
              android:layout_height="match_parent"
              tools:context="com.saumykukreti.learnforever.fragments.ReviseFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
+        android:id="@+id/text_no_notes"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Revise fragment"/>
+        android:text="No notes to revise"
+        android:gravity="center"
+        android:visibility="gone"
+        android:textSize="18sp"
+        android:layout_height="match_parent"/>
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_notes"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 </FrameLayout>

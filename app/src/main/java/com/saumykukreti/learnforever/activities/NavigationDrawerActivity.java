@@ -5,6 +5,9 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -20,12 +23,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.birbit.android.jobqueue.JobManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.saumykukreti.learnforever.LearnForeverApplication;
 import com.saumykukreti.learnforever.R;
 import com.saumykukreti.learnforever.brodcastReceiver.NotificationBuilder;
 import com.saumykukreti.learnforever.constants.Constants;
@@ -33,12 +35,8 @@ import com.saumykukreti.learnforever.fragments.CategoriesFragment;
 import com.saumykukreti.learnforever.fragments.HomeFragment;
 import com.saumykukreti.learnforever.fragments.ReviseFragment;
 import com.saumykukreti.learnforever.fragments.SettingsFragment;
-import com.saumykukreti.learnforever.jobs.DataInitializerJob;
-import com.saumykukreti.learnforever.jobs.DataSyncJob;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
+import java.io.InputStream;
 import java.util.Calendar;
 
 public class NavigationDrawerActivity extends AppCompatActivity
@@ -67,6 +65,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
     private FloatingActionButton mFab;
     private Fragment mCurrentFragment;
     private GoogleSignInAccount mAccount;
+    private final String TAG = NavigationDrawerActivity.class.getSimpleName();
 
 
     @Override
@@ -196,12 +195,42 @@ public class NavigationDrawerActivity extends AppCompatActivity
         if (mAccount != null) {
             TextView nameTV = mNavigationView.getHeaderView(0).findViewById(R.id.tv_name);
             TextView emailTV = mNavigationView.getHeaderView(0).findViewById(R.id.tv_email);
+            final ImageView profileIM = mNavigationView.getHeaderView(0).findViewById(R.id.imageView_profile);
 
             nameTV.setText(mAccount.getDisplayName());
             emailTV.setText(mAccount.getEmail());
+
+            if(mAccount.getPhotoUrl()!=null) {
+                new DownloadImageTask(profileIM).execute(mAccount.getPhotoUrl().toString());
+            }
+        }
+    }
+
+    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        ImageView profileImage;
+
+        public DownloadImageTask(ImageView bmImage) {
+            this.profileImage = bmImage;
         }
 
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            profileImage.setImageBitmap(result);
+        }
     }
+
 
     /**
      * This method initialises FAB

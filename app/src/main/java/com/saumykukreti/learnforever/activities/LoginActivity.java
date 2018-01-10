@@ -88,7 +88,6 @@ public class LoginActivity extends AppCompatActivity {
     public void onMessageEvent(InitializationCompleteEvent event){
         startActivity(new Intent(this, NavigationDrawerActivity.class));
         this.finish();
-
     }
 
     @Override
