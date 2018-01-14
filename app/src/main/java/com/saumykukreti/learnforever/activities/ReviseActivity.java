@@ -10,6 +10,7 @@ import android.transition.TransitionManager;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -103,12 +104,13 @@ public class ReviseActivity extends AppCompatActivity {
                 if(!mIsSpeechIconVisible) {
                     mIsSpeechIconVisible= true;
                     noSpeechImage.setVisibility(View.VISIBLE);
-                    arrowImage.setBackground(getResources().getDrawable(R.drawable.ic_arrow_down_white));
+                    arrowImage.animate().rotation(180);
                 }else{
                     mIsSpeechIconVisible = false;
                     noSpeechImage.setVisibility(View.GONE);
-                    arrowImage.setBackground(getResources().getDrawable(R.drawable.ic_arrow_up_white));
+                    arrowImage.animate().rotation(0);
                 }
+
             }
         });
 
