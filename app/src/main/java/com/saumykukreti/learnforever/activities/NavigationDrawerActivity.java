@@ -119,7 +119,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
     private void creteAndLoadFragment(String fragmentName) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.setCustomAnimations(R.anim.enter_from_left,R.anim.exit_to_right);
+        fragmentTransaction.setCustomAnimations(R.anim.fade_in,R.anim.fade_out);
 
         mCurrentFragment = null;
         switch (fragmentName) {

@@ -6,8 +6,10 @@ import android.os.Handler;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.transition.TransitionManager;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -95,6 +97,9 @@ public class ReviseActivity extends AppCompatActivity {
         settingLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ViewGroup container = findViewById(R.id.revise_activity_relative_layout);
+                TransitionManager.beginDelayedTransition(container);
+
                 if(!mIsSpeechIconVisible) {
                     mIsSpeechIconVisible= true;
                     noSpeechImage.setVisibility(View.VISIBLE);
