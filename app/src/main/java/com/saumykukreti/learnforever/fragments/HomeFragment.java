@@ -17,11 +17,13 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.saumykukreti.learnforever.LearnForeverApplication;
 import com.saumykukreti.learnforever.R;
+import com.saumykukreti.learnforever.activities.NavigationDrawerActivity;
 import com.saumykukreti.learnforever.adapters.HomeFragmentNotesRecyclerViewAdapter;
 import com.saumykukreti.learnforever.dataManager.NoteDataController;
 import com.saumykukreti.learnforever.jobs.DataSyncJob;
@@ -63,6 +65,10 @@ public class HomeFragment extends Fragment{
         if (getArguments() != null) {
             mCategory = getArguments().getString(METADATA_CATEGORY);
         }
+
+        //Hiding the keyboard
+        getActivity().getWindow().setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
     @Override

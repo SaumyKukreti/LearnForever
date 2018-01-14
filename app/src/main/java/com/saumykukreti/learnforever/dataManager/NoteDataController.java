@@ -102,12 +102,27 @@ public class NoteDataController {
         return listOfCategories;
     }
 
+    /**
+     * Pass this method the following parameters to make a new note.
+     * If null is passed in any parameter, the note is not created
+     * @param category
+     * @param noteTitle
+     * @param contentInShort
+     * @param content
+     * @param timeStamp
+     * @param learn
+     * @return
+     */
     public boolean newNote(String category, String noteTitle, String contentInShort, String content, String timeStamp, boolean learn) {
         //Validate data
 
-        //Mandatory fields
-        if (content == null || content.equalsIgnoreCase("")) {
-            //A mandatory field is null/blank, note cannot be added
+
+        if(category==null || noteTitle == null || contentInShort == null || content == null || timeStamp == null){
+            return false;
+        }
+
+        //Checking if content, cis timestamp, and notetitle are empty, if so return false
+        if(content.isEmpty() && contentInShort.isEmpty() && noteTitle.isEmpty()){
             return false;
         }
 

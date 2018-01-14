@@ -44,6 +44,7 @@
                     android:layout_marginTop="10dp"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
+                    android:maxLength="100"
                     android:singleLine="true"
                     android:imeOptions="actionNext"
                     android:background="@android:color/white"
@@ -70,7 +71,7 @@
                     android:singleLine="true"
                     android:imeOptions="actionNext"
                     android:nextFocusDown="@id/edit_note_content"
-
+                    android:maxLength="300"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
                     android:background="@android:color/white"

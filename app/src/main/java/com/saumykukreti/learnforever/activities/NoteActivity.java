@@ -14,6 +14,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
@@ -72,6 +73,10 @@ public class NoteActivity extends AppCompatActivity {
         }
 
         setCategoryAutoComplete();
+
+        //Hiding keyboard
+        getWindow().setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
     private void setCategoryAutoComplete() {
@@ -204,7 +209,9 @@ public class NoteActivity extends AppCompatActivity {
         mCategoryAutoComplete.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
-                setDateInCategoryAutoComplete("");
+                if(b) {
+                    setDateInCategoryAutoComplete("");
+                }
             }
         });
 
