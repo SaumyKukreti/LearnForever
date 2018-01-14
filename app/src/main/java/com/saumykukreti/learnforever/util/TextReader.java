@@ -41,16 +41,6 @@ public class TextReader implements TextToSpeech.OnInitListener, LifecycleObserve
 
 
     public void readAloud(String speech) {
-//        String[] splitspeech = speech.split(Constants.PAUSE_FOR_TWO_HUNDERED_MILISECONDS);
-//        for (int i = 0; i < splitspeech.length; i++) {
-//            if (i == 0) { // Use for the first splited text to flush on audio stream
-//                mTts.speak(splitspeech[i].toString().trim(), TextToSpeech.QUEUE_FLUSH, null);
-//            } else { // add the new test on previous then play the TTS
-//                mTts.speak(splitspeech[i].toString().trim(), android.speech.tts.TextToSpeech.QUEUE_ADD, null);
-//            }
-//            mTts.playSilence(750, android.speech.tts.TextToSpeech.QUEUE_ADD, null);
-//        }
-
         //If speech contains some breaks
         if(speech.contains("&%&")) {
             int index = 1;
@@ -100,6 +90,15 @@ public class TextReader implements TextToSpeech.OnInitListener, LifecycleObserve
     public void stopReading(){
         if(mTts!=null && mTts.isSpeaking()){
             mTts.stop();
+        }
+    }
+
+    public boolean isReading(){
+        if(mTts!=null && mTts.isSpeaking()){
+            return true;
+        }
+        else{
+            return false;
         }
     }
 

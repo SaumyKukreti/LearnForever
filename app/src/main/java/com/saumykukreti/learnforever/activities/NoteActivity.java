@@ -25,6 +25,8 @@ import com.saumykukreti.learnforever.R;
 import com.saumykukreti.learnforever.dataManager.NoteDataController;
 import com.saumykukreti.learnforever.modelClasses.dataTables.NoteTable;
 import com.saumykukreti.learnforever.util.DateHandler;
+import com.saumykukreti.learnforever.util.TextCreator;
+import com.saumykukreti.learnforever.util.TextReader;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -49,6 +51,7 @@ public class NoteActivity extends AppCompatActivity {
     private boolean mLearnState = false;
     private AutoCompleteTextView mCategoryAutoComplete;
     private ArrayAdapter<String> mAutoCompleteAdapter;
+    private TextReader mTextReader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +59,7 @@ public class NoteActivity extends AppCompatActivity {
         setContentView(R.layout.activity_note);
 
         mDataController = NoteDataController.getInstance(this);
+        mTextReader = new TextReader(this, getLifecycle());
 
         initialiseToolbar();
         initialiseViews();
@@ -244,6 +248,16 @@ public class NoteActivity extends AppCompatActivity {
                 break;
             case android.R.id.home:
                 onBackPressed();
+                break;
+
+            case R.id.note_activity_speak:
+                //Checking if the note is currently being read, if so stop the reading else start it
+                if(mTextReader.isReading()){
+                    mTextReader.stopReading();
+                }
+                else {
+                    mTextReader.readAloud(TextCreator.getNoteText(mNote));
+                }
                 break;
         }
         return true;
