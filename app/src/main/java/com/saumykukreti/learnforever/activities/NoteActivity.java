@@ -42,6 +42,7 @@ public class NoteActivity extends AppCompatActivity {
 
     //Intent constants
     public static final String METADATA_NOTE = "metadata_note";
+    public static final String METADATA_FROM_WIDGET = "metadata_from_widget";
     private static final int REQ_CODE_SPEECH_INPUT = 1001;
     private static final String TAG = NoteActivity.class.getSimpleName();
 
@@ -84,6 +85,11 @@ public class NoteActivity extends AppCompatActivity {
         //Hiding keyboard
         getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+        if(getIntent().hasExtra(METADATA_FROM_WIDGET) && getIntent().getBooleanExtra(METADATA_FROM_WIDGET,false)){
+            //From widget, start dictation
+            promptSpeechInput();
+        }
     }
 
     private void setCategoryAutoComplete() {
