@@ -2,13 +2,17 @@ package com.saumykukreti.learnforever.activities;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Handler;
+import android.speech.RecognizerIntent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -32,11 +36,14 @@ import com.saumykukreti.learnforever.util.TextReader;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class NoteActivity extends AppCompatActivity {
 
     //Intent constants
     public static final String METADATA_NOTE = "metadata_note";
+    private static final int REQ_CODE_SPEECH_INPUT = 1001;
+    private static final String TAG = NoteActivity.class.getSimpleName();
 
     private boolean isNewNote = false;
     private EditText mNoteTitleEdit;
@@ -241,6 +248,8 @@ public class NoteActivity extends AppCompatActivity {
         MenuInflater menuInflater = getMenuInflater();
         if (!isNewNote) {
             menuInflater.inflate(R.menu.menu_for_note_activity, menu);
+        }else{
+            menuInflater.inflate(R.menu.menu_for_note_activity_new_note, menu);
         }
         return true;
     }
@@ -256,6 +265,9 @@ public class NoteActivity extends AppCompatActivity {
             case android.R.id.home:
                 onBackPressed();
                 break;
+            case R.id.note_activity_dictate:
+                promptSpeechInput();
+                break;
 
             case R.id.note_activity_speak:
                 //Checking if the note is currently being read, if so stop the reading else start it
@@ -266,8 +278,25 @@ public class NoteActivity extends AppCompatActivity {
                     mTextReader.readAloud(TextCreator.getNoteText(mNote));
                 }
                 break;
+
         }
         return true;
+    }
+
+    /**
+     *  This method
+     */
+    private void promptSpeechInput() {
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT,"Speak now now");
+        try {
+            startActivityForResult(intent, REQ_CODE_SPEECH_INPUT);
+        } catch (ActivityNotFoundException a) {
+            Log.e(TAG, "Dictation not initialised");
+        }
     }
 
     /**
@@ -369,5 +398,13 @@ public class NoteActivity extends AppCompatActivity {
 
         mListOfCategories.clear();
         mListOfCategories.addAll(listOfCategories);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode== REQ_CODE_SPEECH_INPUT && resultCode == RESULT_OK && data!=null){
+            ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+            mNoteContentEdit.setText(result.get(0));
+        }
     }
 }
