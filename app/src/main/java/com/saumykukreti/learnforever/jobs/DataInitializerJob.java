@@ -1,12 +1,14 @@
 
 package com.saumykukreti.learnforever.jobs;
 
+import android.app.job.JobScheduler;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.birbit.android.jobqueue.Job;
+import com.birbit.android.jobqueue.JobManager;
 import com.birbit.android.jobqueue.Params;
 import com.birbit.android.jobqueue.RetryConstraint;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -70,7 +72,7 @@ public class DataInitializerJob extends Job {
 
                 //Initialisation of note table complete, initialising reminder table in the background
                 if(!listOfNotes.isEmpty()) {
-                    initialiseReminderTable(listOfNotes);
+                    LearnForeverApplication.getInstance().getJobManager().addJobInBackground(new ReminderJob(mContext,listOfNotes, null));
                 }
             }
 
@@ -78,15 +80,6 @@ public class DataInitializerJob extends Job {
             public void onCancelled(DatabaseError databaseError) {
             }
         });
-    }
-
-    private void initialiseReminderTable(List<NoteTable> listOfNotes) {
-        //Iterating over the list of notes and using the date created field of notes to set reminders
-        for(NoteTable note : listOfNotes){
-            if(note.isLearn() && note.getDateOfCreation()!=null && !note.getDateOfCreation().isEmpty()){
-                LearnForeverApplication.getInstance().getJobManager().addJobInBackground(new ReminderJob(mContext, note.getId(),note.getDateOfCreation(), null));
-            }
-        }
     }
 
 

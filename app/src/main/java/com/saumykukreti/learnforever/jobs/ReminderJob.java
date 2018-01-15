@@ -33,8 +33,9 @@ public class ReminderJob extends Job {
     private static final int PRIORITY = 1;
     private static final String TAG = DataSyncJob.class.getSimpleName();
     private final Context mContext;
-    private final long mNoteId;
-    private final String mDateOfCreation;
+    private long mNoteId = 0;
+    private String mDateOfCreation = null;
+    private List<NoteTable> mListOfNotes = null;
     private GoogleSignInAccount mAccount;
     private ReminderDataController mReminderDataController;
     private NoteDataController mNoteDataController;
@@ -55,23 +56,43 @@ public class ReminderJob extends Job {
         mDateOfCreation = dateOfCreation;
     }
 
+    public ReminderJob(Context context, List<NoteTable> listOfNotes, Params params) {
+        super(new Params(PRIORITY).requireNetwork());
+        mContext = context;
+        mListOfNotes = listOfNotes;
+    }
+
     @Override
     public void onAdded() {
     }
 
     @Override
     public void onRun() throws Throwable {
+        //Initialise variables
         mAccount = GoogleSignIn.getLastSignedInAccount(mContext);
         mReminderDataController = ReminderDataController.getInstance(mContext);
         mNoteDataController = NoteDataController.getInstance(mContext);
-        saveNoteIdInReminderTable(mNoteId);
+
+
+        //Check if list of notes is null or not
+        if(mListOfNotes!=null){
+            for(NoteTable note : mListOfNotes){
+                mNoteId = note.getId();
+                mDateOfCreation = note.getDateOfCreation();
+                if(note.isLearn()) {
+                    saveNoteIdInReminderTable();
+                }
+            }
+        }
+        else{
+            saveNoteIdInReminderTable();
+        }
     }
 
     /**
      *  This method saves the noteId in the ReminderTable, at frequent intervals
-     * @param noteId
      */
-    public void saveNoteIdInReminderTable(long noteId) {
+    public void saveNoteIdInReminderTable() {
         SharedPreferences preference = mContext.getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE, Context.MODE_PRIVATE);
         String savedNoteString = preference.getString(Constants.LEARN_FOREVER_PREFERENCE_SAVED_NOTES_LIST, "");
 
@@ -79,13 +100,13 @@ public class ReminderJob extends Job {
         if(savedNoteString.length()>0){
             List<String> listOfNotes = Converter.convertStringToList(savedNoteString);
 
-            if(!listOfNotes.contains(String.valueOf(noteId))){
-                saveNoteIdInPreferenceAndUpdateReminderTable(noteId, savedNoteString);
+            if(!listOfNotes.contains(String.valueOf(mNoteId))){
+                saveNoteIdInPreferenceAndUpdateReminderTable(mNoteId, savedNoteString);
             }
             //else ignore
         }else{
             //Else, its a new list
-            saveNoteIdInPreferenceAndUpdateReminderTable(noteId, "");
+            saveNoteIdInPreferenceAndUpdateReminderTable(mNoteId, "");
         }
     }
 
@@ -110,6 +131,7 @@ public class ReminderJob extends Job {
 
         for(int days : Constants.DAY_INTERVAL_ONE){
             Calendar cal = Calendar.getInstance();
+            cal.setTime(currentDate);
             cal.add(Calendar.DATE, days);
             Date date = cal.getTime();
 
