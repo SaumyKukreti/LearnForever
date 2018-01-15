@@ -466,7 +466,7 @@ public class HomeFragment extends Fragment{
             mTextReader.readAloud(TextCreator.getNoteText(listOfSelectedNotes));
         }
         else{
-            Toast.makeText(getContext(), "Please choose some notes first!", Toast.LENGTH_SHORT).show();
+            setSelectionMode(true);
         }
     }
 
