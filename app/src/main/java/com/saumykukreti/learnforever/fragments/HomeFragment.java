@@ -1,10 +1,12 @@
 package com.saumykukreti.learnforever.fragments;
 
+import android.animation.ValueAnimator;
 import android.app.AlertDialog;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -13,12 +15,16 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.transition.TransitionManager;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.saumykukreti.learnforever.LearnForeverApplication;
@@ -44,6 +50,7 @@ public class HomeFragment extends Fragment{
 
     private static final String METADATA_CATEGORY = "metadata_category";
     private String mCategory;
+    private EditText mSearchEdit;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -103,6 +110,7 @@ public class HomeFragment extends Fragment{
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        initialiseViews();
         if(mCategory!=null && !mCategory.isEmpty()){
             //Means this activity shows notes of a particular category
 
@@ -125,6 +133,14 @@ public class HomeFragment extends Fragment{
 
         //Initialise search view
         initialiseSearchView();
+
+    }
+
+    /**
+     *  This method intialises all the views that are used across the fragment
+     */
+    private void initialiseViews() {
+        mSearchEdit = getView().findViewById(R.id.edit_search);
 
     }
 
@@ -155,7 +171,6 @@ public class HomeFragment extends Fragment{
      *  This method sets text watcher on the search view and
      */
     private void initialiseSearchView() {
-        EditText searchEdit = getView().findViewById(R.id.edit_search);
         TextWatcher textWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -193,7 +208,7 @@ public class HomeFragment extends Fragment{
             public void afterTextChanged(Editable editable) {
             }
         };
-        searchEdit.addTextChangedListener(textWatcher);
+        mSearchEdit.addTextChangedListener(textWatcher);
     }
 
     @Override
@@ -258,8 +273,66 @@ public class HomeFragment extends Fragment{
                 setSelectionMode(on);
             }
         });
+
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
         recyclerView.setAdapter(mHomeFragmentNotesRecyclerViewAdapter);
+
+
+        final Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.fade_out);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                mSearchEdit.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+        });
+
+
+        final Animation animation2 = AnimationUtils.loadAnimation(getContext(), R.anim.fade_in);
+        animation2.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                mSearchEdit.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+        });
+
+
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            recyclerView.setOnFlingListener(new RecyclerView.OnFlingListener() {
+                @Override
+                public boolean onFling(int velocityX, int velocityY) {
+                    //If velocity is positive, the user is scolling down and vice versa
+                    ViewGroup view = getView().findViewById(R.id.fragment_linear_container);
+                    TransitionManager.beginDelayedTransition(view);
+                    if(velocityY>0){
+                        //Scrolling down
+                        mSearchEdit.startAnimation(animation);
+
+                    }else{
+                        //Scolling up
+                        mSearchEdit.startAnimation(animation2);
+                    }
+                    return false;
+                }
+            });
+        }
     }
 
     /**

@@ -12,15 +12,21 @@
         android:orientation="vertical"
         tools:context="com.saumykukreti.learnforever.fragments.HomeFragment">
 
-        <EditText
-            android:id="@+id/edit_search"
+        <LinearLayout
+            android:id="@+id/fragment_linear_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:background="@drawable/background_drawable_with_white_background_and_gray_border"
-            android:hint="Search"
-            android:maxLines="1"
-            android:padding="10dp"/>
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/edit_search"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/background_drawable_with_white_background_and_gray_border"
+                android:hint="Search"
+                android:maxLines="1"
+                android:padding="10dp"/>
+        </LinearLayout>
+
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_notes"
@@ -35,7 +41,7 @@
         android:background="@drawable/ic_cross_white"
         android:layout_marginBottom="40dp"
         android:visibility="gone"
-        android:backgroundTint="@android:color/darker_gray"
+        app:backgroundTint="@android:color/darker_gray"
         android:layout_gravity="bottom|center_horizontal"
         app:srcCompat="@drawable/ic_cross_white"/>
 </android.support.design.widget.CoordinatorLayout>
