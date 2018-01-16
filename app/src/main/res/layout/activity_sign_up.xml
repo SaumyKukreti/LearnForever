@@ -56,28 +56,23 @@
             android:paddingBottom="5dp"
             android:hint="Password"
             android:background="@android:color/white"/>
-
-        <Button
-            android:id="@+id/button_sign_in"
-            android:layout_width="wrap_content"
+        <EditText
+            android:id="@+id/edit_text_confirm_password"
+            android:layout_marginTop="30dp"
+            android:inputType="textPassword"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Sign in"
-            android:layout_gravity="center_horizontal"
-            android:textAllCaps="false"/>
+            android:paddingLeft="10dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:hint="Confirm Password"
+            android:background="@android:color/white"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="OR"
-            android:layout_marginTop="20dp"
-            android:layout_gravity="center_horizontal"
-            android:textColor="@android:color/white"/>
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="30dp"
             android:orientation="horizontal">
 
             <com.google.android.gms.common.SignInButton
@@ -99,3 +94,4 @@
     </LinearLayout>
 
 </RelativeLayout>
+

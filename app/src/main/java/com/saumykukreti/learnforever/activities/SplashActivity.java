@@ -1,7 +1,9 @@
 package com.saumykukreti.learnforever.activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,6 +20,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.saumykukreti.learnforever.R;
+import com.saumykukreti.learnforever.constants.Constants;
 
 public class SplashActivity extends Activity implements GoogleApiClient.ConnectionCallbacks{
 
@@ -31,8 +34,10 @@ public class SplashActivity extends Activity implements GoogleApiClient.Connecti
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(SplashActivity.this);
-                if(account!=null){
+                SharedPreferences preference = getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE, Context.MODE_PRIVATE);
+                String userId = preference.getString(Constants.LEARN_FOREVER_PREFERENCE_USER_ID,"");
+
+                if(!userId.isEmpty()){
                     startActivity(new Intent(SplashActivity.this,NavigationDrawerActivity.class));
                 }
                 else{
@@ -53,6 +58,4 @@ public class SplashActivity extends Activity implements GoogleApiClient.Connecti
     public void onConnectionSuspended(int i) {
 
     }
-
-
 }

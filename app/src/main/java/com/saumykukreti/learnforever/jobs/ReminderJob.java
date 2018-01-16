@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.birbit.android.jobqueue.Job;
 import com.birbit.android.jobqueue.Params;
@@ -36,10 +37,10 @@ public class ReminderJob extends Job {
     private long mNoteId = 0;
     private String mDateOfCreation = null;
     private List<NoteTable> mListOfNotes = null;
-    private GoogleSignInAccount mAccount;
     private ReminderDataController mReminderDataController;
     private NoteDataController mNoteDataController;
     private SharedPreferences mPreference;
+    private String mUserId;
 
     /**
      * Constructor
@@ -69,7 +70,6 @@ public class ReminderJob extends Job {
     @Override
     public void onRun() throws Throwable {
         //Initialise variables
-        mAccount = GoogleSignIn.getLastSignedInAccount(mContext);
         mReminderDataController = ReminderDataController.getInstance(mContext);
         mNoteDataController = NoteDataController.getInstance(mContext);
 
@@ -93,20 +93,28 @@ public class ReminderJob extends Job {
      *  This method saves the noteId in the ReminderTable, at frequent intervals
      */
     public void saveNoteIdInReminderTable() {
+        mPreference = mContext.getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE, Context.MODE_PRIVATE);
         SharedPreferences preference = mContext.getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE, Context.MODE_PRIVATE);
         String savedNoteString = preference.getString(Constants.LEARN_FOREVER_PREFERENCE_SAVED_NOTES_LIST, "");
 
-        //Check if the note is already saved or not, if yes then ignore
-        if(savedNoteString.length()>0){
-            List<String> listOfNotes = Converter.convertStringToList(savedNoteString);
+        mUserId = mPreference.getString(Constants.LEARN_FOREVER_PREFERENCE_USER_ID, "");
 
-            if(!listOfNotes.contains(String.valueOf(mNoteId))){
-                saveNoteIdInPreferenceAndUpdateReminderTable(mNoteId, savedNoteString);
+        if(!mUserId.isEmpty()) {
+            //Check if the note is already saved or not, if yes then ignore
+            if (savedNoteString.length() > 0) {
+                List<String> listOfNotes = Converter.convertStringToList(savedNoteString);
+
+                if (!listOfNotes.contains(String.valueOf(mNoteId))) {
+                    saveNoteIdInPreferenceAndUpdateReminderTable(mNoteId, savedNoteString);
+                }
+                //else ignore
+            } else {
+                //Else, its a new list
+                saveNoteIdInPreferenceAndUpdateReminderTable(mNoteId, "");
             }
-            //else ignore
-        }else{
-            //Else, its a new list
-            saveNoteIdInPreferenceAndUpdateReminderTable(mNoteId, "");
+        }
+        else{
+            Log.e(TAG, "User id is empty");
         }
     }
 
@@ -176,7 +184,7 @@ public class ReminderJob extends Job {
 
     void syncReminderDataToFirebase(){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference(mAccount.getId());
+        DatabaseReference myRef = database.getReference(mUserId);
 
         SharedPreferences preference = mContext.getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE, Context.MODE_PRIVATE);
         String savedNoteString = preference.getString(Constants.LEARN_FOREVER_PREFERENCE_SAVED_NOTES_LIST, "");

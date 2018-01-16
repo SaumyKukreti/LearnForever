@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.birbit.android.jobqueue.Job;
 import com.birbit.android.jobqueue.Params;
@@ -36,10 +37,10 @@ public class DeleteReminderJob extends Job {
     private final Context mContext;
     private final long mNoteId;
     private final boolean mDeleteNote;
-    private GoogleSignInAccount mAccount;
     private ReminderDataController mReminderDataController;
     private SharedPreferences mPreference;
     private NoteDataController mNoteDataController;
+    private String mUserId;
 
     public DeleteReminderJob(Context context, long noteId, boolean deleteNote, Params params) {
         super(new Params(PRIORITY).requireNetwork());
@@ -54,12 +55,19 @@ public class DeleteReminderJob extends Job {
 
     @Override
     public void onRun() throws Throwable {
-        mAccount = GoogleSignIn.getLastSignedInAccount(mContext);
+        mPreference = mContext.getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE, Context.MODE_PRIVATE);
         mReminderDataController = ReminderDataController.getInstance(mContext);
         mNoteDataController = NoteDataController.getInstance(mContext);
-        if(deleteNoteFromPreferenceList(mNoteId)){
-            //Means the note was previously saved and all reminder data must be removed
-            deleteReminderDatesFromNoteAndDeleteEntriesFromReminderTable();
+
+        mUserId = mPreference.getString(Constants.LEARN_FOREVER_PREFERENCE_USER_ID, "");
+
+        if (!mUserId.isEmpty()) {
+            if (deleteNoteFromPreferenceList(mNoteId)) {
+                //Means the note was previously saved and all reminder data must be removed
+                deleteReminderDatesFromNoteAndDeleteEntriesFromReminderTable();
+            }
+        } else {
+            Log.e(TAG, "User id is empty");
         }
     }
 
@@ -69,17 +77,16 @@ public class DeleteReminderJob extends Job {
     private void deleteReminderDatesFromNoteAndDeleteEntriesFromReminderTable() {
         List<NoteTable> noteList = mNoteDataController.getNoteWithId(mNoteId);
 
-        if(noteList!=null && !noteList.isEmpty()){
+        if (noteList != null && !noteList.isEmpty()) {
             NoteTable note = noteList.get(0);
 
             deleteEntriesFromReminderTable(note.getReminderDates());
 
             //Check if the note is being deleted or updated
             //If the note is being deleted, delete the note else update the note
-            if(mDeleteNote){
+            if (mDeleteNote) {
                 mNoteDataController.deleteNoteFromDatabase(note);
-            }
-            else {
+            } else {
                 //Saving nothing
                 note.setReminderDates("");
                 mNoteDataController.updateNoteInDatabseOnly(note);
@@ -88,19 +95,20 @@ public class DeleteReminderJob extends Job {
     }
 
     /**
-     *  This method deletes the reminders from all the dates
+     * This method deletes the reminders from all the dates
+     *
      * @param reminderDates
      */
     private void deleteEntriesFromReminderTable(String reminderDates) {
 
-        if(reminderDates!=null && !reminderDates.isEmpty()){
+        if (reminderDates != null && !reminderDates.isEmpty()) {
             String[] reminders = reminderDates.split(",");
 
-            for(String rem : reminders){
+            for (String rem : reminders) {
                 //Removing the note id from each reminder date
                 ReminderTable reminderTable = mReminderDataController.getNotesForDate(rem);
 
-                if(reminderTable!=null) {
+                if (reminderTable != null) {
                     String noteIds = reminderTable.getNoteIds();
 
                     List<String> listOfNotes = Converter.convertStringToList(noteIds);
@@ -121,24 +129,24 @@ public class DeleteReminderJob extends Job {
     }
 
     /**
-     *  This method deletes the noteId from the list of notes to be reminded list
+     * This method deletes the noteId from the list of notes to be reminded list
+     *
      * @param noteId
      */
     private boolean deleteNoteFromPreferenceList(long noteId) {
-        SharedPreferences preference = mContext.getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE, Context.MODE_PRIVATE);
-        String savedNoteString = preference.getString(Constants.LEARN_FOREVER_PREFERENCE_SAVED_NOTES_LIST, "");
+        String savedNoteString = mPreference.getString(Constants.LEARN_FOREVER_PREFERENCE_SAVED_NOTES_LIST, "");
 
-        if(!savedNoteString.isEmpty()){
+        if (!savedNoteString.isEmpty()) {
             List<String> savedNotesList = Converter.convertStringToList(savedNoteString);
 
-            if(savedNotesList.contains(String.valueOf(noteId))){
+            if (savedNotesList.contains(String.valueOf(noteId))) {
                 //If so remove it from the list and save it
                 savedNotesList.remove(String.valueOf(noteId));
 
                 //Converting list to string
                 String noteString = Converter.convertListToString(savedNotesList);
 
-                preference.edit().putString(Constants.LEARN_FOREVER_PREFERENCE_SAVED_NOTES_LIST, noteString).apply();
+                mPreference.edit().putString(Constants.LEARN_FOREVER_PREFERENCE_SAVED_NOTES_LIST, noteString).apply();
                 syncReminderDataToFirebase();
 
                 return true;
@@ -149,7 +157,7 @@ public class DeleteReminderJob extends Job {
 
     void syncReminderDataToFirebase() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference(mAccount.getId());
+        DatabaseReference myRef = database.getReference(mUserId);
 
         SharedPreferences preference = mContext.getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE, Context.MODE_PRIVATE);
         String savedNoteString = preference.getString(Constants.LEARN_FOREVER_PREFERENCE_SAVED_NOTES_LIST, "");
