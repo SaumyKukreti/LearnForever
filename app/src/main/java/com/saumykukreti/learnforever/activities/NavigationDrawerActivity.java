@@ -28,6 +28,8 @@ import android.widget.TextView;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.saumykukreti.learnforever.R;
 import com.saumykukreti.learnforever.brodcastReceiver.NotificationBuilder;
 import com.saumykukreti.learnforever.constants.Constants;
@@ -64,7 +66,6 @@ public class NavigationDrawerActivity extends AppCompatActivity
     private int mCurrentMenu;
     private FloatingActionButton mFab;
     private Fragment mCurrentFragment;
-    private GoogleSignInAccount mAccount;
     private final String TAG = NavigationDrawerActivity.class.getSimpleName();
 
 
@@ -74,7 +75,6 @@ public class NavigationDrawerActivity extends AppCompatActivity
         setContentView(R.layout.activity_navigation_drawer);
 
         setRepeatingAlarm();
-        getAccountInformation();
         initialiseToolbar();
         initialiseFab();
         initialiseDrawer();
@@ -102,13 +102,6 @@ public class NavigationDrawerActivity extends AppCompatActivity
 
             alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY,pendingIntent);
         }
-    }
-
-    /**
-     * This method gets the account information and displays it on the UI
-     */
-    private void getAccountInformation() {
-        mAccount = GoogleSignIn.getLastSignedInAccount(this);
     }
 
     /**
@@ -193,16 +186,17 @@ public class NavigationDrawerActivity extends AppCompatActivity
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
         mNavigationView.setNavigationItemSelectedListener(this);
 
-        if (mAccount != null) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
             TextView nameTV = mNavigationView.getHeaderView(0).findViewById(R.id.tv_name);
             TextView emailTV = mNavigationView.getHeaderView(0).findViewById(R.id.tv_email);
             final ImageView profileIM = mNavigationView.getHeaderView(0).findViewById(R.id.imageView_profile);
 
-            nameTV.setText(mAccount.getDisplayName());
-            emailTV.setText(mAccount.getEmail());
+            nameTV.setText(user.getDisplayName());
+            emailTV.setText(user.getEmail());
 
-            if(mAccount.getPhotoUrl()!=null) {
-                new DownloadImageTask(profileIM).execute(mAccount.getPhotoUrl().toString());
+            if(user.getPhotoUrl()!=null) {
+                new DownloadImageTask(profileIM).execute(user.getPhotoUrl().toString());
             }
         }
     }
