@@ -19,9 +19,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 import com.saumykukreti.learnforever.LearnForeverApplication;
 import com.saumykukreti.learnforever.R;
 import com.saumykukreti.learnforever.constants.Constants;
@@ -39,6 +41,8 @@ public class LoginActivity extends Activity {
     private GoogleSignInClient mGoogleSignInClient;
     private EditText mEmailEditText;
     private EditText mPasswordEditText;
+    private Task<GoogleSignInAccount> mGoogleSignInTask;
+    private boolean mCreateAccount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,8 +106,19 @@ public class LoginActivity extends Activity {
      */
     private void initiateFirebaseSignIn() {
         final FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        mAuth.signInWithEmailAndPassword(mEmailEditText.getText().toString(), mPasswordEditText.getText().toString())
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+        //Check if sign in is using firebase only or through google
+        Task<AuthResult> authResult = null;
+        if(mGoogleSignInTask!=null){
+            //Through google sign in
+            GoogleSignInAccount account = mGoogleSignInTask.getResult();
+            AuthCredential googleCredentials = GoogleAuthProvider.getCredential(account.getIdToken(), null);
+            authResult = mAuth.signInWithCredential(googleCredentials);
+        }else{
+            authResult = mAuth.signInWithEmailAndPassword(mEmailEditText.getText().toString(), mPasswordEditText.getText().toString());
+        }
+
+        //On completion listener
+        authResult.addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
@@ -115,11 +130,10 @@ public class LoginActivity extends Activity {
                             Toast.makeText(LoginActivity.this, "Login complete", Toast.LENGTH_SHORT).show();
 
                             //Sign in complete, initiate login procedure
-                            startDataInitialiserJob(Constants.SIGN_IN_METHOD_FIREBASE_SIGN_IN);
+                            startDataInitialiserJob();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
-
                             // Show appropriate error
                             showInvalidCredentialsError();
                         }
@@ -129,13 +143,20 @@ public class LoginActivity extends Activity {
 
     /**
      *  This method saves the sign in method in shared preference and starts data initializer job
-     * @param signInMethod
      */
-    private void startDataInitialiserJob(int signInMethod) {
+    private void startDataInitialiserJob() {
 
         //Saving the sign in method in preferences
         SharedPreferences preference = getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE, Context.MODE_PRIVATE);
-        preference.edit().putInt(Constants.LEARN_FOREVER_PREFERENCE_SIGN_IN_METHOD, signInMethod).apply();
+
+        if(mGoogleSignInTask==null){
+            //Firebase sign in
+            preference.edit().putInt(Constants.LEARN_FOREVER_PREFERENCE_SIGN_IN_METHOD, Constants.SIGN_IN_METHOD_FIREBASE_SIGN_IN).apply();
+        }
+        else{
+            //Google sign in
+            preference.edit().putInt(Constants.LEARN_FOREVER_PREFERENCE_SIGN_IN_METHOD, Constants.SIGN_IN_METHOD_GOOGLE_SIGN_IN).apply();
+        }
 
         LearnForeverApplication.getInstance().getJobManager().addJobInBackground(new DataInitializerJob(this, null));
     }
@@ -165,6 +186,7 @@ public class LoginActivity extends Activity {
      */
     private void initialiseGoogleSignIn() {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
 
@@ -193,22 +215,9 @@ public class LoginActivity extends Activity {
         if (requestCode == RC_SIGN_IN) {
             // The Task returned from this call is always completed, no need to attach
             // a listener.
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            handleSignInResult(task);
-        }
-    }
-    // [END onActivityResult]
+            mGoogleSignInTask = GoogleSignIn.getSignedInAccountFromIntent(data);
 
-    // [START handleSignInResult]
-    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
-        try {
-            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-            // Signed in successfully, show authenticated UI.
-            startDataInitialiserJob(Constants.SIGN_IN_METHOD_GOOGLE_SIGN_IN);
-        } catch (ApiException e) {
-            // The ApiException status code indicates the detailed failure reason.
-            // Please refer to the GoogleSignInStatusCodes class reference for more information.
-            Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
+            initiateFirebaseSignIn();
         }
     }
 

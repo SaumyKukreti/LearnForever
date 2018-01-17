@@ -61,14 +61,8 @@ public class DataInitializerJob extends Job {
         int loginMethod = preference.getInt(Constants.LEARN_FOREVER_PREFERENCE_SIGN_IN_METHOD,-1);
         String userId = "";
         if(loginMethod!=-1){
-            if(loginMethod == Constants.SIGN_IN_METHOD_FIREBASE_SIGN_IN){
-                FirebaseAuth user = FirebaseAuth.getInstance();
-                userId = (user!=null) ? user.getUid() : "";
-            }
-            else if(loginMethod == Constants.SIGN_IN_METHOD_GOOGLE_SIGN_IN){
-                GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(mContext);
-                userId = (account!=null) ? account.getId() : "";
-            }
+            FirebaseAuth user = FirebaseAuth.getInstance();
+            userId = (user!=null) ? user.getUid() : "";
         }
         else{
             //TODO - HANDLE THIS
