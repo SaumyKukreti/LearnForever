@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@color/colorPrimary"
+    android:layout_height="match_parent"
+    tools:context="com.saumykukreti.learnforever.activities.WaitingVerificationActivity">
+
+    <TextView
+        android:id="@+id/text_app_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:textSize="40sp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
+        android:textColor="@android:color/white"/>
+
+    <TextView
+        android:layout_margin="20dp"
+        android:textSize="18sp"
+        android:layout_below="@id/text_app_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
+        android:text="We have sent you a verification email, please click on the link to activate your account. \n \nOnce done, click on the sign in button shown below to continue into the app.\n\n Please click the resend button if you have not received any verification mail."/>
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:layout_alignParentBottom="true">
+
+        <Button
+            android:id="@+id/button_resend_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Resend Email"
+            android:textAllCaps="false"/>
+
+
+        <Button
+            android:id="@+id/button_continue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Continue"
+            android:layout_marginLeft="10dp"
+            android:textAllCaps="false"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

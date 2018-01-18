@@ -58,16 +58,9 @@ public class DataInitializerJob extends Job {
 
         //Getting id
         SharedPreferences preference = mContext.getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE, Context.MODE_PRIVATE);
-        int loginMethod = preference.getInt(Constants.LEARN_FOREVER_PREFERENCE_SIGN_IN_METHOD,-1);
         String userId = "";
-        if(loginMethod!=-1){
-            FirebaseAuth user = FirebaseAuth.getInstance();
-            userId = (user!=null) ? user.getUid() : "";
-        }
-        else{
-            //TODO - HANDLE THIS
-            Log.e(TAG, "No account information found");
-        }
+        FirebaseAuth user = FirebaseAuth.getInstance();
+        userId = (user!=null) ? user.getUid() : "";
 
         if(userId!=null && !userId.isEmpty()) {
             //Saving the user id in preference

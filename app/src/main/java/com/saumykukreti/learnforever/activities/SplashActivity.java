@@ -19,6 +19,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.saumykukreti.learnforever.R;
 import com.saumykukreti.learnforever.constants.Constants;
 
@@ -41,7 +42,15 @@ public class SplashActivity extends Activity implements GoogleApiClient.Connecti
                     startActivity(new Intent(SplashActivity.this,NavigationDrawerActivity.class));
                 }
                 else{
-                    startActivity(new Intent(SplashActivity.this,LoginActivity.class));
+                    //Check if the user is waiting verification
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                    if(user!=null && !user.isEmailVerified()){
+                        startActivity(new Intent(SplashActivity.this, WaitingVerificationActivity.class));
+                    }
+                    else {
+                        startActivity(new Intent(SplashActivity.this, LoginActivity.class));
+                    }
                 }
 
                 SplashActivity.this.finish();

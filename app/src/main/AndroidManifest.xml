@@ -31,7 +31,8 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".activities.LoginActivity"
+        <activity
+            android:name=".activities.LoginActivity"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
 
         <service
@@ -70,8 +71,11 @@
                 android:resource="@xml/learn_forever_widget_info"/>
         </receiver>
 
-        <activity android:name=".activities.SignUpActivity"
+        <activity
+            android:name=".activities.SignUpActivity"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
+        <activity android:name=".activities.WaitingVerificationActivity"
+                  android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
     </application>
 
 </manifest>

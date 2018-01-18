@@ -2,7 +2,9 @@ package com.saumykukreti.learnforever.activities;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -96,9 +98,10 @@ public class SignUpActivity extends Activity {
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
 
-                            //Sign in complete, initiate login procedure
-                            startDataInitialiserJob(Constants.SIGN_IN_METHOD_FIREBASE_SIGN_IN);
-
+                            if(user!=null) {
+                                user.sendEmailVerification();
+                            }
+                            startActivity( new Intent(SignUpActivity.this, WaitingVerificationActivity.class));
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
@@ -111,18 +114,4 @@ public class SignUpActivity extends Activity {
                 });
 
     }
-
-    /**
-     *  This method saves the sign in method in shared preference and starts data initializer job
-     * @param signInMethod
-     */
-    private void startDataInitialiserJob(int signInMethod) {
-
-        //Saving the sign in method in preferences
-        SharedPreferences preference = getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE, Context.MODE_PRIVATE);
-        preference.edit().putInt(Constants.LEARN_FOREVER_PREFERENCE_SIGN_IN_METHOD, signInMethod).apply();
-
-        LearnForeverApplication.getInstance().getJobManager().addJobInBackground(new DataInitializerJob(this, null));
-    }
-
 }

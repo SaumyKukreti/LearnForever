@@ -43,6 +43,7 @@ public class LoginActivity extends Activity {
     private EditText mPasswordEditText;
     private Task<GoogleSignInAccount> mGoogleSignInTask;
     private boolean mCreateAccount;
+    private FirebaseUser mFireBaseUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,7 +125,7 @@ public class LoginActivity extends Activity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
+                            mFireBaseUser = mAuth.getCurrentUser();
 
                             //TODO - REMOVE THIS
                             Toast.makeText(LoginActivity.this, "Login complete", Toast.LENGTH_SHORT).show();
@@ -158,7 +159,12 @@ public class LoginActivity extends Activity {
             preference.edit().putInt(Constants.LEARN_FOREVER_PREFERENCE_SIGN_IN_METHOD, Constants.SIGN_IN_METHOD_GOOGLE_SIGN_IN).apply();
         }
 
-        LearnForeverApplication.getInstance().getJobManager().addJobInBackground(new DataInitializerJob(this, null));
+        //In case of google sign in, this field is always true
+        if(mFireBaseUser.isEmailVerified()) {
+            LearnForeverApplication.getInstance().getJobManager().addJobInBackground(new DataInitializerJob(this, null));
+        }else{
+            Toast.makeText(this, "Email verification pending", Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**
