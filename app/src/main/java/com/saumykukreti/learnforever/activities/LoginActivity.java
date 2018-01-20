@@ -1,15 +1,24 @@
 package com.saumykukreti.learnforever.activities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.transition.Slide;
+import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -29,6 +38,7 @@ import com.saumykukreti.learnforever.R;
 import com.saumykukreti.learnforever.constants.Constants;
 import com.saumykukreti.learnforever.events.InitializationCompleteEvent;
 import com.saumykukreti.learnforever.jobs.DataInitializerJob;
+import com.saumykukreti.learnforever.util.TextCreator;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -44,6 +54,7 @@ public class LoginActivity extends Activity {
     private Task<GoogleSignInAccount> mGoogleSignInTask;
     private boolean mCreateAccount;
     private FirebaseUser mFireBaseUser;
+    private RelativeLayout mTipLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +70,7 @@ public class LoginActivity extends Activity {
      */
     private void initialiseViews() {
 
+        mTipLayout = (RelativeLayout) findViewById(R.id.tip_container);
         mEmailEditText = findViewById(R.id.edit_text_email);
         mPasswordEditText = findViewById(R.id.edit_text_password);
 
@@ -70,6 +82,7 @@ public class LoginActivity extends Activity {
                 boolean validationPassed = validateFields();
 
                 if(validationPassed){
+                    toggleTipLayout(true);
                     initiateFirebaseSignIn();
                 }
                 else{
@@ -85,6 +98,33 @@ public class LoginActivity extends Activity {
                 startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
             }
         });
+    }
+
+    /**
+     *  This method shows the top layout
+     */
+    private void toggleTipLayout(boolean show) {
+        ViewGroup view = findViewById(R.id.login_activity_container);
+
+        TransitionManager.beginDelayedTransition(view);
+
+        TextView tipText = findViewById(R.id.text_tip);
+        tipText.setText(TextCreator.getRandomTip());
+
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);;
+        if(!show) {
+            params.height=0;
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mEmailEditText.requestFocus();
+                    mPasswordEditText.requestFocus();
+                }
+            },2000);
+        }
+        mTipLayout.setLayoutParams(params);
+
+
     }
 
     /**
@@ -171,6 +211,9 @@ public class LoginActivity extends Activity {
      *  This method displays invalid credentials error message
      */
     private void showInvalidCredentialsError() {
+
+        toggleTipLayout(false);
+
         //TODO - show a dialog box instead
         Toast.makeText(this, "Invalid Credentials, please try again", Toast.LENGTH_SHORT).show();
     }
@@ -225,6 +268,17 @@ public class LoginActivity extends Activity {
 
             initiateFirebaseSignIn();
         }
+    }
+
+    private void showProgressDialog(String message){
+        String progressMessage = "Please Wait !!";
+
+        //Load provided message if not empty or null
+        if (message!=null && !message.isEmpty()){
+            progressMessage = message;
+        }
+
+        ProgressDialog progressDialog = new ProgressDialog(this);
     }
 
     @Subscribe

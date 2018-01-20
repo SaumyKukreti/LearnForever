@@ -28,7 +28,7 @@ public class ReminderDataController {
     private ReminderDataController(Context context) {
         mContext = context;
         mDatabase = Room.databaseBuilder(context,
-                AppDatabase.class, "learnForever").allowMainThreadQueries().build();
+                AppDatabase.class, "learn_forever").allowMainThreadQueries().build();
     }
 
     public static ReminderDataController getInstance(Context context){

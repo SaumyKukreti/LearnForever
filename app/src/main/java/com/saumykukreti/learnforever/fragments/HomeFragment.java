@@ -15,6 +15,9 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.transition.ChangeBounds;
+import android.transition.Fade;
+import android.transition.Transition;
 import android.transition.TransitionManager;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -277,42 +280,8 @@ public class HomeFragment extends Fragment{
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
         recyclerView.setAdapter(mHomeFragmentNotesRecyclerViewAdapter);
 
-
-        final Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.fade_out);
-        animation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                mSearchEdit.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-            }
-        });
-
-
-        final Animation animation2 = AnimationUtils.loadAnimation(getContext(), R.anim.fade_in);
-        animation2.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                mSearchEdit.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-            }
-        });
-
-
-
+        final Fade fade = new Fade();
+        fade.setDuration(500);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             recyclerView.setOnFlingListener(new RecyclerView.OnFlingListener() {
@@ -320,14 +289,13 @@ public class HomeFragment extends Fragment{
                 public boolean onFling(int velocityX, int velocityY) {
                     //If velocity is positive, the user is scolling down and vice versa
                     ViewGroup view = getView().findViewById(R.id.fragment_linear_container);
-                    TransitionManager.beginDelayedTransition(view);
-                    if(velocityY>0){
+                    TransitionManager.beginDelayedTransition(view,fade);
+                    if(velocityY>2000){
                         //Scrolling down
-                        mSearchEdit.startAnimation(animation);
-
-                    }else{
+                        mSearchEdit.setVisibility(View.GONE);
+                    }else if((velocityY<-2000)){
                         //Scolling up
-                        mSearchEdit.startAnimation(animation2);
+                        mSearchEdit.setVisibility(View.VISIBLE);
                     }
                     return false;
                 }
@@ -361,6 +329,9 @@ public class HomeFragment extends Fragment{
                 cancelAction();
                 return true;
             case R.id.home_add_to_category:
+                return true;
+            case R.id.home_search:
+                mSearchEdit.setVisibility(View.VISIBLE);
                 return true;
         }
         return true;

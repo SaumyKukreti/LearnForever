@@ -4,6 +4,7 @@ import com.saumykukreti.learnforever.constants.Constants;
 import com.saumykukreti.learnforever.modelClasses.dataTables.NoteTable;
 
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by saumy on 12/16/2017.
@@ -51,5 +52,25 @@ public class TextCreator {
             }
         }
         return stringBuffer.toString();
+    }
+
+    /**
+     *  This method gives back a random tip
+     * @return
+     */
+    public static String getRandomTip() {
+        String[] arrayOfStrings = new String[] {
+                "Tips 1 ",
+                "Tips 2 ",
+                "Tips 3 "
+        };
+
+        int index = new Random().nextInt(arrayOfStrings.length-1);
+        if(index < arrayOfStrings.length){
+            return arrayOfStrings[index];
+        }
+        else{
+            return arrayOfStrings[0];
+        }
     }
 }

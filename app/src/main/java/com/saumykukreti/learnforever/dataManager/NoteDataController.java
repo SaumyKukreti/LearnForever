@@ -29,7 +29,7 @@ public class NoteDataController {
         //TODO - REMOVE ALLOW MAIN THREAD QUERIES
         mContext = context;
         mDatabase = Room.databaseBuilder(context,
-                AppDatabase.class, "learnForever").allowMainThreadQueries().build();
+                AppDatabase.class, "learn_forever").allowMainThreadQueries().build();
     }
 
     public AppDatabase getDatabase() {
