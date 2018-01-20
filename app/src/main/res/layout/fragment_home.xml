@@ -6,7 +6,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
-        android:id="@+id/home_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/gray_color"
@@ -14,34 +13,42 @@
         tools:context="com.saumykukreti.learnforever.fragments.HomeFragment">
 
         <LinearLayout
-            android:id="@+id/search_container"
+            android:id="@+id/home_container"
             android:layout_width="match_parent"
-            android:orientation="horizontal"
-            android:layout_margin="5dp"
-            android:visibility="gone"
-            android:background="@drawable/background_drawable_with_white_background_and_gray_border"
             android:layout_height="wrap_content">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="5dp"
-                app:srcCompat="@drawable/ic_search_black"/>
-
-            <EditText
-                android:id="@+id/edit_search"
+            <LinearLayout
+                android:id="@+id/search_container"
+                android:orientation="horizontal"
+                android:layout_margin="5dp"
+                android:visibility="gone"
+                android:background="@drawable/background_drawable_with_white_background_and_gray_border"
                 android:layout_width="match_parent"
-                android:background="@android:color/transparent"
-                android:layout_height="wrap_content"
-                android:hint="Search"
-                android:maxLines="1"
-                android:padding="10dp"/>
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="5dp"
+                    app:srcCompat="@drawable/ic_search_black"/>
+
+                <EditText
+                    android:id="@+id/edit_search"
+                    android:layout_width="match_parent"
+                    android:background="@android:color/transparent"
+                    android:layout_height="wrap_content"
+                    android:hint="Search"
+                    android:maxLines="1"
+                    android:padding="10dp"/>
+            </LinearLayout>
+
         </LinearLayout>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_notes"
             android:layout_width="match_parent"
+            android:focusableInTouchMode="true"
             android:layout_height="match_parent"/>
     </LinearLayout>
 
