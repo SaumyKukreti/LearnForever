@@ -54,6 +54,7 @@ public class HomeFragment extends Fragment{
     private static final String METADATA_CATEGORY = "metadata_category";
     private String mCategory;
     private EditText mSearchEdit;
+    private LinearLayout mSearchContainer;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -280,22 +281,23 @@ public class HomeFragment extends Fragment{
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
         recyclerView.setAdapter(mHomeFragmentNotesRecyclerViewAdapter);
 
+        final ViewGroup fragment_container = getView().findViewById(R.id.home_container);
+        mSearchContainer = getView().findViewById(R.id.search_container);
         final Fade fade = new Fade();
-        fade.setDuration(500);
-
+        fade.setDuration(200);
+        fade.removeTarget(recyclerView);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             recyclerView.setOnFlingListener(new RecyclerView.OnFlingListener() {
                 @Override
                 public boolean onFling(int velocityX, int velocityY) {
                     //If velocity is positive, the user is scolling down and vice versa
-                    ViewGroup view = getView().findViewById(R.id.fragment_linear_container);
-                    TransitionManager.beginDelayedTransition(view,fade);
-                    if(velocityY>2000){
+                    TransitionManager.beginDelayedTransition(fragment_container,fade);
+                    if(velocityY>3000){
                         //Scrolling down
-                        mSearchEdit.setVisibility(View.GONE);
-                    }else if((velocityY<-2000)){
+                        mSearchContainer.setVisibility(View.GONE);
+                    }else if((velocityY<-3000)){
                         //Scolling up
-                        mSearchEdit.setVisibility(View.VISIBLE);
+                        mSearchContainer.setVisibility(View.VISIBLE);
                     }
                     return false;
                 }
@@ -331,7 +333,7 @@ public class HomeFragment extends Fragment{
             case R.id.home_add_to_category:
                 return true;
             case R.id.home_search:
-                mSearchEdit.setVisibility(View.VISIBLE);
+                mSearchContainer.setVisibility(View.VISIBLE);
                 return true;
         }
         return true;
