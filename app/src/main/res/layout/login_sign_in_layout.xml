@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:text="Please enter your credentials to sign in or use the google sign in button below"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"/>
+
+            <EditText
+                android:id="@+id/edit_text_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:inputType="textEmailAddress"
+                android:background="@drawable/background_white_with_rounded_corders"
+                android:hint="Email"
+                android:paddingBottom="5dp"
+                android:imeOptions="actionNext"
+                android:nextFocusDown="@+id/edit_text_password"
+                android:paddingLeft="15dp"
+                android:paddingTop="5dp"/>
+
+            <EditText
+                android:id="@+id/edit_text_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/background_white_with_rounded_corders"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:imeOptions="actionDone"
+                android:paddingBottom="5dp"
+                android:paddingLeft="15dp"
+                android:paddingTop="5dp"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="50dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/scene_login_button_sign_in"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Sign in"
+                    android:background="@drawable/button_drawable_with_white_background_and_rounded_corners"
+                    android:textAllCaps="false"/>
+                <Button
+                    android:id="@+id/scene_login_button_sign_up"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="Sign up"
+                    android:background="@drawable/button_drawable_with_white_background_and_rounded_corners"
+                    android:textAllCaps="false"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:text="OR USE"
+                android:textColor="@android:color/white"/>
+
+            <com.google.android.gms.common.SignInButton
+                android:id="@+id/button_google_sign_in"
+                android:layout_width="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
+

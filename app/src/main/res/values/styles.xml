@@ -20,6 +20,7 @@
     <style name="AppThemeWithNoActionBar" parent="AppTheme">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:windowContentTransitions">true</item>
     </style>
 
     <style name="AppThemeWithNoActionBarAndBlackStatusBar" parent="AppThemeWithNoActionBar">

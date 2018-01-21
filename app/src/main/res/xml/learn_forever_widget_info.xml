@@ -5,6 +5,7 @@
                     android:updatePeriodMillis="0"
                     android:initialLayout="@layout/learn_forever_widget_layout"
                     android:resizeMode="horizontal|vertical"
+                    android:previewImage="@drawable/learn_forever"
                     android:widgetCategory="home_screen|keyguard">
 
 </appwidget-provider>

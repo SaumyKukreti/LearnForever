@@ -21,6 +21,7 @@
         android:textColor="@android:color/white"/>
 
     <TextView
+        android:id="@+id/text_waiting"
         android:layout_margin="20dp"
         android:textSize="18sp"
         android:layout_below="@id/text_app_name"
@@ -29,8 +30,21 @@
         android:textColor="@android:color/white"
         android:text="We have sent you a verification email, please click on the link to activate your account. \n \nOnce done, click on the sign in button shown below to continue into the app.\n\n Please click the resend button if you have not received any verification mail."/>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/text_waiting"
+        android:layout_above="@+id/button_container">
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"/>
+    </RelativeLayout>
+
 
     <LinearLayout
+        android:id="@+id/button_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"

@@ -14,102 +14,18 @@
         android:id="@+id/text_app_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/app_name"
-        android:textSize="40sp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="30dp"
         android:layout_marginBottom="30dp"
-        android:textColor="@android:color/white"/>
+        android:layout_marginTop="30dp"
+        android:text="@string/app_name"
+        android:textColor="@android:color/white"
+        android:textSize="40sp"
+        android:transitionName="title"/>
 
-    <RelativeLayout
-        android:id="@+id/tip_container"
-        android:layout_width="match_parent"
-        android:layout_height="0dp">
-        <include layout="@layout/tip_layout"/>
-    </RelativeLayout>
-
-    <RelativeLayout
+    <FrameLayout
+        android:id="@+id/frame_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Please enter your credentials to sign in or use the google sign in button below"
-                android:textColor="@android:color/white"
-                android:layout_gravity="center_horizontal"
-                android:textSize="16sp"/>
-            <EditText
-                android:id="@+id/edit_text_email"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Email"
-                android:layout_marginTop="20dp"
-                android:paddingLeft="10dp"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:background="@android:color/white"/>
-
-            <EditText
-                android:id="@+id/edit_text_password"
-                android:layout_marginTop="30dp"
-                android:inputType="textPassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="10dp"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:hint="Password"
-                android:background="@android:color/white"/>
-
-            <Button
-                android:id="@+id/button_sign_in"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="Sign in"
-                android:layout_gravity="center_horizontal"
-                android:textAllCaps="false"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="OR"
-                android:layout_marginTop="20dp"
-                android:layout_gravity="center_horizontal"
-                android:textColor="@android:color/white"/>
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:orientation="horizontal">
-
-                <com.google.android.gms.common.SignInButton
-                    android:id="@+id/button_google_sign_in"
-                    android:layout_width="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_height="wrap_content"/>
-
-                <Button
-                    android:id="@+id/button_sign_up"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Sign up"
-                    android:layout_marginLeft="10dp"
-                    android:textAllCaps="false"/>
-
-            </LinearLayout>
-
-        </LinearLayout>
-    </RelativeLayout>
-
-
+        <include layout="@layout/login_sign_in_layout"/>
+    </FrameLayout>
 </LinearLayout>

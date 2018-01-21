@@ -3,8 +3,14 @@ package com.saumykukreti.learnforever.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.transition.Fade;
+import android.transition.Scene;
+import android.transition.Transition;
+import android.transition.TransitionManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -23,12 +29,14 @@ public class WaitingVerificationActivity extends Activity {
 
 
     private FirebaseUser mUser;
+    private View mProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_waiting_verification);
 
+        mProgressBar = findViewById(R.id.progress_bar);
         mUser = FirebaseAuth.getInstance().getCurrentUser();
 
         initialiseViews();
@@ -52,7 +60,8 @@ public class WaitingVerificationActivity extends Activity {
             @Override
             public void onClick(View v) {
                 mUser.reload();
-                //Wait for 5 seconds to load and check
+                toggleTipLayout(true);
+                //Wait for 3 seconds to load and check
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -61,10 +70,11 @@ public class WaitingVerificationActivity extends Activity {
                         }
                         else{
                             //User still not verified
+                            toggleTipLayout(false);
                             Toast.makeText(WaitingVerificationActivity.this, "Verification not complete, please open the link given on the email!!", Toast.LENGTH_SHORT).show();
                         }
                     }
-                }, 5000);
+                }, 3000);
             }
         });
     }
@@ -83,7 +93,22 @@ public class WaitingVerificationActivity extends Activity {
 
     @Subscribe
     public void onMessageEvent(InitializationCompleteEvent event) {
-        startActivity(new Intent(this, NavigationDrawerActivity.class));
+        Intent intent =new Intent(this, NavigationDrawerActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
         this.finish();
     }
+
+    /**
+     *  This method shows the top layout
+     */
+    private void toggleTipLayout(boolean show) {
+        if(show){
+            mProgressBar.setVisibility(View.VISIBLE);
+        }
+        else{
+            mProgressBar.setVisibility(View.GONE);
+        }
+    }
+
 }
