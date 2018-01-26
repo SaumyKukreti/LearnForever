@@ -87,20 +87,20 @@ public class NavigationDrawerActivity extends AppCompatActivity
      * This method sets an alarm if it is not already set
      */
     private void setRepeatingAlarm() {
-        SharedPreferences preference = getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE,Context.MODE_PRIVATE);
+        SharedPreferences preference = getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE, Context.MODE_PRIVATE);
         boolean isAlarmSet = preference.getBoolean(Constants.LEARN_FOREVER_PREFERENCE_IS_ALARM_SET, false);
 
-        if(!isAlarmSet){
+        if (!isAlarmSet) {
             //Alarm is not se, setting an alarm
             Calendar calendar = Calendar.getInstance();
             //TODO- SET TIME HERE
-            calendar.add(Calendar.MINUTE,1);
+            calendar.add(Calendar.MINUTE, 1);
             Intent intent = new Intent(getApplicationContext(), NotificationBuilder.class);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),Constants.NOTIFICATION_ALARM_REQUEST_CODE,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), Constants.NOTIFICATION_ALARM_REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
             AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY,pendingIntent);
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
         }
     }
 
@@ -112,36 +112,70 @@ public class NavigationDrawerActivity extends AppCompatActivity
     private void creteAndLoadFragment(String fragmentName) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.setCustomAnimations(R.anim.fade_in,R.anim.fade_out);
+        fragmentTransaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
 
-        mCurrentFragment = null;
-        switch (fragmentName) {
-            case FRAGMENT_HOME:
-                mNavigationView.setCheckedItem(R.id.nav_home);
-                mCurrentItemId = R.id.nav_home;
-                mCurrentFragment = createHomeFragment();
-                break;
-            case FRAGMENT_CATEGORIES:
-                mNavigationView.setCheckedItem(R.id.nav_categories);
-                mCurrentItemId = R.id.nav_categories;
-                mCurrentFragment = createCategoriesFragment();
-                break;
-            case FRAGMENT_REVISE_:
-                mNavigationView.setCheckedItem(R.id.nav_revise);
-                mCurrentItemId = R.id.nav_revise;
-                mCurrentFragment = createReviseFragment();
-                break;
-            case FRAGMENT_SETTINGS:
-                mNavigationView.setCheckedItem(R.id.nav_settings);
-                mCurrentItemId = R.id.nav_settings;
-                mCurrentFragment = createSettingsFragment();
-                break;
+        int lengthOfFragmentBackStack = getLengthOfFragmentStack(fragmentManager);
+
+        if (fragmentName.equalsIgnoreCase(FRAGMENT_HOME) && lengthOfFragmentBackStack == 0) {
+            mNavigationView.setCheckedItem(R.id.nav_home);
+            mCurrentItemId = R.id.nav_home;
+            mCurrentFragment = createHomeFragment();
+            //As the length of fragment back stack is 0, this means no fragment has been added to the back stack till now, hence adding home fragment to the container
+            fragmentTransaction.add(R.id.navigation_drawer_fragment_container, mCurrentFragment).commit();
+            //Returning as no further action is required
+            return;
         }
 
-        //If fragment is null then do not replace else replace
-        if (mCurrentFragment != null) {
-            fragmentTransaction.replace(R.id.navigation_drawer_fragment_container, mCurrentFragment).commit();
+        //If home fragment is required for the second time
+        if (fragmentName.equalsIgnoreCase(FRAGMENT_HOME) && lengthOfFragmentBackStack != 0) {
+            //As the home fragment will be added and other fragments will be added over it till 1 level only, hence pop will show home fragment
+            mNavigationView.setCheckedItem(R.id.nav_home);
+            mCurrentItemId = R.id.nav_home;
+            mCurrentFragment = createHomeFragment();
+            fragmentManager.popBackStack();
+            updateActionBarForHomeFragment();
+            return;
         }
+
+        //If some other fragment needs to get added
+        if (!fragmentName.equalsIgnoreCase(FRAGMENT_HOME)) {
+            //Check which is the current fragment, if it is home fragment then adding the new fragment on the top else first popping the previous fragment and then adding the new fragment
+            mCurrentFragment = null;
+            switch (fragmentName) {
+                case FRAGMENT_CATEGORIES:
+                    mNavigationView.setCheckedItem(R.id.nav_categories);
+                    mCurrentItemId = R.id.nav_categories;
+                    mCurrentFragment = createCategoriesFragment();
+                    break;
+                case FRAGMENT_REVISE_:
+                    mNavigationView.setCheckedItem(R.id.nav_revise);
+                    mCurrentItemId = R.id.nav_revise;
+                    mCurrentFragment = createReviseFragment();
+                    break;
+                case FRAGMENT_SETTINGS:
+                    mNavigationView.setCheckedItem(R.id.nav_settings);
+                    mCurrentItemId = R.id.nav_settings;
+                    mCurrentFragment = createSettingsFragment();
+                    break;
+            }
+
+            //Checking if some other fragment is already added or not, if so first popping that and then adding a new item
+            if (lengthOfFragmentBackStack != 0) {
+                fragmentManager.popBackStack();
+            }
+
+            fragmentTransaction.add(R.id.navigation_drawer_fragment_container, mCurrentFragment).addToBackStack(null).commit();
+        }
+    }
+
+    /**
+     * Returns length of Fragment stack
+     *
+     * @param fragmentManager
+     * @return
+     */
+    private int getLengthOfFragmentStack(FragmentManager fragmentManager) {
+        return fragmentManager.getBackStackEntryCount();
     }
 
     private Fragment createHomeFragment() {
@@ -195,36 +229,37 @@ public class NavigationDrawerActivity extends AppCompatActivity
             nameTV.setText(user.getDisplayName());
             emailTV.setText(user.getEmail());
 
-            if(user.getPhotoUrl()!=null) {
+            if (user.getPhotoUrl() != null) {
                 new DownloadImageTask(profileIM).execute(user.getPhotoUrl().toString());
             }
         }
     }
 
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView profileImage;
+private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+    ImageView profileImage;
 
-        public DownloadImageTask(ImageView bmImage) {
-            this.profileImage = bmImage;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            return mIcon11;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            profileImage.setImageBitmap(result);
-        }
+    public DownloadImageTask(ImageView bmImage) {
+        this.profileImage = bmImage;
     }
+
+    protected Bitmap doInBackground(String... urls) {
+        String urldisplay = urls[0];
+        Bitmap mIcon11 = null;
+        try {
+            InputStream in = new java.net.URL(urldisplay).openStream();
+            mIcon11 = BitmapFactory.decodeStream(in);
+        } catch (Exception e) {
+            Log.e("Error", e.getMessage());
+            e.printStackTrace();
+        }
+        return mIcon11;
+    }
+
+    protected void onPostExecute(Bitmap result) {
+        profileImage.setImageBitmap(result);
+    }
+
+}
 
 
     /**

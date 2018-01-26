@@ -316,7 +316,8 @@ public class LoginActivity extends Activity {
             } else {
                 boolean emailFlag = false;
                 boolean passwordFlag = false;
-                boolean confirmPasswordFlag = false;
+                boolean sameCheck = false;
+
 
 
                 if (mEmailEditText.getText().length() == 0) {
@@ -330,6 +331,11 @@ public class LoginActivity extends Activity {
                     passwordFlag = true;
                 } else {
                     mPasswordEditText.setBackground(ContextCompat.getDrawable(this, R.drawable.background_white_with_rounded_corders));
+                    mConfirmPasswordEditText.setBackground(ContextCompat.getDrawable(this, R.drawable.background_white_with_rounded_corders));
+                }
+
+                if(!mPasswordEditText.getText().toString().contentEquals(mConfirmPasswordEditText.getText().toString())){
+                    sameCheck = true;
                 }
 
                 if (emailFlag && passwordFlag) {
@@ -338,6 +344,9 @@ public class LoginActivity extends Activity {
                     Toast.makeText(this, "Email cannot be empty", Toast.LENGTH_SHORT).show();
                 } else if (passwordFlag) {
                     Toast.makeText(this, "The length of the password should be 6 or greater", Toast.LENGTH_SHORT).show();
+                }
+                else if(sameCheck){
+                    Toast.makeText(this, "Password and confirm passwords do not match", Toast.LENGTH_SHORT).show();
                 }
             }
         }
