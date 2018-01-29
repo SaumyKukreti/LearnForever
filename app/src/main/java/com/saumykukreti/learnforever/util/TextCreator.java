@@ -73,4 +73,17 @@ public class TextCreator {
             return arrayOfStrings[0];
         }
     }
+
+    public static String getIntervalText(int[] dayIntervalOne) {
+        StringBuffer stringBuffer = new StringBuffer();
+
+        for(int i : dayIntervalOne){
+            stringBuffer.append(i).append(",");
+        }
+
+        //Removing last ,
+        stringBuffer.substring(0,stringBuffer.length()-1);
+
+        return stringBuffer.toString();
+    }
 }

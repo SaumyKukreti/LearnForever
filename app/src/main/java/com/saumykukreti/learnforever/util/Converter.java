@@ -1,5 +1,7 @@
 package com.saumykukreti.learnforever.util;
 
+import com.saumykukreti.learnforever.constants.Constants;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -53,6 +55,24 @@ public class Converter {
             }
 
             return str.toString();
+        }
+    }
+
+    public static int[] convertStringToIntArray(String str){
+        try {
+
+            if(str.isEmpty()){
+                return Constants.DAY_INTERVAL_ONE;
+            }
+            String[] strSplitted = str.split(",");
+            int intArray[] = new int[strSplitted.length];
+            for (int i = 0; i < strSplitted.length; i++) {
+                intArray[i] = Integer.parseInt(strSplitted[i]);
+            }
+            return intArray;
+        }
+        catch (Exception e){
+            return Constants.DAY_INTERVAL_ONE;
         }
     }
 }

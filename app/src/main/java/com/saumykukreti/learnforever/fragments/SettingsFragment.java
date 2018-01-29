@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +31,7 @@ import com.saumykukreti.learnforever.dataManager.ReminderDataController;
 import com.saumykukreti.learnforever.jobs.DataSyncJob;
 import com.saumykukreti.learnforever.modelClasses.dataTables.NoteTable;
 import com.saumykukreti.learnforever.modelClasses.dataTables.ReminderTable;
+import com.saumykukreti.learnforever.util.TextCreator;
 
 import java.util.List;
 
@@ -151,13 +154,60 @@ public class SettingsFragment extends Fragment {
      * This method shows a dialog that displays various interval options
      */
     private void showReviseIntervalsDialog() {
-//        Dialog dialog = new Dialog(getContext());
-//        dialog.setContentView();
+        final Dialog dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.dialog_settings_revise_interval);
 
+        final RadioButton radioOne = dialog.findViewById(R.id.radio_one);
+        final RadioButton radioTwo = dialog.findViewById(R.id.radio_two);
+        final RadioButton radioThree = dialog.findViewById(R.id.radio_three);
+        final RadioGroup radioGroup = dialog.findViewById(R.id.radio_group);
 
-        //Setting on click listeners
+        //Setting selection based on earlier preferences
+        final SharedPreferences sharedPreferences = getContext().getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE, Context.MODE_PRIVATE);
 
+        radioOne.setText(TextCreator.getIntervalText(Constants.DAY_INTERVAL_ONE));
+        radioTwo.setText(TextCreator.getIntervalText(Constants.DAY_INTERVAL_TWO));
+        radioThree.setText(TextCreator.getIntervalText(Constants.DAY_INTERVAL_THREE));
 
+        //Set current choice
+        String currentPreference = sharedPreferences.getString(Constants.LEARN_FOREVER_PREFERENCE_CURRENT_INTERVAL,"");
+        switch (currentPreference){
+            case "1":
+                radioGroup.check(R.id.radio_one);
+                break;
+            case "2":
+                radioGroup.check(R.id.radio_two);
+                break;
+            case "3":
+                radioGroup.check(R.id.radio_three);
+                break;
+            default:
+                radioGroup.check(R.id.radio_one);
+                break;
+        }
+
+        //Setting current selection
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId){
+                    case R.id.radio_one:
+                        sharedPreferences.edit().putString(Constants.LEARN_FOREVER_PREFERENCE_CURRENT_INTERVAL,"1").apply();
+                        break;
+
+                    case R.id.radio_two:
+                        sharedPreferences.edit().putString(Constants.LEARN_FOREVER_PREFERENCE_CURRENT_INTERVAL,"2").apply();
+                        break;
+
+                    case R.id.radio_three:
+                        sharedPreferences.edit().putString(Constants.LEARN_FOREVER_PREFERENCE_CURRENT_INTERVAL,"3").apply();
+                        break;
+                }
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
     }
 
     public interface OnSettingsFragmentInteractionListener {

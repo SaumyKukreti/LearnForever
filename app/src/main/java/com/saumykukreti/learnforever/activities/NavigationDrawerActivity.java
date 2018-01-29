@@ -37,6 +37,7 @@ import com.saumykukreti.learnforever.fragments.CategoriesFragment;
 import com.saumykukreti.learnforever.fragments.HomeFragment;
 import com.saumykukreti.learnforever.fragments.ReviseFragment;
 import com.saumykukreti.learnforever.fragments.SettingsFragment;
+import com.saumykukreti.learnforever.fragments.TempFragment;
 
 import java.io.InputStream;
 import java.util.Calendar;
@@ -368,6 +369,12 @@ private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
                 creteAndLoadFragment(FRAGMENT_SETTINGS);
                 break;
             case R.id.nav_send:
+                //TODO - TEMP CODE REMOVE
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
+
+                fragmentTransaction.add(R.id.navigation_drawer_fragment_container, new TempFragment()).commit();
                 break;
             case R.id.nav_share:
                 break;

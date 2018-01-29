@@ -22,6 +22,8 @@ public class Constants {
     public static final String LEARN_FOREVER_PREFERENCE_IS_SPEECH_ON = "lf_preference_is_speech_on";
     public static final String LEARN_FOREVER_PREFERENCE_SIGN_IN_METHOD = "lf_preference_sign_in_method";
     public static final String LEARN_FOREVER_PREFERENCE_USER_ID = "lf_preference_user_id";
+    public static final String LEARN_FOREVER_PREFERENCE_CURRENT_INTERVAL = "lf_preference_current_interval";
+    public static final String LEARN_FOREVER_PREFERENCE_CUSTOM_INTERVAL = "lf_preference_current_interval";
 
     //Preferences
     public static final String LEARN_FOREVER_PREFERENCE_TITLE_SETTINGS = "lf_preference_title";
@@ -33,6 +35,10 @@ public class Constants {
     public static final int SIGN_IN_METHOD_FIREBASE_SIGN_IN = 1011;
 
     public static final int[] DAY_INTERVAL_ONE = {1,3,7,14,29, 59, 89, 129,219, 309, 399};
+    public static final int[] DAY_INTERVAL_TWO = {1,2,3,5,7,11,15,23,31,47,63,95,127,191,255,383};
+    public static final int[] DAY_INTERVAL_THREE = {1,2,4,7,11,16,22,29,37,46,56,67,79,92,106,121};
+
+
     public static final int NOTIFICATION_ALARM_REQUEST_CODE = 1000;
     public static final int NOTIFICATION_REQUEST_CODE = 1001;
 }
