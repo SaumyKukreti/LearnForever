@@ -3,6 +3,7 @@ package com.saumykukreti.learnforever.fragments;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -31,6 +32,7 @@ import com.saumykukreti.learnforever.dataManager.ReminderDataController;
 import com.saumykukreti.learnforever.jobs.DataSyncJob;
 import com.saumykukreti.learnforever.modelClasses.dataTables.NoteTable;
 import com.saumykukreti.learnforever.modelClasses.dataTables.ReminderTable;
+import com.saumykukreti.learnforever.util.Converter;
 import com.saumykukreti.learnforever.util.TextCreator;
 
 import java.util.List;
@@ -39,6 +41,7 @@ import static android.app.Activity.RESULT_OK;
 
 public class SettingsFragment extends Fragment {
     private OnSettingsFragmentInteractionListener mListener;
+    private SharedPreferences mSharedPreferences;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -54,6 +57,9 @@ public class SettingsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mSharedPreferences = getContext().getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE, Context.MODE_PRIVATE);
+
         if (getArguments() != null) {
             //Get arguments here
         }
@@ -93,7 +99,6 @@ public class SettingsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         //Setting on clicks
-
         getView().findViewById(R.id.linear_settings_revise_intervals).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,6 +112,40 @@ public class SettingsFragment extends Fragment {
                 showNewNoteDialog();
             }
         });
+
+        //Initialising values
+        setValues();
+    }
+
+    /**
+     * This method sets values in views
+     */
+    private void setValues() {
+        String currentPreference = mSharedPreferences.getString(Constants.LEARN_FOREVER_PREFERENCE_CURRENT_INTERVAL,"");
+        int[] currentInterval;
+        switch (currentPreference){
+            case "1":
+                currentInterval = Constants.DAY_INTERVAL_ONE;
+                break;
+            case "2":
+                currentInterval = Constants.DAY_INTERVAL_TWO;
+                break;
+            case "3":
+                currentInterval = Constants.DAY_INTERVAL_THREE;
+                break;
+            default:
+                currentInterval = Constants.DAY_INTERVAL_ONE;
+                break;
+        }
+
+        TextView currentIntervalTV = getView().findViewById(R.id.text_two_revise_intervals);
+        TextView currentFields = getView().findViewById(R.id.text_two_new_note);
+
+        currentIntervalTV.setText((TextCreator.getIntervalText(currentInterval)));
+
+        currentFields.setText(TextCreator.getNoteSettingsText(mSharedPreferences.getBoolean(Constants.LEARN_FOREVER_PREFERENCE_TITLE_SETTINGS, false),
+                mSharedPreferences.getBoolean(Constants.LEARN_FOREVER_PREFERENCE_CIS_SETTINGS, false),
+                mSharedPreferences.getBoolean(Constants.LEARN_FOREVER_PREFERENCE_CATEGORY_SETTINGS, false)));
     }
 
     /**
@@ -121,33 +160,39 @@ public class SettingsFragment extends Fragment {
         final Switch categorySwitch = dialog.findViewById(R.id.switch_category);
 
         //Setting selection based on earlier preferences
-        final SharedPreferences sharedPreferences = getContext().getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE, Context.MODE_PRIVATE);
-
-        titleSwitch.setChecked(sharedPreferences.getBoolean(Constants.LEARN_FOREVER_PREFERENCE_TITLE_SETTINGS, false));
-        cisSwitch.setChecked(sharedPreferences.getBoolean(Constants.LEARN_FOREVER_PREFERENCE_CIS_SETTINGS, false));
-        categorySwitch.setChecked(sharedPreferences.getBoolean(Constants.LEARN_FOREVER_PREFERENCE_CATEGORY_SETTINGS, false));
+        titleSwitch.setChecked(mSharedPreferences.getBoolean(Constants.LEARN_FOREVER_PREFERENCE_TITLE_SETTINGS, false));
+        cisSwitch.setChecked(mSharedPreferences.getBoolean(Constants.LEARN_FOREVER_PREFERENCE_CIS_SETTINGS, false));
+        categorySwitch.setChecked(mSharedPreferences.getBoolean(Constants.LEARN_FOREVER_PREFERENCE_CATEGORY_SETTINGS, false));
 
         titleSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sharedPreferences.edit().putBoolean(Constants.LEARN_FOREVER_PREFERENCE_TITLE_SETTINGS,titleSwitch.isChecked()).apply();
+                mSharedPreferences.edit().putBoolean(Constants.LEARN_FOREVER_PREFERENCE_TITLE_SETTINGS,titleSwitch.isChecked()).apply();
             }
         });
 
         cisSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sharedPreferences.edit().putBoolean(Constants.LEARN_FOREVER_PREFERENCE_CIS_SETTINGS,cisSwitch.isChecked()).apply();
+                mSharedPreferences.edit().putBoolean(Constants.LEARN_FOREVER_PREFERENCE_CIS_SETTINGS,cisSwitch.isChecked()).apply();
             }
         });
 
         categorySwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sharedPreferences.edit().putBoolean(Constants.LEARN_FOREVER_PREFERENCE_CATEGORY_SETTINGS,categorySwitch.isChecked()).apply();
+                mSharedPreferences.edit().putBoolean(Constants.LEARN_FOREVER_PREFERENCE_CATEGORY_SETTINGS,categorySwitch.isChecked()).apply();
+            }
+        });
+
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                setValues();
             }
         });
         dialog.show();
+
     }
 
     /**
@@ -163,14 +208,14 @@ public class SettingsFragment extends Fragment {
         final RadioGroup radioGroup = dialog.findViewById(R.id.radio_group);
 
         //Setting selection based on earlier preferences
-        final SharedPreferences sharedPreferences = getContext().getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE, Context.MODE_PRIVATE);
+        mSharedPreferences = getContext().getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE, Context.MODE_PRIVATE);
 
         radioOne.setText(TextCreator.getIntervalText(Constants.DAY_INTERVAL_ONE));
         radioTwo.setText(TextCreator.getIntervalText(Constants.DAY_INTERVAL_TWO));
         radioThree.setText(TextCreator.getIntervalText(Constants.DAY_INTERVAL_THREE));
 
         //Set current choice
-        String currentPreference = sharedPreferences.getString(Constants.LEARN_FOREVER_PREFERENCE_CURRENT_INTERVAL,"");
+        String currentPreference = mSharedPreferences.getString(Constants.LEARN_FOREVER_PREFERENCE_CURRENT_INTERVAL,"");
         switch (currentPreference){
             case "1":
                 radioGroup.check(R.id.radio_one);
@@ -192,18 +237,25 @@ public class SettingsFragment extends Fragment {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 switch (checkedId){
                     case R.id.radio_one:
-                        sharedPreferences.edit().putString(Constants.LEARN_FOREVER_PREFERENCE_CURRENT_INTERVAL,"1").apply();
+                        mSharedPreferences.edit().putString(Constants.LEARN_FOREVER_PREFERENCE_CURRENT_INTERVAL,"1").apply();
                         break;
 
                     case R.id.radio_two:
-                        sharedPreferences.edit().putString(Constants.LEARN_FOREVER_PREFERENCE_CURRENT_INTERVAL,"2").apply();
+                        mSharedPreferences.edit().putString(Constants.LEARN_FOREVER_PREFERENCE_CURRENT_INTERVAL,"2").apply();
                         break;
 
                     case R.id.radio_three:
-                        sharedPreferences.edit().putString(Constants.LEARN_FOREVER_PREFERENCE_CURRENT_INTERVAL,"3").apply();
+                        mSharedPreferences.edit().putString(Constants.LEARN_FOREVER_PREFERENCE_CURRENT_INTERVAL,"3").apply();
                         break;
                 }
                 dialog.dismiss();
+            }
+        });
+
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                setValues();
             }
         });
 

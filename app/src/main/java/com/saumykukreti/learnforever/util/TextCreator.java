@@ -1,5 +1,7 @@
 package com.saumykukreti.learnforever.util;
 
+import android.content.SharedPreferences;
+
 import com.saumykukreti.learnforever.constants.Constants;
 import com.saumykukreti.learnforever.modelClasses.dataTables.NoteTable;
 
@@ -83,6 +85,32 @@ public class TextCreator {
 
         //Removing last ,
         stringBuffer.substring(0,stringBuffer.length()-1);
+
+        return stringBuffer.toString();
+    }
+
+    /**
+     *  This method creates a string and returns it based on the options selected
+     * @param title
+     * @param cis
+     * @param category
+     */
+    public static String getNoteSettingsText(boolean title, boolean cis, boolean category) {
+        StringBuffer stringBuffer = new StringBuffer();
+        if(title)
+            stringBuffer.append("Title").append(", ");
+        if(cis)
+            stringBuffer.append("Content In Short").append(", ");
+        if(category)
+            stringBuffer.append("Category").append(", ");
+
+        stringBuffer.append("Content");
+
+        if(stringBuffer.length()>0){
+            stringBuffer.substring(0,stringBuffer.length()-2);
+        }else{
+            stringBuffer.append("Only content");
+        }
 
         return stringBuffer.toString();
     }
