@@ -26,14 +26,18 @@
 
 
                 <TextView
+                    android:id="@+id/note_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Title"
+                    android:visibility="gone"
                     android:textStyle="bold"/>
                 <!--Line-->
                 <ImageView
+                    android:id="@+id/title_line"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
+                    android:visibility="gone"
                     android:layout_marginTop="10dp"
                     android:background="@android:color/darker_gray"/>
 
@@ -42,6 +46,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:visibility="gone"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
                     android:maxLength="100"
@@ -51,15 +56,19 @@
                     android:hint="Note title"/>
 
                 <TextView
+                    android:id="@+id/note_cis"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:text="Content In Short"
+                    android:visibility="gone"
                     android:textStyle="bold"/>
                 <!--Line-->
                 <ImageView
+                    android:id="@+id/cis_line"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
+                    android:visibility="gone"
                     android:layout_marginTop="10dp"
                     android:background="@android:color/darker_gray"/>
 
@@ -69,6 +78,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:singleLine="true"
+                    android:visibility="gone"
                     android:imeOptions="actionNext"
                     android:nextFocusDown="@id/edit_note_content"
                     android:maxLength="300"
@@ -78,15 +88,19 @@
                     android:hint="Note content in short"/>
 
                 <TextView
+                    android:id="@+id/note_category"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:text="Category"
+                    android:visibility="gone"
                     android:textStyle="bold"/>
                 <!--Line-->
                 <ImageView
+                    android:id="@+id/category_line"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
+                    android:visibility="gone"
                     android:layout_marginTop="10dp"
                     android:background="@android:color/darker_gray"/>
 
@@ -94,6 +108,7 @@
                     android:id="@+id/autocomplete_category"
                     android:layout_width="match_parent"
                     android:layout_marginTop="20dp"
+                    android:visibility="gone"
                     android:layout_height="wrap_content"
                     android:layout_weight="90"/>
 

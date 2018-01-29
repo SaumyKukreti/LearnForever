@@ -58,6 +58,9 @@ public class DataInitializerJob extends Job {
 
         //Getting id
         SharedPreferences preference = mContext.getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE, Context.MODE_PRIVATE);
+
+        intialisePreferenceSettings(preference);
+
         String userId = "";
         FirebaseAuth user = FirebaseAuth.getInstance();
         userId = (user!=null) ? user.getUid() : "";
@@ -95,6 +98,13 @@ public class DataInitializerJob extends Job {
         else{
             //TODO - Handle this
         }
+    }
+
+    private void intialisePreferenceSettings(SharedPreferences preference) {
+        //Initialising preference values, by default setting all the fields to true
+        preference.edit().putBoolean(Constants.LEARN_FOREVER_PREFERENCE_TITLE_SETTINGS,true).apply();
+        preference.edit().putBoolean(Constants.LEARN_FOREVER_PREFERENCE_CIS_SETTINGS,true).apply();
+        preference.edit().putBoolean(Constants.LEARN_FOREVER_PREFERENCE_CATEGORY_SETTINGS,true).apply();
     }
 
 

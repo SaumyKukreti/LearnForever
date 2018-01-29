@@ -318,8 +318,6 @@ public class LoginActivity extends Activity {
                 boolean passwordFlag = false;
                 boolean sameCheck = false;
 
-
-
                 if (mEmailEditText.getText().length() == 0) {
                     mEmailEditText.setBackground(ContextCompat.getDrawable(this, R.drawable.background_white_with_red_borders));
                     emailFlag = true;
@@ -328,15 +326,20 @@ public class LoginActivity extends Activity {
                 }
                 if (mPasswordEditText.getText().length() < 6) {
                     mPasswordEditText.setBackground(ContextCompat.getDrawable(this, R.drawable.background_white_with_red_borders));
+                    mConfirmPasswordEditText.setBackground(ContextCompat.getDrawable(this, R.drawable.background_white_with_red_borders));
                     passwordFlag = true;
                 } else {
-                    mPasswordEditText.setBackground(ContextCompat.getDrawable(this, R.drawable.background_white_with_rounded_corders));
-                    mConfirmPasswordEditText.setBackground(ContextCompat.getDrawable(this, R.drawable.background_white_with_rounded_corders));
+                    //Else if the lentgth is ok then check
+                    if(!mPasswordEditText.getText().toString().contentEquals(mConfirmPasswordEditText.getText().toString())){
+                        sameCheck = true;
+                        mPasswordEditText.setBackground(ContextCompat.getDrawable(this, R.drawable.background_white_with_red_borders));
+                        mConfirmPasswordEditText.setBackground(ContextCompat.getDrawable(this, R.drawable.background_white_with_red_borders));
+                    } else {
+                        mPasswordEditText.setBackground(ContextCompat.getDrawable(this, R.drawable.background_white_with_rounded_corders));
+                        mConfirmPasswordEditText.setBackground(ContextCompat.getDrawable(this, R.drawable.background_white_with_rounded_corders));
+                    }
                 }
 
-                if(!mPasswordEditText.getText().toString().contentEquals(mConfirmPasswordEditText.getText().toString())){
-                    sameCheck = true;
-                }
 
                 if (emailFlag && passwordFlag) {
                     Toast.makeText(this, "Please enter the email address and password to sign in or press the google sign in button to sign in with your google account!", Toast.LENGTH_SHORT).show();
@@ -344,8 +347,7 @@ public class LoginActivity extends Activity {
                     Toast.makeText(this, "Email cannot be empty", Toast.LENGTH_SHORT).show();
                 } else if (passwordFlag) {
                     Toast.makeText(this, "The length of the password should be 6 or greater", Toast.LENGTH_SHORT).show();
-                }
-                else if(sameCheck){
+                } else if(sameCheck){
                     Toast.makeText(this, "Password and confirm passwords do not match", Toast.LENGTH_SHORT).show();
                 }
             }

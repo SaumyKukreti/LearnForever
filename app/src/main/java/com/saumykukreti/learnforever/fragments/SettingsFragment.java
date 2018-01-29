@@ -1,7 +1,10 @@
 package com.saumykukreti.learnforever.fragments;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +23,7 @@ import com.saumykukreti.learnforever.LearnForeverApplication;
 import com.saumykukreti.learnforever.R;
 import com.saumykukreti.learnforever.activities.CategoryActivity;
 import com.saumykukreti.learnforever.activities.ReviseActivity;
+import com.saumykukreti.learnforever.constants.Constants;
 import com.saumykukreti.learnforever.dataManager.NoteDataController;
 import com.saumykukreti.learnforever.dataManager.ReminderDataController;
 import com.saumykukreti.learnforever.jobs.DataSyncJob;
@@ -30,9 +35,6 @@ import java.util.List;
 import static android.app.Activity.RESULT_OK;
 
 public class SettingsFragment extends Fragment {
-
-    private final int METADATA_CATEGORIES_ACTIVITY_REQUEST_CODE = 10101;
-
     private OnSettingsFragmentInteractionListener mListener;
 
     public SettingsFragment() {
@@ -87,154 +89,78 @@ public class SettingsFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        final NoteDataController datacontroller = NoteDataController.getInstance(getActivity());
+        //Setting on clicks
 
-        final TextView textview = view.findViewById(R.id.currentdatabase);
-
-        Button insert = view.findViewById(R.id.buttton_insert_note);
-        Button showall = view.findViewById(R.id.buttton_showall);
-        Button update = view.findViewById(R.id.buttton_update);
-        Button delete = view.findViewById(R.id.buttton_delete);
-        Button categories = view.findViewById(R.id.buttton_categories);
-        Button firebase = view.findViewById(R.id.insert_into_firebase);
-        Button sync = view.findViewById(R.id.start_sync);
-        Button showReminder = view.findViewById(R.id.show_reminder);
-        Button revise = view.findViewById(R.id.buttton_revise);
-        Button category = view.findViewById(R.id.button_category);
-
-        final EditText noteToUpdate = view.findViewById(R.id.noteToUpdate);
-
-        final EditText categoryedit = view.findViewById(R.id.categoryedit);
-        final EditText titleedit = view.findViewById(R.id.titleedit);
-        final EditText contentinshort = view.findViewById(R.id.cisedit);
-        final EditText content = view.findViewById(R.id.contentedit);
-        revise.setOnClickListener(new View.OnClickListener() {
+        getView().findViewById(R.id.linear_settings_revise_intervals).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getContext(), ReviseActivity.class));
+            public void onClick(View v) {
+                showReviseIntervalsDialog();
             }
         });
 
-        category.setOnClickListener(new View.OnClickListener() {
+        getView().findViewById(R.id.linear_settings_new_note).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                startActivityForResult(new Intent(getContext(), CategoryActivity.class), METADATA_CATEGORIES_ACTIVITY_REQUEST_CODE);
+            public void onClick(View v) {
+                showNewNoteDialog();
             }
         });
-        insert.setOnClickListener(new View.OnClickListener() {
+    }
+
+    /**
+     * This method shows a dialog that displays various new note options
+     */
+    private void showNewNoteDialog() {
+        Dialog dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.dialog_settings_new_note);
+
+        final Switch titleSwitch = dialog.findViewById(R.id.switch_title);
+        final Switch cisSwitch = dialog.findViewById(R.id.switch_cis);
+        final Switch categorySwitch = dialog.findViewById(R.id.switch_category);
+
+        //Setting selection based on earlier preferences
+        final SharedPreferences sharedPreferences = getContext().getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE, Context.MODE_PRIVATE);
+
+        titleSwitch.setChecked(sharedPreferences.getBoolean(Constants.LEARN_FOREVER_PREFERENCE_TITLE_SETTINGS, false));
+        cisSwitch.setChecked(sharedPreferences.getBoolean(Constants.LEARN_FOREVER_PREFERENCE_CIS_SETTINGS, false));
+        categorySwitch.setChecked(sharedPreferences.getBoolean(Constants.LEARN_FOREVER_PREFERENCE_CATEGORY_SETTINGS, false));
+
+        titleSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                if (!datacontroller.newNote(categoryedit.getText().toString(), titleedit.getText().toString(),
-                        contentinshort.getText().toString(),
-                        content.getText().toString(),
-                        "timestamp",
-                        true)) {
-
-                    Toast.makeText(getContext(), "Note not Added", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getContext(), "Note Added", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-
-        showall.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                List<NoteTable> a = datacontroller.getAllNotes();
-                String s = "";
-                for (NoteTable x : a) {
-                    s = s + x + "\n\n";
-
-                }
-                textview.setText(s);
+            public void onClick(View v) {
+                sharedPreferences.edit().putBoolean(Constants.LEARN_FOREVER_PREFERENCE_TITLE_SETTINGS,titleSwitch.isChecked()).apply();
             }
         });
 
-        update.setOnClickListener(new View.OnClickListener() {
+        cisSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-
-                if (datacontroller.updateNote(Long.parseLong(noteToUpdate.getText().toString()),
-                        categoryedit.getText().toString(),
-                        titleedit.getText().toString(),
-                        contentinshort.getText().toString(),
-                        content.getText().toString(),
-                        "timestamp",
-                        true)) {
-                    Toast.makeText(getContext(), "Note Updated", Toast.LENGTH_SHORT).show();
-
-                } else {
-                    Toast.makeText(getContext(), "Note note updated", Toast.LENGTH_SHORT).show();
-
-                }
+            public void onClick(View v) {
+                sharedPreferences.edit().putBoolean(Constants.LEARN_FOREVER_PREFERENCE_CIS_SETTINGS,cisSwitch.isChecked()).apply();
             }
         });
 
-        categories.setOnClickListener(new View.OnClickListener() {
+        categorySwitch.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                List<String> listOfCategories = datacontroller.getListOfCategories();
-
-                String srrr = "";
-                for (String str : listOfCategories){
-                    srrr= srrr+ str;
-                }
-
-                textview.setText(srrr);
-            }
-
-        });
-
-
-        firebase.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference myRef = database.getReference();
-
-                
-                myRef.setValue("Hello, World!");
+            public void onClick(View v) {
+                sharedPreferences.edit().putBoolean(Constants.LEARN_FOREVER_PREFERENCE_CATEGORY_SETTINGS,categorySwitch.isChecked()).apply();
             }
         });
+        dialog.show();
+    }
 
-        sync.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                LearnForeverApplication.getInstance().getJobManager().addJobInBackground(new DataSyncJob(getContext(),null));
-            }
-        });
+    /**
+     * This method shows a dialog that displays various interval options
+     */
+    private void showReviseIntervalsDialog() {
+//        Dialog dialog = new Dialog(getContext());
+//        dialog.setContentView();
 
-        showReminder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                List<ReminderTable> listOfData = ReminderDataController.getInstance(getContext()).getAllEntries();
 
-                StringBuffer str = new StringBuffer();
+        //Setting on click listeners
 
-                for (ReminderTable i : listOfData){
-                    str.append(i);
-                }
 
-                textview.setText(str);
-
-            }
-        });
     }
 
     public interface OnSettingsFragmentInteractionListener {
         void updateActionBarForSettingsFragment();
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == METADATA_CATEGORIES_ACTIVITY_REQUEST_CODE){
-            if(resultCode == RESULT_OK){
-                //Refreshing activity
-
-            }
-            //else do nothing
-        }
     }
 }

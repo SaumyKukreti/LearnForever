@@ -13,4 +13,9 @@
         app:showAsAction="always"
         />
 
+    <item
+        android:id="@+id/note_activity_show_all_views"
+        android:title="Show all views"
+        app:showAsAction="never"/>
+
 </menu>

@@ -3,8 +3,10 @@ package com.saumykukreti.learnforever.activities;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.speech.RecognizerIntent;
 import android.support.v7.app.AppCompatActivity;
@@ -27,6 +29,7 @@ import android.widget.Spinner;
 import android.widget.Switch;
 
 import com.saumykukreti.learnforever.R;
+import com.saumykukreti.learnforever.constants.Constants;
 import com.saumykukreti.learnforever.dataManager.NoteDataController;
 import com.saumykukreti.learnforever.modelClasses.dataTables.NoteTable;
 import com.saumykukreti.learnforever.util.DateHandler;
@@ -61,6 +64,7 @@ public class NoteActivity extends AppCompatActivity {
     private AutoCompleteTextView mCategoryAutoComplete;
     private ArrayAdapter<String> mAutoCompleteAdapter;
     private TextReader mTextReader;
+    private SharedPreferences mSharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +73,7 @@ public class NoteActivity extends AppCompatActivity {
 
         mDataController = NoteDataController.getInstance(this);
         mTextReader = new TextReader(this, getLifecycle());
+        mSharedPreferences = getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE, Context.MODE_PRIVATE);
 
         initialiseToolbar();
         initialiseViews();
@@ -80,6 +85,10 @@ public class NoteActivity extends AppCompatActivity {
             isNewNote = true;
         }
 
+        if(isNewNote)
+            setVisibilityOfViewsBasedOnPreference();
+        //else make visible contents only those items that is of note
+
         setCategoryAutoComplete();
 
         //Hiding keyboard
@@ -89,6 +98,51 @@ public class NoteActivity extends AppCompatActivity {
         if(getIntent().hasExtra(METADATA_FROM_WIDGET) && getIntent().getBooleanExtra(METADATA_FROM_WIDGET,false)){
             //From widget, start dictation
             promptSpeechInput();
+        }
+    }
+
+    /**
+     *  This method sets the visibility of views based on preference settings
+     */
+    private void setVisibilityOfViewsBasedOnPreference() {
+        showTitleViews();
+        showCISViews();
+        showCategoryViews();
+    }
+
+    /**
+     * Show all views related with category
+     */
+    private void showCategoryViews() {
+        if(mSharedPreferences.getBoolean(Constants.LEARN_FOREVER_PREFERENCE_CATEGORY_SETTINGS, false)){
+            //Showing the fields
+            findViewById(R.id.note_category).setVisibility(View.VISIBLE);
+            findViewById(R.id.category_line).setVisibility(View.VISIBLE);
+            findViewById(R.id.autocomplete_category).setVisibility(View.VISIBLE);
+        }
+    }
+
+    /**
+     * Show all views related with cis
+     */
+    private void showCISViews() {
+        if(mSharedPreferences.getBoolean(Constants.LEARN_FOREVER_PREFERENCE_CIS_SETTINGS, false)){
+            //Showing the fields
+            findViewById(R.id.note_cis).setVisibility(View.VISIBLE);
+            findViewById(R.id.cis_line).setVisibility(View.VISIBLE);
+            findViewById(R.id.edit_note_content_in_short).setVisibility(View.VISIBLE);
+        }
+    }
+
+    /**
+     * Show all views related with title
+     */
+    private void showTitleViews() {
+        if(mSharedPreferences.getBoolean(Constants.LEARN_FOREVER_PREFERENCE_TITLE_SETTINGS, false)){
+            //Showing the fields
+            findViewById(R.id.note_title).setVisibility(View.VISIBLE);
+            findViewById(R.id.title_line).setVisibility(View.VISIBLE);
+            findViewById(R.id.edit_note_title).setVisibility(View.VISIBLE);
         }
     }
 
@@ -238,11 +292,23 @@ public class NoteActivity extends AppCompatActivity {
     private void setData(NoteTable note) {
         if (note != null) {
             mNote = note;
-            mNoteTitleEdit.setText(note.getTitle());
-            mNoteConetentInShortEdit.setText(note.getContentInShort());
+            if(!note.getTitle().isEmpty()) {
+                showTitleViews();
+                mNoteTitleEdit.setText(note.getTitle());
+            }
+
+            if(!note.getContentInShort().isEmpty()) {
+                showCISViews();
+                mNoteConetentInShortEdit.setText(note.getContentInShort());
+            }
+
+            if(!note.getCategory().isEmpty()) {
+                showCategoryViews();
+                mCategoryAutoComplete.setText(note.getCategory());
+            }
+
             mNoteContentEdit.setText(note.getContent());
             mLearnSwitch.setChecked(note.isLearn());
-            mCategoryAutoComplete.setText(note.getCategory());
             mLearnState = note.isLearn();
         } else {
             isNewNote = true;
@@ -267,6 +333,12 @@ public class NoteActivity extends AppCompatActivity {
             case R.id.note_activity_delete:
                 //Ask for deletion
                 askForConfirmationAndDeleteNote();
+                break;
+            case R.id.note_activity_show_all_views:
+                //Ask for deletion
+                showCategoryViews();
+                showCISViews();
+                showTitleViews();
                 break;
             case android.R.id.home:
                 onBackPressed();
