@@ -7,10 +7,18 @@
              android:focusable="true"
              tools:context="com.saumykukreti.learnforever.fragments.CategoriesFragment">
 
+    <TextView
+        android:id="@+id/no_categories_text"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:textSize="18sp"
+        android:text="No categories available"/>
+
     <ListView
         android:id="@+id/category_fragment_categories_list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-
 
 </FrameLayout>

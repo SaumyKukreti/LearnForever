@@ -23,6 +23,7 @@ public class CategoriesFragment extends Fragment {
     private OnCategoriesFragmentInteractionListener mListener;
     private List<String> mListOfCategories = new ArrayList<>();
     private ArrayAdapter<String> mArrayAdapter;
+    private ListView mCategoriesListView;
 
     public CategoriesFragment() {
         // Required empty public constructor
@@ -69,9 +70,16 @@ public class CategoriesFragment extends Fragment {
         //Refreshing adapter
         getListOfCategories();
 
-        mArrayAdapter.notifyDataSetChanged();
-
+        if (!mListOfCategories.isEmpty()) {
+            mArrayAdapter.notifyDataSetChanged();
+            mCategoriesListView.setVisibility(View.VISIBLE);
+            getView().findViewById(R.id.no_categories_text).setVisibility(View.GONE);
+        } else {
+            mCategoriesListView.setVisibility(View.GONE);
+            getView().findViewById(R.id.no_categories_text).setVisibility(View.VISIBLE);
+        }
     }
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -80,16 +88,16 @@ public class CategoriesFragment extends Fragment {
         getListOfCategories();
 
         //Creating and setting an adapter for categories
-        mArrayAdapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1,mListOfCategories);
+        mArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, mListOfCategories);
 
-        ListView categoriesListView = getView().findViewById(R.id.category_fragment_categories_list_view);
-        categoriesListView.setAdapter(mArrayAdapter);
+        mCategoriesListView = getView().findViewById(R.id.category_fragment_categories_list_view);
+        mCategoriesListView.setAdapter(mArrayAdapter);
 
-        categoriesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mCategoriesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(getActivity(), CategoryActivity.class);
-                intent.putExtra(CategoryActivity.METADATA_CATEGORY,mListOfCategories.get(i));
+                intent.putExtra(CategoryActivity.METADATA_CATEGORY, mListOfCategories.get(i));
                 startActivity(intent);
             }
         });
