@@ -1,6 +1,5 @@
 package com.saumykukreti.learnforever.fragments;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -12,34 +11,20 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.saumykukreti.learnforever.LearnForeverApplication;
 import com.saumykukreti.learnforever.R;
-import com.saumykukreti.learnforever.activities.CategoryActivity;
-import com.saumykukreti.learnforever.activities.ReviseActivity;
+import com.saumykukreti.learnforever.activities.CustomIntervalActivity;
 import com.saumykukreti.learnforever.constants.Constants;
-import com.saumykukreti.learnforever.dataManager.NoteDataController;
-import com.saumykukreti.learnforever.dataManager.ReminderDataController;
-import com.saumykukreti.learnforever.jobs.DataSyncJob;
-import com.saumykukreti.learnforever.modelClasses.dataTables.NoteTable;
-import com.saumykukreti.learnforever.modelClasses.dataTables.ReminderTable;
 import com.saumykukreti.learnforever.util.Converter;
 import com.saumykukreti.learnforever.util.TextCreator;
 
-import java.util.List;
-
-import static android.app.Activity.RESULT_OK;
-
 public class SettingsFragment extends Fragment {
+    public static final int LIST_CHANGED = 101;
+    public static final int CANCELLED = 102;
     private OnSettingsFragmentInteractionListener mListener;
     private SharedPreferences mSharedPreferences;
 
@@ -133,6 +118,9 @@ public class SettingsFragment extends Fragment {
             case "3":
                 currentInterval = Constants.DAY_INTERVAL_THREE;
                 break;
+            case "custom":
+                currentInterval = Converter.convertStringToIntArray(mSharedPreferences.getString(Constants.LEARN_FOREVER_PREFERENCE_CUSTOM_INTERVAL,""));
+                break;
             default:
                 currentInterval = Constants.DAY_INTERVAL_ONE;
                 break;
@@ -192,7 +180,6 @@ public class SettingsFragment extends Fragment {
             }
         });
         dialog.show();
-
     }
 
     /**
@@ -226,6 +213,9 @@ public class SettingsFragment extends Fragment {
             case "3":
                 radioGroup.check(R.id.radio_three);
                 break;
+            case "custom":
+                radioGroup.check(R.id.radio_custom);
+                break;
             default:
                 radioGroup.check(R.id.radio_one);
                 break;
@@ -247,6 +237,10 @@ public class SettingsFragment extends Fragment {
                     case R.id.radio_three:
                         mSharedPreferences.edit().putString(Constants.LEARN_FOREVER_PREFERENCE_CURRENT_INTERVAL,"3").apply();
                         break;
+
+                    case R.id.radio_custom:
+                        openCustomIntervalActivity();
+                        break;
                 }
                 dialog.dismiss();
             }
@@ -262,7 +256,19 @@ public class SettingsFragment extends Fragment {
         dialog.show();
     }
 
+    private void openCustomIntervalActivity() {
+        Intent intent = new Intent(getContext(), CustomIntervalActivity.class);
+        startActivityForResult(intent,1020);
+    }
+
     public interface OnSettingsFragmentInteractionListener {
         void updateActionBarForSettingsFragment();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        if(resultCode == LIST_CHANGED){
+            setValues();
+        }
     }
 }

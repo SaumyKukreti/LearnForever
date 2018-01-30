@@ -84,7 +84,7 @@ public class TextCreator {
         }
 
         //Removing last ,
-        stringBuffer.substring(0,stringBuffer.length()-1);
+        stringBuffer = new StringBuffer(stringBuffer.substring(0,stringBuffer.length()-1));
 
         return stringBuffer.toString();
     }

@@ -58,6 +58,29 @@ public class Converter {
         }
     }
 
+    public static String convertIntegerListToString(List<Integer> list){
+        if(list==null){
+            return "";
+        }
+        else if (list.isEmpty()){
+            return "";
+        }
+        else{
+            StringBuffer str = new StringBuffer();
+            for(int i=0 ;i<list.size();i++){
+                if(i == list.size()-1){
+                    //Last element
+                    str.append(list.get(i));
+                }
+                else{
+                    str.append(list.get(i)).append(",");
+                }
+            }
+
+            return str.toString();
+        }
+    }
+
     public static int[] convertStringToIntArray(String str){
         try {
 

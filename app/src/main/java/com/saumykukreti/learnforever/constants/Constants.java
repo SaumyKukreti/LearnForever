@@ -23,7 +23,7 @@ public class Constants {
     public static final String LEARN_FOREVER_PREFERENCE_SIGN_IN_METHOD = "lf_preference_sign_in_method";
     public static final String LEARN_FOREVER_PREFERENCE_USER_ID = "lf_preference_user_id";
     public static final String LEARN_FOREVER_PREFERENCE_CURRENT_INTERVAL = "lf_preference_current_interval";
-    public static final String LEARN_FOREVER_PREFERENCE_CUSTOM_INTERVAL = "lf_preference_current_interval";
+    public static final String LEARN_FOREVER_PREFERENCE_CUSTOM_INTERVAL = "lf_preference_custom_interval";
 
     //Preferences
     public static final String LEARN_FOREVER_PREFERENCE_TITLE_SETTINGS = "lf_preference_title";
