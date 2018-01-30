@@ -88,11 +88,9 @@ public class CategoriesFragment extends Fragment {
         getListOfCategories();
 
         //Creating and setting an adapter for categories
-        mArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, mListOfCategories);
-
+        mArrayAdapter = new ArrayAdapter<String>(getActivity(), R.layout.categories_fragment_item_layout, mListOfCategories);
         mCategoriesListView = getView().findViewById(R.id.category_fragment_categories_list_view);
         mCategoriesListView.setAdapter(mArrayAdapter);
-
         mCategoriesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -108,9 +106,6 @@ public class CategoriesFragment extends Fragment {
         List<String> listOfCategories = dataController.getListOfCategories();
         mListOfCategories.clear();
         mListOfCategories.addAll(listOfCategories);
-
-        //TODO - If no categories are found show appropriate error message
-
     }
 
     @Override
