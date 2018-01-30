@@ -78,8 +78,8 @@
         <activity
             android:name=".activities.WaitingVerificationActivity"
             android:theme="@style/AppThemeWithNoActionBar"/>
-        <activity android:name=".activities.CustomIntervalActivity">
-        </activity>
+        <activity android:name=".activities.CustomIntervalActivity"
+            android:windowSoftInputMode="stateAlwaysVisible"/>
     </application>
 
 </manifest>

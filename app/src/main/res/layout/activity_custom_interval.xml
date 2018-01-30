@@ -6,46 +6,70 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/colorPrimary"
     tools:context="com.saumykukreti.learnforever.activities.CustomIntervalActivity">
 
-    <TextView
-        android:id="@+id/text_current_list"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_margin="30dp"
-        tools:text="1,2,3,4,5"/>
+        android:layout_height="wrap_content">
 
-    <EditText
-        android:id="@+id/day_edit_text"
-        android:layout_width="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="30dp"
-        android:inputType="number"
-        android:imeOptions="actionDone"
-        android:layout_height="wrap_content"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="horizontal">
+            <TextView
+                android:id="@+id/text_current_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="18sp"
+                android:hint="Add some days"
+                android:layout_margin="30dp"
+                android:textColorHint="@android:color/white"
+                android:textColor="@android:color/white"
+                tools:text="1,2,3,4,5"/>
 
-        <Button
-            android:id="@+id/button_go_back"
-            android:layout_width="wrap_content"
-            android:text="back"
-            android:layout_height="wrap_content"/>
-        <Button
-            android:id="@+id/button_go_forward"
-            android:text="forward"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-        <Button
-            android:id="@+id/button_done"
-            android:text="done"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
+            <EditText
+                android:id="@+id/day_edit_text"
+                android:layout_width="100dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:padding="10dp"
+                android:hint="Days"
+                android:inputType="number"
+                android:background="@drawable/button_drawable_with_white_background_and_rounded_corners"
+                android:imeOptions="actionDone"
+                android:layout_height="wrap_content"/>
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/button_go_back"
+                    android:layout_width="wrap_content"
+                    android:text="Delete"
+                    android:background="@drawable/button_drawable_with_white_background_and_rounded_corners"
+                    android:layout_height="wrap_content"/>
+                <Button
+                    android:id="@+id/button_go_forward"
+                    android:text="Add"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/button_drawable_with_white_background_and_rounded_corners"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <Button
+                    android:id="@+id/button_done"
+                    android:text="SAVE"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/button_drawable_with_white_background_and_rounded_corners"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

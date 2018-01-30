@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,6 +33,8 @@ public class CustomIntervalActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_custom_interval);
 
+        initialiseToolbar();
+
         mListOfDays = new ArrayList<Integer>();
         mIndex = 0;
 
@@ -45,7 +48,7 @@ public class CustomIntervalActivity extends AppCompatActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 mGoForward.performClick();
-                return false;
+                return true;
             }
         });
 
@@ -55,6 +58,7 @@ public class CustomIntervalActivity extends AppCompatActivity {
                 if(mListOfDays.size()!=0){
                     mIndex-=1;
                     mEditText.setText(mListOfDays.get(mIndex).toString());
+                    mEditText.setSelection(mListOfDays.get(mIndex).toString().length());
                     mListOfDays.remove(mIndex);
                     showCurrentList();
                 }
@@ -91,11 +95,29 @@ public class CustomIntervalActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * This method initialises the toolbar
+     */
+    private void initialiseToolbar() {
+        getSupportActionBar().setTitle("Custom Interval");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
     private void showCurrentList() {
         StringBuffer stringBuffer = new StringBuffer();
         for(Integer i : mListOfDays){
             stringBuffer.append(i).append(", ");
         }
         mCurrentListTV.setText(stringBuffer.toString());
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

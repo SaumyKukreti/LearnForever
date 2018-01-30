@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="18dp"
-        android:text="Choose the categories you want "
+        android:text="Choose the fields you want.."
         android:textSize="18sp"/>
 
 
