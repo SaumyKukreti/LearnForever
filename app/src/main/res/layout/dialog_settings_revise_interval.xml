@@ -10,6 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="18dp"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
         android:text="Choose revise intervals.."
         android:textSize="18sp"/>
 

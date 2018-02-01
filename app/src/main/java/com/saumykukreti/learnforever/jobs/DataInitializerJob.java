@@ -25,6 +25,7 @@ import com.saumykukreti.learnforever.constants.Constants;
 import com.saumykukreti.learnforever.dataManager.NoteDataController;
 import com.saumykukreti.learnforever.events.InitializationCompleteEvent;
 import com.saumykukreti.learnforever.modelClasses.dataTables.NoteTable;
+import com.saumykukreti.learnforever.util.Utility;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -58,8 +59,10 @@ public class DataInitializerJob extends Job {
 
         //Getting id
         SharedPreferences preference = mContext.getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE, Context.MODE_PRIVATE);
-
         intialisePreferenceSettings(preference);
+
+        //Initialising alarm
+        Utility.setNotification(mContext);
 
         String userId = "";
         FirebaseAuth user = FirebaseAuth.getInstance();

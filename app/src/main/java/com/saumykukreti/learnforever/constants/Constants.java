@@ -30,6 +30,10 @@ public class Constants {
     public static final String LEARN_FOREVER_PREFERENCE_CIS_SETTINGS = "lf_preference_cis";
     public static final String LEARN_FOREVER_PREFERENCE_CATEGORY_SETTINGS = "lf_preference_category";
 
+    //Notification time
+    public static final String LEARN_FOREVER_PREFERENCE_NOTIFICATION_HOUR = "lf_preference_hour";
+    public static final String LEARN_FOREVER_PREFERENCE_NOTIFICATION_MINUTE = "lf_preference_minute";
+
     //Sign in methods
     public static final int SIGN_IN_METHOD_GOOGLE_SIGN_IN = 1010;
     public static final int SIGN_IN_METHOD_FIREBASE_SIGN_IN = 1011;

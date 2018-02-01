@@ -38,6 +38,7 @@ import com.saumykukreti.learnforever.fragments.HomeFragment;
 import com.saumykukreti.learnforever.fragments.ReviseFragment;
 import com.saumykukreti.learnforever.fragments.SettingsFragment;
 import com.saumykukreti.learnforever.fragments.TempFragment;
+import com.saumykukreti.learnforever.util.Utility;
 
 import java.io.InputStream;
 import java.util.Calendar;
@@ -75,34 +76,12 @@ public class NavigationDrawerActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation_drawer);
 
-        setRepeatingAlarm();
         initialiseToolbar();
         initialiseFab();
         initialiseDrawer();
 
         //Load home fragment
         creteAndLoadFragment(FRAGMENT_HOME);
-    }
-
-    /**
-     * This method sets an alarm if it is not already set
-     */
-    private void setRepeatingAlarm() {
-        SharedPreferences preference = getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE, Context.MODE_PRIVATE);
-        boolean isAlarmSet = preference.getBoolean(Constants.LEARN_FOREVER_PREFERENCE_IS_ALARM_SET, false);
-
-        if (!isAlarmSet) {
-            //Alarm is not se, setting an alarm
-            Calendar calendar = Calendar.getInstance();
-            //TODO- SET TIME HERE
-            calendar.add(Calendar.MINUTE, 1);
-            Intent intent = new Intent(getApplicationContext(), NotificationBuilder.class);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), Constants.NOTIFICATION_ALARM_REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-            AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
-        }
     }
 
     /**

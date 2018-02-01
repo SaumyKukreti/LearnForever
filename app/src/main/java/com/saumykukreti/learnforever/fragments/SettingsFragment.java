@@ -1,6 +1,7 @@
 package com.saumykukreti.learnforever.fragments;
 
 import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,16 +12,20 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.saumykukreti.learnforever.R;
 import com.saumykukreti.learnforever.activities.CustomIntervalActivity;
 import com.saumykukreti.learnforever.constants.Constants;
 import com.saumykukreti.learnforever.util.Converter;
 import com.saumykukreti.learnforever.util.TextCreator;
+import com.saumykukreti.learnforever.util.Utility;
 
 public class SettingsFragment extends Fragment {
     public static final int LIST_CHANGED = 101;
@@ -98,8 +103,36 @@ public class SettingsFragment extends Fragment {
             }
         });
 
+        getView().findViewById(R.id.linear_settings_notification_time).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showTimePicker();
+            }
+        });
+
         //Initialising values
         setValues();
+    }
+
+    /**
+     *  This method shows a time picker to choose a time for notification
+     */
+    private void showTimePicker() {
+        TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                //Saving notification time
+                mSharedPreferences.edit().putString(Constants.LEARN_FOREVER_PREFERENCE_NOTIFICATION_HOUR, String.valueOf(hourOfDay))
+                .putString(Constants.LEARN_FOREVER_PREFERENCE_NOTIFICATION_MINUTE, String.valueOf(minute)).apply();
+
+                //Re initialise notification
+                Utility.setNotification(getContext());
+
+                setValues();
+                Toast.makeText(getContext(), "Time Changed!", Toast.LENGTH_SHORT).show();
+            }
+        },9,0,false);
+        timePickerDialog.show();
     }
 
     /**
@@ -128,12 +161,39 @@ public class SettingsFragment extends Fragment {
 
         TextView currentIntervalTV = getView().findViewById(R.id.text_two_revise_intervals);
         TextView currentFields = getView().findViewById(R.id.text_two_new_note);
+        TextView currentTime = getView().findViewById(R.id.text_two_notification);
 
         currentIntervalTV.setText((TextCreator.getIntervalText(currentInterval)));
 
-        currentFields.setText(TextCreator.getNoteSettingsText(mSharedPreferences.getBoolean(Constants.LEARN_FOREVER_PREFERENCE_TITLE_SETTINGS, false),
+        String currentFieldsString = TextCreator.getNoteSettingsText(mSharedPreferences.getBoolean(Constants.LEARN_FOREVER_PREFERENCE_TITLE_SETTINGS, false),
                 mSharedPreferences.getBoolean(Constants.LEARN_FOREVER_PREFERENCE_CIS_SETTINGS, false),
-                mSharedPreferences.getBoolean(Constants.LEARN_FOREVER_PREFERENCE_CATEGORY_SETTINGS, false)));
+                mSharedPreferences.getBoolean(Constants.LEARN_FOREVER_PREFERENCE_CATEGORY_SETTINGS, false));
+
+        //Checking if settings were changed or not, if yes then showing toast to the user
+        if(!currentFields.getText().toString().isEmpty() &&
+                !currentFields.getText().toString().equalsIgnoreCase(currentFieldsString))
+            Toast.makeText(getContext(), "New note settings changed!", Toast.LENGTH_SHORT).show();
+
+        currentFields.setText(currentFieldsString);
+
+        //Setting current time
+        int hour = Integer.parseInt(mSharedPreferences.getString(Constants.LEARN_FOREVER_PREFERENCE_NOTIFICATION_HOUR,"9"));
+        int minute = Integer.parseInt(mSharedPreferences.getString(Constants.LEARN_FOREVER_PREFERENCE_NOTIFICATION_MINUTE,"0"));
+
+        String hourString="";
+        String minuteString="";
+
+        if(hour<10)
+            hourString = "0"+hour;
+        else
+            hourString = String.valueOf(hour);
+
+        if(minute<10)
+            minuteString = "0"+minute;
+        else
+            minuteString = String.valueOf(minute);
+
+        currentTime.setText(hourString +":"+minuteString + "  (In 24 hours)");
     }
 
     /**
@@ -179,6 +239,9 @@ public class SettingsFragment extends Fragment {
                 setValues();
             }
         });
+
+        setParams(dialog);
+
         dialog.show();
     }
 
@@ -243,6 +306,7 @@ public class SettingsFragment extends Fragment {
                         break;
                 }
                 dialog.dismiss();
+                Toast.makeText(getContext(), "Revise Interval Changed!", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -253,7 +317,20 @@ public class SettingsFragment extends Fragment {
             }
         });
 
+        setParams(dialog);
         dialog.show();
+    }
+
+    /**
+     * This method sets the params to dialog
+     * @param dialog
+     */
+    private void setParams(Dialog dialog) {
+        //Setting dialog params
+        WindowManager.LayoutParams params = dialog.getWindow().getAttributes();
+        params.width = ViewGroup.LayoutParams.MATCH_PARENT;
+        params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+        dialog.onWindowAttributesChanged(params);
     }
 
     private void openCustomIntervalActivity() {

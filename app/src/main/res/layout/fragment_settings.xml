@@ -11,68 +11,104 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <!--Revise-->
         <android.support.v7.widget.CardView
-            android:layout_margin="5dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_margin="3dp">
 
             <LinearLayout
                 android:id="@+id/linear_settings_revise_intervals"
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="15dp"
-                android:layout_height="wrap_content">
+                android:padding="15dp">
 
                 <TextView
                     android:id="@+id/text_one_revise_intervals"
                     android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:text="Revise Intervals"
                     android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:layout_height="wrap_content"/>
+                    android:textStyle="bold"/>
 
                 <TextView
                     android:id="@+id/text_two_revise_intervals"
-                    tools:text = "Current revise interval"
                     android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:textSize="16sp"
-                    android:maxLines="1"
                     android:ellipsize="end"
-                    android:layout_height="wrap_content"/>
+                    android:maxLines="1"
+                    android:textSize="14sp"
+                    tools:text="Current revise interval"/>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <!--New note-->
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="3dp">
+
+            <LinearLayout
+                android:id="@+id/linear_settings_new_note"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="15dp">
+
+                <TextView
+                    android:id="@+id/text_one_new_note"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="New note settings"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/text_two_new_note"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textSize="14sp"
+                    tools:text="Show all"/>
             </LinearLayout>
 
         </android.support.v7.widget.CardView>
 
+        <!--Notification time-->
         <android.support.v7.widget.CardView
-            android:layout_margin="5dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        <LinearLayout
-            android:id="@+id/linear_settings_new_note"
-            android:layout_width="match_parent"
-            android:orientation="vertical"
-            android:padding="15dp"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_margin="3dp">
 
-            <TextView
-                android:id="@+id/text_one_new_note"
+            <LinearLayout
+                android:id="@+id/linear_settings_notification_time"
                 android:layout_width="match_parent"
-                android:text="New note settings"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="15dp">
 
-            <TextView
-                android:id="@+id/text_two_new_note"
-                tools:text = "Show all"
-                android:layout_width="match_parent"
-                android:layout_marginTop="5dp"
-                android:textSize="16sp"
-                android:maxLines="1"
-                android:ellipsize="end"
-                android:layout_height="wrap_content"/>
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/text_one_notification"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Notification Time"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/text_two_notification"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textSize="14sp"
+                    tools:text="9:00 pm"/>
+            </LinearLayout>
 
         </android.support.v7.widget.CardView>
     </LinearLayout>
