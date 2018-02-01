@@ -1,11 +1,38 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
              android:background="@android:color/white"
              android:clickable="true"
              android:focusable="true"
              tools:context="com.saumykukreti.learnforever.fragments.CategoriesFragment">
+
+    <LinearLayout
+        android:id="@+id/search_container"
+        android:orientation="horizontal"
+        android:layout_margin="5dp"
+        android:visibility="visible"
+        android:background="@drawable/background_drawable_with_white_background_and_gray_border"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="5dp"
+            app:srcCompat="@drawable/ic_search_black"/>
+
+        <EditText
+            android:id="@+id/edit_search"
+            android:layout_width="match_parent"
+            android:background="@android:color/transparent"
+            android:layout_height="wrap_content"
+            android:hint="Search"
+            android:maxLines="1"
+            android:padding="10dp"/>
+    </LinearLayout>
 
     <TextView
         android:id="@+id/no_categories_text"
@@ -19,6 +46,7 @@
     <ListView
         android:id="@+id/category_fragment_categories_list_view"
         android:layout_width="match_parent"
+        android:layout_below="@id/search_container"
         android:layout_height="match_parent"/>
 
-</FrameLayout>
+</RelativeLayout>

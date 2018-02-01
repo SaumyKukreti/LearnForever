@@ -2,14 +2,18 @@ package com.saumykukreti.learnforever.fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import com.saumykukreti.learnforever.R;
@@ -24,6 +28,8 @@ public class CategoriesFragment extends Fragment {
     private List<String> mListOfCategories = new ArrayList<>();
     private ArrayAdapter<String> mArrayAdapter;
     private ListView mCategoriesListView;
+    private EditText mSearchEditText;
+    private NoteDataController mDataController;
 
     public CategoriesFragment() {
         // Required empty public constructor
@@ -87,10 +93,12 @@ public class CategoriesFragment extends Fragment {
         //Getting list of categories
         getListOfCategories();
 
+        initialiseSearchView();
         //Creating and setting an adapter for categories
         mArrayAdapter = new ArrayAdapter<String>(getActivity(), R.layout.categories_fragment_item_layout, mListOfCategories);
         mCategoriesListView = getView().findViewById(R.id.category_fragment_categories_list_view);
         mCategoriesListView.setAdapter(mArrayAdapter);
+
         mCategoriesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -101,11 +109,48 @@ public class CategoriesFragment extends Fragment {
         });
     }
 
+    /**
+     *  This method initialises search view
+     */
+    private void initialiseSearchView() {
+        mSearchEditText = getView().findViewById(R.id.edit_search);
+        mSearchEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+                if(charSequence.length()>1){
+                    //Extracting all the categories and showing the list to the user
+                    String searchString = "%"+charSequence+"%";
+                    List<String> listOfCategories = mDataController.getListOfCategoriesWithValue(searchString);
+
+                    //Changing the current string to list obtained from search
+                    mListOfCategories.clear();
+                    mListOfCategories.addAll(listOfCategories);
+                    mArrayAdapter.notifyDataSetChanged();
+                }
+                else{
+                    //Reset list to show all categories
+                    getListOfCategories();
+                    mArrayAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+    }
+
     private void getListOfCategories() {
-        NoteDataController dataController = NoteDataController.getInstance(getActivity());
-        List<String> listOfCategories = dataController.getListOfCategories();
+        mDataController = NoteDataController.getInstance(getActivity());
+        List<String> listOfCategories = mDataController.getListOfCategories();
         mListOfCategories.clear();
         mListOfCategories.addAll(listOfCategories);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            mListOfCategories.sort(null);
+        }
     }
 
     @Override

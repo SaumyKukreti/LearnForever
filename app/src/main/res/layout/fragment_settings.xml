@@ -11,35 +11,43 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/linear_settings_revise_intervals"
+        <android.support.v7.widget.CardView
+            android:layout_margin="5dp"
             android:layout_width="match_parent"
-            android:orientation="vertical"
-            android:padding="15dp"
             android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/text_one_revise_intervals"
+            <LinearLayout
+                android:id="@+id/linear_settings_revise_intervals"
                 android:layout_width="match_parent"
-                android:text="Revise Intervals"
-                android:textSize="18sp"
-                android:layout_height="wrap_content"/>
+                android:orientation="vertical"
+                android:padding="15dp"
+                android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/text_two_revise_intervals"
-                tools:text = "Current revise interval"
-                android:layout_width="match_parent"
-                android:layout_marginTop="5dp"
-                android:textSize="16sp"
-                android:layout_height="wrap_content"/>
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/text_one_revise_intervals"
+                    android:layout_width="match_parent"
+                    android:text="Revise Intervals"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_height="wrap_content"/>
 
+                <TextView
+                    android:id="@+id/text_two_revise_intervals"
+                    tools:text = "Current revise interval"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="5dp"
+                    android:textSize="16sp"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
 
-        <ImageView
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_margin="5dp"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@android:color/black"/>
-
+            android:layout_height="wrap_content">
         <LinearLayout
             android:id="@+id/linear_settings_new_note"
             android:layout_width="match_parent"
@@ -52,6 +60,7 @@
                 android:layout_width="match_parent"
                 android:text="New note settings"
                 android:textSize="18sp"
+                android:textStyle="bold"
                 android:layout_height="wrap_content"/>
 
             <TextView
@@ -60,13 +69,12 @@
                 android:layout_width="match_parent"
                 android:layout_marginTop="5dp"
                 android:textSize="16sp"
+                android:maxLines="1"
+                android:ellipsize="end"
                 android:layout_height="wrap_content"/>
         </LinearLayout>
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@android:color/black"/>
+        </android.support.v7.widget.CardView>
     </LinearLayout>
 
 
