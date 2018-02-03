@@ -124,8 +124,25 @@ public class SettingsFragment extends Fragment {
             }
         });
 
+        getView().findViewById(R.id.linear_settings_about_me).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAboutMeDialog();
+            }
+        });
+
         //Initialising values
         setValues();
+    }
+
+    /**
+     *  This method shows a dialog that tells the user about me
+     */
+    private void showAboutMeDialog() {
+        Dialog dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.dialog_settings_about_me);
+        setParams(dialog);
+        dialog.show();
     }
 
     /**
