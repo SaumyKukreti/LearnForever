@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.saumykukreti.learnforever.R;
 import com.saumykukreti.learnforever.activities.ReviseActivity;
 import com.saumykukreti.learnforever.constants.Constants;
 import com.saumykukreti.learnforever.dataManager.ReminderDataController;
@@ -43,7 +44,7 @@ public class NotificationBuilder extends BroadcastReceiver {
 
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                     .setContentIntent(pendingIntent)
-                    .setSmallIcon(android.R.drawable.arrow_up_float)
+                    .setSmallIcon(R.drawable.learn_forever_icon)
                     .setContentTitle("Time to revise some notes")
                     .setContentText("Tap to start revising now")
                     .setAutoCancel(true);
