@@ -108,6 +108,7 @@ public class DataInitializerJob extends Job {
         preference.edit().putBoolean(Constants.LEARN_FOREVER_PREFERENCE_TITLE_SETTINGS,true).apply();
         preference.edit().putBoolean(Constants.LEARN_FOREVER_PREFERENCE_CIS_SETTINGS,true).apply();
         preference.edit().putBoolean(Constants.LEARN_FOREVER_PREFERENCE_CATEGORY_SETTINGS,true).apply();
+        preference.edit().putInt(Constants.LEARN_FOREVER_PREFERENCE_SPEECH_RATE,10).apply();
     }
 
 

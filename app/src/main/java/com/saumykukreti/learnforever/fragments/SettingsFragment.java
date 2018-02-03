@@ -32,6 +32,9 @@ public class SettingsFragment extends Fragment {
     public static final int CANCELLED = 102;
     private OnSettingsFragmentInteractionListener mListener;
     private SharedPreferences mSharedPreferences;
+    private int mSpeechRate;
+    private TextView mSpeechRateText;
+    private int mCurrentSpeechRate;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -49,6 +52,10 @@ public class SettingsFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         mSharedPreferences = getContext().getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE, Context.MODE_PRIVATE);
+
+        //Initialising SpeechRate
+        getCurrentSpeechRate();
+        mCurrentSpeechRate = mSpeechRate;
 
         if (getArguments() != null) {
             //Get arguments here
@@ -110,8 +117,84 @@ public class SettingsFragment extends Fragment {
             }
         });
 
+        getView().findViewById(R.id.linear_settings_reading_speed).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showReadingSpeedDialog();
+            }
+        });
+
         //Initialising values
         setValues();
+    }
+
+    /**
+     *  This method shows a dialog to change the reading speed
+     */
+    private void showReadingSpeedDialog() {
+        Dialog dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.dialog_settings_reading_speed);
+        mSpeechRateText = (TextView)dialog.findViewById(R.id.text_speech_Rate);
+        mSpeechRateText.setText(String.valueOf(mSpeechRate * 0.1));
+
+        dialog.findViewById(R.id.button_add).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                increaseSpeechRate();
+            }
+        });
+
+        dialog.findViewById(R.id.button_substract).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                decreaseSpeechRate();
+            }
+        });
+
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                setValues();
+            }
+        });
+
+        setParams(dialog);
+        dialog.show();
+    }
+
+    /**
+     * This method decreases the rate of speech
+     */
+    private void decreaseSpeechRate() {
+        getCurrentSpeechRate();
+        mSpeechRate-=1;
+        if(mSpeechRate==0){
+            mSpeechRate = 1;
+        }
+        mSharedPreferences.edit().putInt(Constants.LEARN_FOREVER_PREFERENCE_SPEECH_RATE,mSpeechRate).apply();
+        mSpeechRateText.setText(String.valueOf(mSpeechRate * 0.1));
+    }
+
+    /**
+     *  This method gets the current speech rate
+     */
+    private void getCurrentSpeechRate() {
+        mSpeechRate = mSharedPreferences.getInt(Constants.LEARN_FOREVER_PREFERENCE_SPEECH_RATE,10);
+    }
+
+    /**
+     * This method increases the rate of speech
+     */
+    private void increaseSpeechRate() {
+        getCurrentSpeechRate();
+        mSpeechRate+=1;
+
+        //Dont let the speech increase more than 10
+        if(mSpeechRate>=100){
+            mSpeechRate = 99;
+        }
+        mSharedPreferences.edit().putInt(Constants.LEARN_FOREVER_PREFERENCE_SPEECH_RATE,mSpeechRate).apply();
+        mSpeechRateText.setText(String.valueOf(mSpeechRate * 0.1));
     }
 
     /**
@@ -194,6 +277,15 @@ public class SettingsFragment extends Fragment {
             minuteString = String.valueOf(minute);
 
         currentTime.setText(hourString +":"+minuteString + "  (In 24 hours)");
+
+        TextView currentRateOfSpeech = getView().findViewById(R.id.text_two_reading);
+
+        //Speech rate
+        if(mCurrentSpeechRate != mSpeechRate){
+            mCurrentSpeechRate = mSpeechRate;
+            Toast.makeText(getContext(), "Rate of speech changed!", Toast.LENGTH_SHORT).show();
+        }
+        currentRateOfSpeech.setText(String.valueOf(mSpeechRate * 0.1));
     }
 
     /**

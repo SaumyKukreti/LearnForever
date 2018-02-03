@@ -4,6 +4,7 @@ import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.LifecycleObserver;
 import android.arch.lifecycle.OnLifecycleEvent;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
 
@@ -41,6 +42,10 @@ public class TextReader implements TextToSpeech.OnInitListener, LifecycleObserve
 
 
     public void readAloud(String speech) {
+        //Set speech rate
+        setSpeechRate();
+
+
         //If speech contains some breaks
         if(speech.contains("&%&")) {
             int index = 1;
@@ -70,6 +75,15 @@ public class TextReader implements TextToSpeech.OnInitListener, LifecycleObserve
         else{
             mTts.speak(speech.trim(), TextToSpeech.QUEUE_FLUSH, null);
         }
+    }
+
+    /**
+     *  This method sets the speech rate
+     */
+    private void setSpeechRate() {
+        SharedPreferences sharedPreferences = mContext.getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE, Context.MODE_PRIVATE);
+        float speechRate = sharedPreferences.getInt(Constants.LEARN_FOREVER_PREFERENCE_SPEECH_RATE,10) * 0.1f;
+        mTts.setSpeechRate(speechRate);
     }
 
     public void addToReadingText(String speech){

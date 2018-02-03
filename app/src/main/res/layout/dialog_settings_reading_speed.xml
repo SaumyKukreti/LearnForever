@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="18dp"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
+        android:text="Choose the speech rate you want.."
+        android:textSize="18sp"/>
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/button_substract"
+            android:layout_width="wrap_content"
+            android:layout_marginRight="20dp"
+            android:padding="30dp"
+            android:foregroundGravity="center"
+            android:background="@drawable/ic_chevron_left_white"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/text_speech_Rate"
+            android:maxLength="3"
+            android:padding="10dp"
+            android:layout_gravity="center"
+            android:background="@drawable/background_drawable_with_white_background_and_gray_border"
+            tools:text = "1.0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <ImageView
+            android:id="@+id/button_add"
+            android:layout_marginLeft="20dp"
+            android:background="@drawable/ic_chevron_right_white"
+            android:padding="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+</LinearLayout>

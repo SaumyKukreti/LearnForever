@@ -20,6 +20,7 @@ public class Constants {
     public static final String LEARN_FOREVER_PREFERENCE_SAVED_NOTES_LIST = "lf_preference_saved_notes_list";
     public static final String LEARN_FOREVER_PREFERENCE_IS_ALARM_SET = "lf_preference_is_alarm_set";
     public static final String LEARN_FOREVER_PREFERENCE_IS_SPEECH_ON = "lf_preference_is_speech_on";
+    public static final String LEARN_FOREVER_PREFERENCE_SPEECH_RATE = "lf_preference_speech_rate";
     public static final String LEARN_FOREVER_PREFERENCE_SIGN_IN_METHOD = "lf_preference_sign_in_method";
     public static final String LEARN_FOREVER_PREFERENCE_USER_ID = "lf_preference_user_id";
     public static final String LEARN_FOREVER_PREFERENCE_CURRENT_INTERVAL = "lf_preference_current_interval";
