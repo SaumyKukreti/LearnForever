@@ -24,7 +24,13 @@
         <activity
             android:name=".activities.NoteActivity"
             android:parentActivityName=".activities.NavigationDrawerActivity"
-            android:theme="@style/AppThemeWithNoActionBar"/>
+            android:theme="@style/AppThemeWithNoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".activities.SplashActivity"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen">

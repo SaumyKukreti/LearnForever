@@ -98,6 +98,26 @@ public class NoteActivity extends AppCompatActivity {
             //From widget, start dictation
             promptSpeechInput();
         }
+
+        if(getIntent().getAction()!=null &&
+                getIntent().getAction().equals(Intent.ACTION_SEND) &&
+                getIntent().getType()!=null &&
+                getIntent().getType().equals("text/plain")){
+
+            handleSendText(getIntent());
+        }
+
+    }
+
+    /**
+     *  This method handles the text sent by other applications
+     * @param intent - The received intent
+     */
+    private void handleSendText(Intent intent) {
+        String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
+        if(sharedText!=null && !sharedText.isEmpty()){
+            mNoteContentEdit.setText(sharedText);
+        }
     }
 
     /**
