@@ -23,6 +23,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/text_note_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
@@ -30,6 +31,7 @@
 
             <!--Line-->
             <ImageView
+                android:id="@+id/image_note_title"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginTop="10dp"
@@ -44,6 +46,7 @@
                 tools:text="Title"/>
 
             <TextView
+                android:id="@+id/text_content_in_short_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Content in short"
@@ -52,6 +55,7 @@
 
             <!--Line-->
             <ImageView
+                android:id="@+id/image_note_cis"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginTop="10dp"
@@ -59,13 +63,37 @@
 
             <TextView
                 android:layout_marginTop="10dp"
-
                 android:id="@+id/text_content_in_short"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 tools:text="Content in short"/>
 
             <TextView
+                android:id="@+id/text_category_title"
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:text="Category"/>
+
+            <!--Line-->
+            <ImageView
+                android:id="@+id/image_note_category"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:background="@android:color/darker_gray"/>
+
+            <TextView
+                android:layout_marginTop="10dp"
+                android:id="@+id/text_category"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="Category"/>
+
+
+            <TextView
+                android:id="@+id/text_content_title"
                 android:layout_marginTop="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -74,6 +102,7 @@
 
             <!--Line-->
             <ImageView
+                android:id="@+id/image_note_content"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginTop="10dp"
