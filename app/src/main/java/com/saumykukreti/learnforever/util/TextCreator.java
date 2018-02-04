@@ -1,7 +1,5 @@
 package com.saumykukreti.learnforever.util;
 
-import android.content.SharedPreferences;
-
 import com.saumykukreti.learnforever.constants.Constants;
 import com.saumykukreti.learnforever.modelClasses.dataTables.NoteTable;
 
@@ -14,7 +12,7 @@ import java.util.Random;
 
 public class TextCreator {
 
-    public static String getNoteText (NoteTable note){
+    public static String getNoteTextForReading(NoteTable note){
         StringBuffer stringBuffer = new StringBuffer();
 
         if(!note.getTitle().isEmpty()){
@@ -35,12 +33,12 @@ public class TextCreator {
 
 
 
-    public static String getNoteText (List<NoteTable> notes){
+    public static String getNoteTextForReading(List<NoteTable> notes){
         StringBuffer stringBuffer = new StringBuffer();
 
         for(int i =0;i<notes.size();i++){
 
-            stringBuffer.append(getNoteText(notes.get(i)));
+            stringBuffer.append(getNoteTextForReading(notes.get(i)));
 
             if(i==notes.size()-1){
                 //Last note
@@ -114,4 +112,19 @@ public class TextCreator {
 
         return stringBuffer.toString();
     }
+
+    public static String getNoteTextForSending(List<NoteTable> notes){
+        StringBuffer str = new StringBuffer();
+
+        for(NoteTable note : notes){
+            if(!note.getTitle().isEmpty())str.append("Title : ").append(note.getTitle()).append("\n\n");
+            if(!note.getContentInShort().isEmpty())str.append("Content In Short : ").append(note.getContentInShort()).append("\n\n");
+            if(!note.getCategory().isEmpty())str.append("Category : ").append(note.getCategory()).append("\n\n");
+            if(!note.getContent().isEmpty())str.append("Content : ").append(note.getContent()).append("\n\n");
+
+            str.append("\n\n\n");
+        }
+        return str.toString();
+    }
+
 }

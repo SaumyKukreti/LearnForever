@@ -17,13 +17,6 @@
         android:icon="@drawable/ic_speak_white"
         app:showAsAction="always"/>
 
-
-    <item
-        android:id="@+id/home_add_to_category"
-        android:orderInCategory="100"
-        android:title="Add to category"
-        app:showAsAction="never"/>
-
     <item
         android:id="@+id/home_search"
         android:orderInCategory="100"

@@ -24,7 +24,6 @@ import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Switch;
 
@@ -352,7 +351,7 @@ public class NoteActivity extends AppCompatActivity {
                 if (mTextReader.isReading()) {
                     mTextReader.stopReading();
                 } else {
-                    mTextReader.readAloud(TextCreator.getNoteText(mNote));
+                    mTextReader.readAloud(TextCreator.getNoteTextForReading(mNote));
                 }
                 break;
 

@@ -7,10 +7,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.transition.TransitionManager;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -153,7 +151,7 @@ public class ReviseActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     if (mIsSpeechOn) {
-                        mTextReader.readAloud(TextCreator.getNoteText(mNoteList.get(mPageNumber)));
+                        mTextReader.readAloud(TextCreator.getNoteTextForReading(mNoteList.get(mPageNumber)));
                     } else {
                         Toast.makeText(ReviseActivity.this, "Speech is off!!", Toast.LENGTH_SHORT).show();
                     }
@@ -185,14 +183,14 @@ public class ReviseActivity extends AppCompatActivity {
                 setPageNumber(position);
                 if(mIsSpeechOn) {
                     if(mTtsInitialised) {
-                        mTextReader.readAloud(TextCreator.getNoteText(mNoteList.get(position)));
+                        mTextReader.readAloud(TextCreator.getNoteTextForReading(mNoteList.get(position)));
                     }
                     else{
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
                                 if (mIsSpeechOn) {
-                                    mTextReader.readAloud(TextCreator.getNoteText(mNoteList.get(position)));
+                                    mTextReader.readAloud(TextCreator.getNoteTextForReading(mNoteList.get(position)));
                                 }
                             }
                         }, 1000);

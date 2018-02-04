@@ -1,11 +1,11 @@
 package com.saumykukreti.learnforever.fragments;
 
-import android.animation.ValueAnimator;
 import android.app.AlertDialog;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,24 +15,18 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.transition.ChangeBounds;
 import android.transition.Fade;
-import android.transition.Transition;
 import android.transition.TransitionManager;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.saumykukreti.learnforever.LearnForeverApplication;
 import com.saumykukreti.learnforever.R;
-import com.saumykukreti.learnforever.activities.NavigationDrawerActivity;
 import com.saumykukreti.learnforever.adapters.HomeFragmentNotesRecyclerViewAdapter;
 import com.saumykukreti.learnforever.dataManager.NoteDataController;
 import com.saumykukreti.learnforever.jobs.DataSyncJob;
@@ -325,18 +319,39 @@ public class HomeFragment extends Fragment{
                 readSelectedNotes();
                 return true;
             case R.id.home_send:
-                Toast.makeText(getContext(), "Send home", Toast.LENGTH_SHORT).show();
+                sendSelectedNotes();
                 return true;
             case R.id.home_cancel:
                 cancelAction();
-                return true;
-            case R.id.home_add_to_category:
                 return true;
             case R.id.home_search:
                 mSearchContainer.setVisibility(View.VISIBLE);
                 return true;
         }
         return true;
+    }
+
+    private void sendSelectedNotes() {
+        if(mSelectionModeOn){
+            List<NoteTable> selectedNoteList = mHomeFragmentNotesRecyclerViewAdapter.getSelectedList();
+            if(!selectedNoteList.isEmpty()){
+                Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                sharingIntent.setType("text/plain");
+
+                if(selectedNoteList.size()==1 && selectedNoteList.get(0).getTitle()!=null && !selectedNoteList.get(0).getTitle().isEmpty()){
+                    //Setting the subject the title of the note if only one note is being sent and title is available
+                    sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, selectedNoteList.get(0).getTitle());
+                }
+                else{
+                    sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Notes");
+                }
+
+                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, TextCreator.getNoteTextForSending(selectedNoteList));
+                startActivity(Intent.createChooser(sharingIntent,"Send notes via"));
+            }
+        }else{
+            setSelectionMode(true);
+        }
     }
 
     /**
@@ -436,7 +451,7 @@ public class HomeFragment extends Fragment{
         //Check if some notes are selected
         if(mSelectionModeOn){
             List<NoteTable> listOfSelectedNotes = mHomeFragmentNotesRecyclerViewAdapter.getSelectedList();
-            mTextReader.readAloud(TextCreator.getNoteText(listOfSelectedNotes));
+            mTextReader.readAloud(TextCreator.getNoteTextForReading(listOfSelectedNotes));
         }
         else{
             setSelectionMode(true);
