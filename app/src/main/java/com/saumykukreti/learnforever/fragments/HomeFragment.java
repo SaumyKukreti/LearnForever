@@ -24,6 +24,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.saumykukreti.learnforever.LearnForeverApplication;
 import com.saumykukreti.learnforever.R;
@@ -322,10 +323,19 @@ public class HomeFragment extends Fragment{
                 sendSelectedNotes();
                 return true;
             case R.id.home_cancel:
+                if(mSelectionModeOn){
+
+                }else {
+                    Toast.makeText(getContext(), "Nothing to cancel!", Toast.LENGTH_SHORT).show();
+                }
                 cancelAction();
                 return true;
             case R.id.home_search:
-                mSearchContainer.setVisibility(View.VISIBLE);
+                if(mSearchContainer.getVisibility() == View.VISIBLE){
+                    Toast.makeText(getContext(), "Search is already visible!", Toast.LENGTH_SHORT).show();
+                }else{
+                    mSearchContainer.setVisibility(View.VISIBLE);
+                }
                 return true;
         }
         return true;
