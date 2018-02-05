@@ -22,8 +22,10 @@ import com.saumykukreti.learnforever.dataManager.ReminderDataController;
 import com.saumykukreti.learnforever.modelClasses.dataTables.NoteTable;
 import com.saumykukreti.learnforever.modelClasses.dataTables.ReminderTable;
 import com.saumykukreti.learnforever.util.Converter;
+import com.saumykukreti.learnforever.util.DateHandler;
 import com.saumykukreti.learnforever.util.TextCreator;
 import com.saumykukreti.learnforever.util.TextReader;
+import com.saumykukreti.learnforever.util.Utility;
 
 import java.util.Date;
 import java.util.List;
@@ -37,6 +39,7 @@ public class ReviseActivity extends AppCompatActivity {
     private boolean mIsSpeechIconVisible = false;
     private int mPageNumber;
     private boolean mTtsInitialised = false;
+    private SharedPreferences mPreference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,8 +76,8 @@ public class ReviseActivity extends AppCompatActivity {
     }
 
     private void getValuesFromPreference() {
-        SharedPreferences preference = getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE, Context.MODE_PRIVATE);
-        mIsSpeechOn = preference.getBoolean(Constants.LEARN_FOREVER_PREFERENCE_IS_SPEECH_ON, true);
+        mPreference = getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE, Context.MODE_PRIVATE);
+        mIsSpeechOn = mPreference.getBoolean(Constants.LEARN_FOREVER_PREFERENCE_IS_SPEECH_ON, true);
     }
 
     /**
@@ -215,22 +218,17 @@ public class ReviseActivity extends AppCompatActivity {
      *  This method gets the notes that are to be revised today
      */
     private void getNotesToRevise() {
-
-        ReminderTable todaysReminder = ReminderDataController.getInstance(this).getNotesForDate(new Date());
-        if(todaysReminder!=null){
-            String notesIdsToRemind = todaysReminder.getNoteIds();
-            List<String> notesToRemind = Converter.convertStringToList(notesIdsToRemind);
-
-            //Getting the notes
-            mNoteList = NoteDataController.getInstance(this).getNoteWithIds(notesToRemind);
-        }
+        List<String> notesToRemind = Utility.getNoteIdsToRemind(this);
+        //Getting the notes
+        mNoteList = NoteDataController.getInstance(this).getNoteWithIds(notesToRemind);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         //Save speech preference in shared preference
-        SharedPreferences preference = getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE, Context.MODE_PRIVATE);
-        preference.edit().putBoolean(Constants.LEARN_FOREVER_PREFERENCE_IS_SPEECH_ON, mIsSpeechOn).apply();
+        mPreference.edit().putBoolean(Constants.LEARN_FOREVER_PREFERENCE_IS_SPEECH_ON, mIsSpeechOn).apply();
+        mPreference.edit().putString(Constants.LEARN_FOREVER_PREFERENCE_LAST_REVISE_DATE, DateHandler.convertDateToString(new Date())).apply();
+
     }
 }

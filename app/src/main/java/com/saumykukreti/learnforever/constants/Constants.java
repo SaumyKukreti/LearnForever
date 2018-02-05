@@ -35,6 +35,9 @@ public class Constants {
     public static final String LEARN_FOREVER_PREFERENCE_NOTIFICATION_HOUR = "lf_preference_hour";
     public static final String LEARN_FOREVER_PREFERENCE_NOTIFICATION_MINUTE = "lf_preference_minute";
 
+    //Revise date
+    public static final String LEARN_FOREVER_PREFERENCE_LAST_REVISE_DATE = "lf_preference_last_revise_date";
+
     //Sign in methods
     public static final int SIGN_IN_METHOD_GOOGLE_SIGN_IN = 1010;
     public static final int SIGN_IN_METHOD_FIREBASE_SIGN_IN = 1011;

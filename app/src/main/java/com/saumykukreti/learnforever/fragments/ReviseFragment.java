@@ -17,6 +17,7 @@ import com.saumykukreti.learnforever.dataManager.ReminderDataController;
 import com.saumykukreti.learnforever.modelClasses.dataTables.NoteTable;
 import com.saumykukreti.learnforever.modelClasses.dataTables.ReminderTable;
 import com.saumykukreti.learnforever.util.Converter;
+import com.saumykukreti.learnforever.util.Utility;
 
 import java.util.Date;
 import java.util.List;
@@ -58,16 +59,10 @@ public class ReviseFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         RecyclerView recyclerView = view.findViewById(R.id.recycler_notes);
-
-        ReminderTable todaysReminder = ReminderDataController.getInstance(getContext()).getNotesForDate(new Date());
         List<NoteTable> noteList = null;
-        if(todaysReminder!=null){
-            String notesIdsToRemind = todaysReminder.getNoteIds();
-            List<String> notesToRemind = Converter.convertStringToList(notesIdsToRemind);
-
-            //Getting the notes
-            noteList = NoteDataController.getInstance(getContext()).getNoteWithIds(notesToRemind);
-        }
+        List<String> notesToRemind = Utility.getNoteIdsToRemind(getContext());
+        //Getting the notes
+        noteList = NoteDataController.getInstance(getContext()).getNoteWithIds(notesToRemind);
 
         if(noteList!=null && !noteList.isEmpty()){
             ReviseNotesAdapter adapter = new ReviseNotesAdapter(getContext(), noteList);

@@ -13,8 +13,10 @@ import com.saumykukreti.learnforever.activities.ReviseActivity;
 import com.saumykukreti.learnforever.constants.Constants;
 import com.saumykukreti.learnforever.dataManager.ReminderDataController;
 import com.saumykukreti.learnforever.modelClasses.dataTables.ReminderTable;
+import com.saumykukreti.learnforever.util.Utility;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by saumy on 12/27/2017.
@@ -30,8 +32,8 @@ public class NotificationBuilder extends BroadcastReceiver {
         Log.e(TAG, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Inside broadcast receiver!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
         //Checking if there are any notes to revise, if so, show a notification else ignore
-        ReminderTable todaysReminder = ReminderDataController.getInstance(context).getNotesForDate(new Date());
-        if (todaysReminder != null) {
+        List<String> noteIdsToRemind = Utility.getNoteIdsToRemind(context);
+        if (!noteIdsToRemind.isEmpty()) {
             //This means we have some notes to revise today
 
             //Here we make a notification
