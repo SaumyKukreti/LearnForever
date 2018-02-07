@@ -1,10 +1,6 @@
 package com.saumykukreti.learnforever.activities;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -26,13 +22,9 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.saumykukreti.learnforever.R;
-import com.saumykukreti.learnforever.brodcastReceiver.NotificationBuilder;
-import com.saumykukreti.learnforever.constants.Constants;
 import com.saumykukreti.learnforever.fragments.CategoriesFragment;
 import com.saumykukreti.learnforever.fragments.HomeFragment;
 import com.saumykukreti.learnforever.fragments.ReviseFragment;
@@ -41,7 +33,6 @@ import com.saumykukreti.learnforever.fragments.TempFragment;
 import com.saumykukreti.learnforever.util.Utility;
 
 import java.io.InputStream;
-import java.util.Calendar;
 
 public class NavigationDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -209,7 +200,17 @@ public class NavigationDrawerActivity extends AppCompatActivity
             nameTV.setText(user.getDisplayName());
             emailTV.setText(user.getEmail());
 
-            if (user.getPhotoUrl() != null) {
+            //Applying saved profile picture (if any till a new one is loaded from internet)
+            String str = Utility.getStringFromPreference(this,"profileImagePath");
+            if(str.length()>0 && str.equalsIgnoreCase("unsuccessful")) {
+                Bitmap bit = BitmapFactory.decodeFile(str);
+                profileIM.setImageBitmap(bit);
+            }else{
+                //Apply default image
+                profileIM.setImageDrawable(getResources().getDrawable(R.drawable.learn_forever));
+            }
+
+            if (user.getPhotoUrl() != null && Utility.isNetworkAvailable(this)) {
                 new DownloadImageTask(profileIM).execute(user.getPhotoUrl().toString());
             }
         }
@@ -236,9 +237,10 @@ private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
     }
 
     protected void onPostExecute(Bitmap result) {
+        //Saving bitmap to file
         profileImage.setImageBitmap(result);
+        Utility.saveStringInPreference(NavigationDrawerActivity.this,"profileImagePath",Utility.saveImage(NavigationDrawerActivity.this, result));
     }
-
 }
 
 

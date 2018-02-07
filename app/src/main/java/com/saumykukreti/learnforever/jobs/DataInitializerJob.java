@@ -1,11 +1,14 @@
 
 package com.saumykukreti.learnforever.jobs;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.job.JobScheduler;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
 import com.birbit.android.jobqueue.Job;
@@ -63,6 +66,7 @@ public class DataInitializerJob extends Job {
         //Getting id
         SharedPreferences preference = mContext.getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE, Context.MODE_PRIVATE);
         intialisePreferenceSettings(preference);
+        ActivityCompat.requestPermissions((Activity) mContext, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 111);
 
         //Initialising alarm
         Utility.setNotification(mContext);
