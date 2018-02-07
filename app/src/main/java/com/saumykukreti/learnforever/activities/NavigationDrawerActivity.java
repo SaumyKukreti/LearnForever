@@ -202,7 +202,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
 
             //Applying saved profile picture (if any till a new one is loaded from internet)
             String str = Utility.getStringFromPreference(this,"profileImagePath");
-            if(str.length()>0 && str.equalsIgnoreCase("unsuccessful")) {
+            if(str.length()>0 && !str.equalsIgnoreCase("unsuccessful")) {
                 Bitmap bit = BitmapFactory.decodeFile(str);
                 profileIM.setImageBitmap(bit);
             }else{
