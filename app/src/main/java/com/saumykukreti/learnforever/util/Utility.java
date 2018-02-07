@@ -174,7 +174,4 @@ public class Utility {
         return sharedPreferences.getString(key,"");
     }
 
-
-
-
 }

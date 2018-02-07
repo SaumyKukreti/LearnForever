@@ -60,6 +60,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
     private FloatingActionButton mFab;
     private Fragment mCurrentFragment;
     private final String TAG = NavigationDrawerActivity.class.getSimpleName();
+    private HomeFragment mHomeFragment;
 
 
     @Override
@@ -91,6 +92,8 @@ public class NavigationDrawerActivity extends AppCompatActivity
             mNavigationView.setCheckedItem(R.id.nav_home);
             mCurrentItemId = R.id.nav_home;
             mCurrentFragment = createHomeFragment();
+            //Field to store home fragment
+            mHomeFragment = (HomeFragment) mCurrentFragment;
             //As the length of fragment back stack is 0, this means no fragment has been added to the back stack till now, hence adding home fragment to the container
             fragmentTransaction.add(R.id.navigation_drawer_fragment_container, mCurrentFragment).commit();
             //Returning as no further action is required
@@ -105,6 +108,9 @@ public class NavigationDrawerActivity extends AppCompatActivity
             mCurrentFragment = createHomeFragment();
             fragmentManager.popBackStack();
             updateActionBarForHomeFragment();
+
+            //Letting home fragment know if it needs to refresh
+            mHomeFragment.refreshLayout();
             return;
         }
 

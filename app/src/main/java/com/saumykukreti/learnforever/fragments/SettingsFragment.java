@@ -130,9 +130,70 @@ public class SettingsFragment extends Fragment {
                 showAboutMeDialog();
             }
         });
+        getView().findViewById(R.id.linear_settings_layout_style).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showLayoutStyleDialog();
+            }
+        });
 
         //Initialising values
         setValues();
+    }
+
+    /**
+     *  This method displays a dialog to choose a layout style
+     */
+    private void showLayoutStyleDialog() {
+        final Dialog dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.dialog_settings_layout_settings);
+
+        final RadioButton radioGrid = dialog.findViewById(R.id.radio_grid);
+        final RadioButton radioList = dialog.findViewById(R.id.radio_list);
+        final RadioGroup radioGroup = dialog.findViewById(R.id.radio_group);
+
+        //Set current choice
+        String currentPreference = mSharedPreferences.getString(Constants.LEARN_FOREVER_PREFERENCE_LAYOUT_PREFERENCE,"");
+        switch (currentPreference){
+            case "grid":
+                radioGroup.check(R.id.radio_grid);
+                break;
+            case "list":
+                radioGroup.check(R.id.radio_list);
+                break;
+
+            default:
+                radioGroup.check(R.id.radio_grid);
+                break;
+        }
+
+        //Setting current selection
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId){
+                    case R.id.radio_grid:
+                        mSharedPreferences.edit().putString(Constants.LEARN_FOREVER_PREFERENCE_LAYOUT_PREFERENCE,"grid").apply();
+                        break;
+
+                    case R.id.radio_list:
+                        mSharedPreferences.edit().putString(Constants.LEARN_FOREVER_PREFERENCE_LAYOUT_PREFERENCE,"list").apply();
+                        break;
+                }
+                dialog.dismiss();
+                Toast.makeText(getContext(), "Layout Settings Changed!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                setValues();
+            }
+        });
+
+        setParams(dialog);
+        dialog.show();
     }
 
     /**
@@ -239,9 +300,9 @@ public class SettingsFragment extends Fragment {
      * This method sets values in views
      */
     private void setValues() {
-        String currentPreference = mSharedPreferences.getString(Constants.LEARN_FOREVER_PREFERENCE_CURRENT_INTERVAL,"");
+        String currentIntervalPreference = mSharedPreferences.getString(Constants.LEARN_FOREVER_PREFERENCE_CURRENT_INTERVAL,"");
         int[] currentInterval;
-        switch (currentPreference){
+        switch (currentIntervalPreference){
             case "1":
                 currentInterval = Constants.DAY_INTERVAL_ONE;
                 break;
@@ -259,11 +320,27 @@ public class SettingsFragment extends Fragment {
                 break;
         }
 
+        String currentLayoutPreference = mSharedPreferences.getString(Constants.LEARN_FOREVER_PREFERENCE_LAYOUT_PREFERENCE,"");
+        String currentStyle = "Grid";
+        switch (currentLayoutPreference){
+            case "grid":
+                currentStyle = "Grid";
+                break;
+            case "list":
+                currentStyle = "List";
+                break;
+            default:
+                currentStyle = "Grid";
+                break;
+        }
+
         TextView currentIntervalTV = getView().findViewById(R.id.text_two_revise_intervals);
         TextView currentFields = getView().findViewById(R.id.text_two_new_note);
         TextView currentTime = getView().findViewById(R.id.text_two_notification);
+        TextView currentLayoutStyle = getView().findViewById(R.id.text_two_layout_style);
 
         currentIntervalTV.setText((TextCreator.getIntervalText(currentInterval)));
+        currentLayoutStyle.setText(currentStyle);
 
         String currentFieldsString = TextCreator.getNoteSettingsText(mSharedPreferences.getBoolean(Constants.LEARN_FOREVER_PREFERENCE_TITLE_SETTINGS, false),
                 mSharedPreferences.getBoolean(Constants.LEARN_FOREVER_PREFERENCE_CIS_SETTINGS, false),

@@ -12,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -29,11 +30,13 @@ import android.widget.Toast;
 import com.saumykukreti.learnforever.LearnForeverApplication;
 import com.saumykukreti.learnforever.R;
 import com.saumykukreti.learnforever.adapters.HomeFragmentNotesRecyclerViewAdapter;
+import com.saumykukreti.learnforever.constants.Constants;
 import com.saumykukreti.learnforever.dataManager.NoteDataController;
 import com.saumykukreti.learnforever.jobs.DataSyncJob;
 import com.saumykukreti.learnforever.modelClasses.dataTables.NoteTable;
 import com.saumykukreti.learnforever.util.TextCreator;
 import com.saumykukreti.learnforever.util.TextReader;
+import com.saumykukreti.learnforever.util.Utility;
 
 import java.util.List;
 
@@ -50,6 +53,8 @@ public class HomeFragment extends Fragment{
     private String mCategory;
     private EditText mSearchEdit;
     private LinearLayout mSearchContainer;
+    private RecyclerView mRecyclerView;
+    private String mCurrentLayoutManager;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -264,8 +269,8 @@ public class HomeFragment extends Fragment{
         if(updateNoteList){
             mAllNotes = datacontroller.getAllNotes();
         }
-        RecyclerView recyclerView = getView().findViewById(R.id.recycler_notes);
-        recyclerView.removeAllViews();
+        mRecyclerView = getView().findViewById(R.id.recycler_notes);
+        mRecyclerView.removeAllViews();
         mHomeFragmentNotesRecyclerViewAdapter = new HomeFragmentNotesRecyclerViewAdapter(getActivity(), mAllNotes, new HomeFragmentAdapterInteractionListener() {
             @Override
             public void toggleSelectionMode(boolean on) {
@@ -273,16 +278,25 @@ public class HomeFragment extends Fragment{
             }
         });
 
-        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
-        recyclerView.setAdapter(mHomeFragmentNotesRecyclerViewAdapter);
+        String layoutStyle = Utility.getStringFromPreference(getContext(), Constants.LEARN_FOREVER_PREFERENCE_LAYOUT_PREFERENCE);
+
+        if(layoutStyle.equalsIgnoreCase("list")){
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            mCurrentLayoutManager = "list";
+        }
+        else{
+            mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
+            mCurrentLayoutManager = "grid";
+        }
+        mRecyclerView.setAdapter(mHomeFragmentNotesRecyclerViewAdapter);
 
         final ViewGroup fragment_container = getView().findViewById(R.id.home_container);
         mSearchContainer = getView().findViewById(R.id.search_container);
         final Fade fade = new Fade();
         fade.setDuration(200);
-        fade.removeTarget(recyclerView);
+        fade.removeTarget(mRecyclerView);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            recyclerView.setOnFlingListener(new RecyclerView.OnFlingListener() {
+            mRecyclerView.setOnFlingListener(new RecyclerView.OnFlingListener() {
                 @Override
                 public boolean onFling(int velocityX, int velocityY) {
                     //If velocity is positive, the user is scolling down and vice versa
@@ -472,5 +486,18 @@ public class HomeFragment extends Fragment{
     public void onDestroy() {
         super.onDestroy();
         mTextReader = null;
+    }
+
+    /**
+     * Call this method when the layout of home fragment needs to be refreshed
+     */
+    public void refreshLayout(){
+        //Checking if layout settings were changed or not if so refreshing the layout
+        String layoutPreference = Utility.getStringFromPreference(getContext(),Constants.LEARN_FOREVER_PREFERENCE_LAYOUT_PREFERENCE);
+
+        if(!layoutPreference.equalsIgnoreCase(mCurrentLayoutManager)){
+            //Setting must have changed, thus refreshing layout
+            initialiseNotesAdapter(false);
+        }
     }
 }

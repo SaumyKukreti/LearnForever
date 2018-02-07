@@ -156,12 +156,49 @@
         </android.support.v7.widget.CardView>
 
 
+        <!--Home fragment layout style-->
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp">
+
+            <LinearLayout
+                android:id="@+id/linear_settings_layout_style"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="15dp">
+
+                <TextView
+                    android:id="@+id/text_one_layout_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Layout style"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/text_two_layout_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textSize="14sp"
+                    tools:text="Grid"/>
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+
         <!--About me-->
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="1dp"
-            android:layout_marginBottom="3dp"
+            android:layout_marginBottom="1dp"
             android:layout_marginLeft="3dp"
             android:layout_marginRight="3dp">
 

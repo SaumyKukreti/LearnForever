@@ -109,8 +109,9 @@
                     android:layout_width="match_parent"
                     android:layout_marginTop="20dp"
                     android:visibility="gone"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="90"/>
+                    android:background="@android:color/white"
+                    android:hint="Choose Category"
+                    android:layout_height="wrap_content"/>
 
 
                 <EditText
