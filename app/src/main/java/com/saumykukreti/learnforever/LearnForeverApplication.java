@@ -8,6 +8,7 @@ import android.util.Log;
 import com.birbit.android.jobqueue.JobManager;
 import com.birbit.android.jobqueue.config.Configuration;
 import com.birbit.android.jobqueue.log.CustomLogger;
+import com.birbit.android.jobqueue.network.NetworkUtil;
 import com.birbit.android.jobqueue.scheduling.FrameworkJobSchedulerService;
 import com.birbit.android.jobqueue.scheduling.GcmJobSchedulerService;
 import com.google.android.gms.common.ConnectionResult;
@@ -67,7 +68,15 @@ public class LearnForeverApplication extends Application {
                 .minConsumerCount(1)//always keep at least one consumer alive
                 .maxConsumerCount(3)//up to 3 consumers at a time
                 .loadFactor(3)//3 jobs per consumer
-                .consumerKeepAlive(120);//wait 2 minute
+                .consumerKeepAlive(120)
+                .networkUtil(new NetworkUtil() {
+                    @Override
+                    public int getNetworkStatus(Context context) {
+                        //For allowing offline mode
+                        //Remove this if offline mode need to be disabled
+                        return UNMETERED;
+                    }
+                });//wait 2 minute
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             builder.scheduler(FrameworkJobSchedulerService.createSchedulerFor(this,
                     MyJobService.class), true);

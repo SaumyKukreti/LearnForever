@@ -173,7 +173,7 @@ public class NoteDataController {
         if (noteTable.isLearn()) {
             LearnForeverApplication.getInstance().getJobManager().addJobInBackground(new ReminderJob(mContext, noteTable.getId(), null, null));
         } else {
-            LearnForeverApplication.getInstance().getJobManager().addJobInBackground(new DeleteReminderJob(mContext, noteTable.getId(),false, null));
+            LearnForeverApplication.getInstance().getJobManager().addJobInBackground(new DeleteReminderJob(mContext, noteTable,false, null));
         }
 
         return true;
@@ -216,35 +216,32 @@ public class NoteDataController {
         if (note.isLearn()) {
             LearnForeverApplication.getInstance().getJobManager().addJobInBackground(new ReminderJob(mContext, note.getId(),null, null));
         } else {
-            LearnForeverApplication.getInstance().getJobManager().addJobInBackground(new DeleteReminderJob(mContext, note.getId(),false, null));
+            LearnForeverApplication.getInstance().getJobManager().addJobInBackground(new DeleteReminderJob(mContext, note,false, null));
         }
 
         return true;
     }
 
+    /**
+     *  This method is used to delete list of notes
+     * @param notes - The list of notes that need to be deleted
+     */
     public void deleteNotes(List<NoteTable> notes) {
-        for(NoteTable note : notes){
-            //Check if note was saved, if yes then delete its reminders as well else just delete the note
-            if(note.isLearn()) {
-                LearnForeverApplication.getInstance().getJobManager().addJobInBackground(new DeleteReminderJob(mContext, note.getId(), true, null));
-            }
-            else{
-                deleteNoteFromDatabase(note);
-            }
-        }
+        LearnForeverApplication.getInstance().getJobManager().addJobInBackground(new DeleteReminderJob(mContext, notes,null));
     }
 
-
+    /**
+     * This method is used to delete a single note
+     * @param noteTable
+     */
     public void deleteNote(NoteTable noteTable) {
-        //Check if note was saved, if yes then delete its reminders as well else just delete the note
-        if(noteTable.isLearn()) {
-            //Delete reminder attached to this note
-            LearnForeverApplication.getInstance().getJobManager().addJobInBackground(new DeleteReminderJob(mContext, noteTable.getId(), true, null));
-        }else{
-            deleteNoteFromDatabase(noteTable);
-        }
+        LearnForeverApplication.getInstance().getJobManager().addJobInBackground(new DeleteReminderJob(mContext, noteTable, true, null));
     }
 
+    /**
+     * Important - Call this method from database only, as this method does not check for any reminders. Also this note saves the updated/deleted note in sync queue
+     * @param noteTable
+     */
     public void deleteNoteFromDatabase(NoteTable noteTable) {
         //Delete reminder attached to this note
         mDatabase.noteDao().deleteNote(noteTable);

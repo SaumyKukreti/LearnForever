@@ -118,7 +118,7 @@ public class HomeFragment extends Fragment{
 
             initialiseNotesAdapter(false);
 
-            //Hide search view
+            //Not for home fragment but the list we are shown when in categories (tap one)
             setLiveDataForCategory();
         }
         else{
