@@ -22,9 +22,11 @@
         <activity
             android:name=".activities.NavigationDrawerActivity"
             android:label="@string/title_activity_navigation_drawer"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".activities.NoteActivity"
+            android:screenOrientation="portrait"
             android:parentActivityName=".activities.NavigationDrawerActivity"
             android:theme="@style/AppThemeWithNoActionBar">
             <intent-filter>
@@ -35,6 +37,7 @@
         </activity>
         <activity
             android:name=".activities.SplashActivity"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -44,6 +47,7 @@
         </activity>
         <activity
             android:name=".activities.LoginActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithNoActionBar"
             android:windowSoftInputMode="adjustPan"/>
 
@@ -66,10 +70,12 @@
 
         <activity
             android:name=".activities.ReviseActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithNoActionBarAndBlackStatusBar"/>
         <activity
             android:name=".activities.CategoryActivity"
             android:label="@string/title_activity_category"
+            android:screenOrientation="portrait"
             android:parentActivityName=".activities.NavigationDrawerActivity"
             android:theme="@style/AppThemeWithNoActionBar"/>
 
@@ -85,8 +91,10 @@
 
         <activity
             android:name=".activities.WaitingVerificationActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithNoActionBar"/>
         <activity android:name=".activities.CustomIntervalActivity"
+                  android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysVisible"/>
     </application>
 

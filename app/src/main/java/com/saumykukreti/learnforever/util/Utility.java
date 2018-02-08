@@ -112,7 +112,12 @@ public class Utility {
         }
         else{
             ReminderTable notes = ReminderDataController.getInstance(context).getNotesForDate(new Date());
-            return Converter.convertStringToList(notes.getNoteIds());
+            if(notes!=null && notes.getNoteIds()!=null && !notes.getNoteIds().isEmpty()) {
+                return Converter.convertStringToList(notes.getNoteIds());
+            }
+            else {
+                return new ArrayList<String>();
+            }
         }
     }
 
