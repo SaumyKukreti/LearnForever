@@ -51,7 +51,7 @@ public class DeleteReminderJob extends Job {
         super(new Params(PRIORITY).requireNetwork());
         mContext = context;
         mNote = note;
-        mListOfNotes= null;
+        mListOfNotes = null;
         mDeleteNote = deleteNote;
     }
 
@@ -72,51 +72,54 @@ public class DeleteReminderJob extends Job {
         mPreference = mContext.getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE, Context.MODE_PRIVATE);
         mReminderDataController = ReminderDataController.getInstance(mContext);
         mNoteDataController = NoteDataController.getInstance(mContext);
-        mUserId =mPreference.getString(Constants.LEARN_FOREVER_PREFERENCE_USER_ID, "");
+        mUserId = mPreference.getString(Constants.LEARN_FOREVER_PREFERENCE_USER_ID, "");
 
         //Check if a single note has to be deleted or a list of notes has to be deleted
-        if(mListOfNotes!=null){
+        if (mListOfNotes != null) {
             //This means that a list of notes needs to be deleted
-            //Making a clone of mlistofnotes
+            //Making a clone of mlistofnotes to avoid concurrent modification exception
             List<NoteTable> mListOfNotesClone = new ArrayList<>(mListOfNotes);
             //Iterating over the list and deleting note one by one
-            for(NoteTable note : mListOfNotesClone){
-                if(note.isLearn()){
+            for (NoteTable note : mListOfNotesClone) {
+                if (note.isLearn()) {
                     //Delete the reminders from the reminder table and delete it from the list of reminders
                     deleteNoteWithLearningOn(note);
-                }
-                else{
+                } else {
                     //Just delete the note
                     mNoteDataController.deleteNoteFromDatabase(note);
                 }
             }
 
             //Check if network is available, sync the reminders list
-            if(Utility.isNetworkAvailable(mContext)){
+            if (Utility.isNetworkAvailable(mContext)) {
                 //Network available
                 syncReminderDataToFirebase();
             }
 
-        }
-        else{
-            //A single note needs to be deleted
-            if(mNote.isLearn()){
+        } else {
+
+            //The note needs to be deleted
+            if (mNote.isLearn()) {
                 deleteNoteWithLearningOn(mNote);
 
                 //Check if network is available, sync the reminders list
-                if(Utility.isNetworkAvailable(mContext)){
+                if (Utility.isNetworkAvailable(mContext)) {
                     //Network available
                     syncReminderDataToFirebase();
                 }
-            }else{
-                //Just delete the note
-                mNoteDataController.deleteNoteFromDatabase(mNote);
+            } else {
+                if(mDeleteNote) {
+                    mNoteDataController.deleteNoteFromDatabase(mNote);
+                }
+                //Else do nothing, this may arise when trying to save a note
             }
+
         }
     }
 
     /**
-     *  This method deletes a note which has learning mode on
+     * This method deletes a note which has learning mode on
+     *
      * @param note
      */
     private void deleteNoteWithLearningOn(NoteTable note) {
@@ -213,13 +216,15 @@ public class DeleteReminderJob extends Job {
 
 
     void syncReminderDataToFirebase() {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference(mUserId);
+        if(Utility.isNetworkAvailable(mContext)) {
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference myRef = database.getReference(mUserId);
 
-        SharedPreferences preference = mContext.getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE, Context.MODE_PRIVATE);
-        String savedNoteString = preference.getString(Constants.LEARN_FOREVER_PREFERENCE_SAVED_NOTES_LIST, "");
+            SharedPreferences preference = mContext.getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE, Context.MODE_PRIVATE);
+            String savedNoteString = preference.getString(Constants.LEARN_FOREVER_PREFERENCE_SAVED_NOTES_LIST, "");
 
-        myRef.child("Reminders").setValue(savedNoteString);
+            myRef.child("Reminders").setValue(savedNoteString);
+        }
     }
 
 

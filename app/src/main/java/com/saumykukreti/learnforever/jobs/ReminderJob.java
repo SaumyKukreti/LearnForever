@@ -20,6 +20,7 @@ import com.saumykukreti.learnforever.modelClasses.dataTables.NoteTable;
 import com.saumykukreti.learnforever.modelClasses.dataTables.ReminderTable;
 import com.saumykukreti.learnforever.util.Converter;
 import com.saumykukreti.learnforever.util.DateHandler;
+import com.saumykukreti.learnforever.util.Utility;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -203,13 +204,15 @@ public class ReminderJob extends Job {
     }
 
     void syncReminderDataToFirebase(){
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference(mUserId);
+        if(Utility.isNetworkAvailable(mContext)) {
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference myRef = database.getReference(mUserId);
 
-        SharedPreferences preference = mContext.getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE, Context.MODE_PRIVATE);
-        String savedNoteString = preference.getString(Constants.LEARN_FOREVER_PREFERENCE_SAVED_NOTES_LIST, "");
+            SharedPreferences preference = mContext.getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE, Context.MODE_PRIVATE);
+            String savedNoteString = preference.getString(Constants.LEARN_FOREVER_PREFERENCE_SAVED_NOTES_LIST, "");
 
-        myRef.child("Reminders").setValue(savedNoteString);
+            myRef.child("Reminders").setValue(savedNoteString);
+        }
     }
 
 
