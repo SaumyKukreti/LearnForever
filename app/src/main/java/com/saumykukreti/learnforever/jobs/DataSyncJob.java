@@ -16,6 +16,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.saumykukreti.learnforever.constants.Constants;
 import com.saumykukreti.learnforever.dataManager.NoteDataController;
 import com.saumykukreti.learnforever.modelClasses.dataTables.NoteTable;
+import com.saumykukreti.learnforever.util.Utility;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,14 +52,14 @@ public class DataSyncJob extends Job {
 
         mUserId = mPreference.getString(Constants.LEARN_FOREVER_PREFERENCE_USER_ID, "");
 
-        if (!mUserId.isEmpty()) {
+        if (!mUserId.isEmpty() && Utility.isNetworkAvailable(mContext)) {
             Set<String> setOfNoteIds = mPreference.getStringSet(Constants.LEARN_FOREVER_PREFERENCE_SYNC_PENDING_NOTE_IDS, null);
             Set<String> setOfNoteIdsToDelete = mPreference.getStringSet(Constants.LEARN_FOREVER_PREFERENCE_SYNC_PENDING_NOTE_IDS_TO_DELETE, null);
 
             syncNotes(setOfNoteIds, false);
             syncNotes(setOfNoteIdsToDelete, true);
         } else {
-            Log.e(TAG, "User id is empty");
+            Log.e(TAG, "User id is empty / Network not available");
         }
     }
 

@@ -32,7 +32,7 @@ import java.util.List;
 public class ReminderJob extends Job {
 
     private static final int PRIORITY = 1;
-    private static final String TAG = DataSyncJob.class.getSimpleName();
+    private static final String TAG = ReminderJob.class.getSimpleName();
     private final Context mContext;
     private long mNoteId = 0;
     private String mDateOfCreation = null;

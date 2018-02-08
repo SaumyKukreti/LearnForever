@@ -24,6 +24,7 @@ import com.saumykukreti.learnforever.util.Converter;
 import com.saumykukreti.learnforever.util.DateHandler;
 import com.saumykukreti.learnforever.util.Utility;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -36,7 +37,7 @@ import java.util.List;
 public class DeleteReminderJob extends Job {
 
     private static final int PRIORITY = 1;
-    private static final String TAG = DataSyncJob.class.getSimpleName();
+    private static final String TAG = DeleteReminderJob.class.getSimpleName();
     private final Context mContext;
     private final NoteTable mNote;
     private final boolean mDeleteNote;
@@ -76,9 +77,10 @@ public class DeleteReminderJob extends Job {
         //Check if a single note has to be deleted or a list of notes has to be deleted
         if(mListOfNotes!=null){
             //This means that a list of notes needs to be deleted
-
+            //Making a clone of mlistofnotes
+            List<NoteTable> mListOfNotesClone = new ArrayList<>(mListOfNotes);
             //Iterating over the list and deleting note one by one
-            for(NoteTable note : mListOfNotes){
+            for(NoteTable note : mListOfNotesClone){
                 if(note.isLearn()){
                     //Delete the reminders from the reminder table and delete it from the list of reminders
                     deleteNoteWithLearningOn(note);

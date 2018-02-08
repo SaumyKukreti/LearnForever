@@ -45,7 +45,7 @@ import java.util.List;
 public class DataInitializerJob extends Job {
 
     private static final int PRIORITY = 1;
-    private static final String TAG = DataSyncJob.class.getSimpleName();
+    private static final String TAG = DataInitializerJob.class.getSimpleName();
     private final Context mContext;
     private NoteDataController mDataController;
     private SharedPreferences mPreference;
