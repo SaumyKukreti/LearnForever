@@ -83,7 +83,12 @@ public class Utility {
             if(lastRevisedCalendarDate.get(Calendar.DAY_OF_YEAR) >= currentCalendarDate.get(Calendar.DAY_OF_YEAR)){
                 //This means the notes were revised today, hence showing reminders for today only
                 ReminderTable notes = ReminderDataController.getInstance(context).getNotesForDate(new Date());
-                return Converter.convertStringToList(notes.getNoteIds());
+                if(notes!=null && notes.getNoteIds()!=null) {
+                    return Converter.convertStringToList(notes.getNoteIds());
+                }
+                else{
+                    return new ArrayList<String>();
+                }
             }
 
             while (lastRevisedCalendarDate.get(Calendar.DATE) < currentCalendarDate.get(Calendar.DATE)){
