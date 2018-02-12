@@ -43,7 +43,7 @@
         android:textSize="18sp"
         android:text="No categories available"/>
 
-    <ListView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/category_fragment_categories_list_view"
         android:layout_width="match_parent"
         android:layout_below="@id/search_container"

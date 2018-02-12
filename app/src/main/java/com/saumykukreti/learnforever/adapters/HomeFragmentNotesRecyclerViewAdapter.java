@@ -181,10 +181,4 @@ public class HomeFragmentNotesRecyclerViewAdapter extends RecyclerView.Adapter<H
         mNoteList.addAll(noteTableList);
     }
 
-    @Override
-    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
-        super.onDetachedFromRecyclerView(recyclerView);
-
-    }
-
 }

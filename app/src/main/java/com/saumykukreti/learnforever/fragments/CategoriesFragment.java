@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -21,6 +23,7 @@ import android.widget.ListView;
 import com.saumykukreti.learnforever.R;
 import com.saumykukreti.learnforever.activities.CategoryActivity;
 import com.saumykukreti.learnforever.activities.ReviseActivity;
+import com.saumykukreti.learnforever.adapters.CategoriesFragmentRecyclerViewAdapter;
 import com.saumykukreti.learnforever.dataManager.NoteDataController;
 import com.saumykukreti.learnforever.modelClasses.dataTables.NoteTable;
 import com.saumykukreti.learnforever.util.Utility;
@@ -31,8 +34,8 @@ import java.util.List;
 public class CategoriesFragment extends Fragment {
     private OnCategoriesFragmentInteractionListener mListener;
     private List<String> mListOfCategories = new ArrayList<>();
-    private ArrayAdapter<String> mArrayAdapter;
-    private ListView mCategoriesListView;
+    private CategoriesFragmentRecyclerViewAdapter mArrayAdapter;
+    private RecyclerView mCategoriesListView;
     private EditText mSearchEditText;
     private NoteDataController mDataController;
 
@@ -101,30 +104,10 @@ public class CategoriesFragment extends Fragment {
 
         initialiseSearchView();
         //Creating and setting an adapter for categories
-        mArrayAdapter = new ArrayAdapter<String>(getActivity(), R.layout.categories_fragment_item_layout, mListOfCategories);
+        mArrayAdapter = new CategoriesFragmentRecyclerViewAdapter(getContext(), (ArrayList<String>) mListOfCategories);
         mCategoriesListView = getView().findViewById(R.id.category_fragment_categories_list_view);
+        mCategoriesListView.setLayoutManager(new LinearLayoutManager(getContext()));
         mCategoriesListView.setAdapter(mArrayAdapter);
-
-        mCategoriesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(getActivity(), CategoryActivity.class);
-                intent.putExtra(CategoryActivity.METADATA_CATEGORY, mListOfCategories.get(i));
-                startActivity(intent);
-            }
-        });
-
-        mCategoriesListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                //Sending the user directly to revise all the notes belonging to that category
-                Intent intent = new Intent(getContext(), ReviseActivity.class);
-                List<NoteTable> listOfNotes = mDataController.getNoteWithCategory(mListOfCategories.get(position));
-                intent.putParcelableArrayListExtra(ReviseActivity.METADATA_NOTES_TO_REVISE, (ArrayList<? extends Parcelable>) listOfNotes);
-                startActivity(intent);
-                return true;
-            }
-        });
     }
 
     /**
