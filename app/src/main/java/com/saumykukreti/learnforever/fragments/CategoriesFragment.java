@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -19,7 +20,9 @@ import android.widget.ListView;
 
 import com.saumykukreti.learnforever.R;
 import com.saumykukreti.learnforever.activities.CategoryActivity;
+import com.saumykukreti.learnforever.activities.ReviseActivity;
 import com.saumykukreti.learnforever.dataManager.NoteDataController;
+import com.saumykukreti.learnforever.modelClasses.dataTables.NoteTable;
 import com.saumykukreti.learnforever.util.Utility;
 
 import java.util.ArrayList;
@@ -108,6 +111,18 @@ public class CategoriesFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), CategoryActivity.class);
                 intent.putExtra(CategoryActivity.METADATA_CATEGORY, mListOfCategories.get(i));
                 startActivity(intent);
+            }
+        });
+
+        mCategoriesListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                //Sending the user directly to revise all the notes belonging to that category
+                Intent intent = new Intent(getContext(), ReviseActivity.class);
+                List<NoteTable> listOfNotes = mDataController.getNoteWithCategory(mListOfCategories.get(position));
+                intent.putParcelableArrayListExtra(ReviseActivity.METADATA_NOTES_TO_REVISE, (ArrayList<? extends Parcelable>) listOfNotes);
+                startActivity(intent);
+                return true;
             }
         });
     }
