@@ -28,6 +28,11 @@
         android:orderInCategory="100"
         android:title="Send Note"
         app:showAsAction="never"/>
+    <item
+        android:id="@+id/home_revise"
+        android:orderInCategory="100"
+        android:title="Revise"
+        app:showAsAction="never"/>
 
     <item
         android:id="@+id/action_settings"

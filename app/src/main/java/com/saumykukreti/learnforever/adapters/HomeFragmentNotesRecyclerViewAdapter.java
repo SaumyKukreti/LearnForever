@@ -72,12 +72,15 @@ public class HomeFragmentNotesRecyclerViewAdapter extends RecyclerView.Adapter<H
         if(noteTitle.equalsIgnoreCase("")){
             // Show only content
             //Hiding line and title
+            //Setting max lines as 7
+            holder.noteContentInShort.setMaxLines(7);
             holder.noteTitle.setVisibility(View.GONE);
             holder.line.setVisibility(View.GONE);
             holder.noteContentInShort.setText(noteDescription);
         }
         else{
             //Show both the content and description
+            holder.noteContentInShort.setMaxLines(5);
             holder.noteTitle.setVisibility(View.VISIBLE);
             holder.line.setVisibility(View.VISIBLE);
             holder.noteTitle.setText(noteTitle);

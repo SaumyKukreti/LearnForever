@@ -34,6 +34,7 @@ import java.util.List;
 public class ReviseActivity extends AppCompatActivity {
 
     public static final String METADATA_POSITION = "metadata_position";
+    public static final String METADATA_NOTES_TO_REVISE = "metadata_notes_to_revise";
     private List<NoteTable> mNoteList;
     private TextReader mTextReader;
     private boolean mIsSpeechOn = true;
@@ -219,9 +220,15 @@ public class ReviseActivity extends AppCompatActivity {
      *  This method gets the notes that are to be revised today
      */
     private void getNotesToRevise() {
-        List<String> notesToRemind = Utility.getNoteIdsToRemind(this);
-        //Getting the notes
-        mNoteList = NoteDataController.getInstance(this).getNoteWithIds(notesToRemind);
+        //Checking if we have notes to revise from previous activity, if so using those notes else using notes to revise
+        if(getIntent().hasExtra(METADATA_NOTES_TO_REVISE)){
+            mNoteList = getIntent().getParcelableArrayListExtra(METADATA_NOTES_TO_REVISE);
+        }
+        else {
+            List<String> notesToRemind = Utility.getNoteIdsToRemind(this);
+            //Getting the notes
+            mNoteList = NoteDataController.getInstance(this).getNoteWithIds(notesToRemind);
+        }
     }
 
     @Override

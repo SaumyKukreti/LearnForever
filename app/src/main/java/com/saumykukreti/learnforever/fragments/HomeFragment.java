@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -30,6 +31,7 @@ import android.widget.Toast;
 
 import com.saumykukreti.learnforever.LearnForeverApplication;
 import com.saumykukreti.learnforever.R;
+import com.saumykukreti.learnforever.activities.ReviseActivity;
 import com.saumykukreti.learnforever.adapters.HomeFragmentNotesRecyclerViewAdapter;
 import com.saumykukreti.learnforever.constants.Constants;
 import com.saumykukreti.learnforever.dataManager.NoteDataController;
@@ -39,6 +41,7 @@ import com.saumykukreti.learnforever.util.TextCreator;
 import com.saumykukreti.learnforever.util.TextReader;
 import com.saumykukreti.learnforever.util.Utility;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HomeFragment extends Fragment{
@@ -358,8 +361,33 @@ public class HomeFragment extends Fragment{
                     mSearchContainer.setVisibility(View.VISIBLE);
                 }
                 return true;
+
+            case R.id.home_revise:
+                handleReviseButtonPress();
+                break;
         }
         return false;
+    }
+
+    /**
+     *  This method handles the revise button
+     */
+    private void handleReviseButtonPress() {
+        if(mSelectionModeOn) {
+            List<NoteTable> selectedNoteList = mHomeFragmentNotesRecyclerViewAdapter.getSelectedList();
+            if(!selectedNoteList.isEmpty()){
+                Intent intent = new Intent(getContext(), ReviseActivity.class);
+                intent.putParcelableArrayListExtra(ReviseActivity.METADATA_NOTES_TO_REVISE, (ArrayList<? extends Parcelable>) selectedNoteList);
+                startActivity(intent);
+                cancelAction();
+            }
+            else{
+                Toast.makeText(getContext(), "Select some notes first!", Toast.LENGTH_SHORT).show();
+            }
+        }
+        else{
+            setSelectionMode(true);
+        }
     }
 
 
