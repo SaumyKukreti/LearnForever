@@ -21,6 +21,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -380,7 +382,10 @@ private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
                         fragmentTransaction.add(R.id.navigation_drawer_fragment_container, new TempFragment()).commit();
                     }
                 });
-
+                WindowManager.LayoutParams params = dialog.getWindow().getAttributes();
+                params.width = ViewGroup.LayoutParams.MATCH_PARENT;
+                params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                dialog.onWindowAttributesChanged(params);
                 dialog.show();
                 break;
 

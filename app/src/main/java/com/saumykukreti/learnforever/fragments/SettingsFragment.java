@@ -400,7 +400,7 @@ public class SettingsFragment extends Fragment {
             mCurrentSpeechRate = mSpeechRate;
             Toast.makeText(getContext(), "Rate of speech changed!", Toast.LENGTH_SHORT).show();
         }
-        currentRateOfSpeech.setText(String.valueOf(mSpeechRate * 0.1));
+        currentRateOfSpeech.setText(String.valueOf(Utility.round(((float) (mSpeechRate * 0.1)),1)));
     }
 
     /**
