@@ -145,6 +145,8 @@ public class LoginActivity extends Activity {
 
 
             final Button signInButton = findViewById(R.id.scene_login_button_sign_in);
+            final TextView forgotPassword = findViewById(R.id.text_forgot_password);
+
             signInButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -163,6 +165,33 @@ public class LoginActivity extends Activity {
                     return false;
                 }
             });
+
+            forgotPassword.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //Verifying email
+                    if(mEmailEditText.getText().length()>0){
+                        //Send mail to reset password
+                        FirebaseAuth.getInstance().sendPasswordResetEmail(mEmailEditText.getText().toString())
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            Toast.makeText(LoginActivity.this, "Email sent, please check your email to reset your password!", Toast.LENGTH_SHORT).show();
+                                        }
+                                        else{
+                                            Toast.makeText(LoginActivity.this, "Failed to send reset email, please check your email address!", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+                    }
+                    else{
+                        Toast.makeText(LoginActivity.this, "Please enter the email address!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+
 
             //Setting on click listeners on sign up button
             findViewById(R.id.scene_login_button_sign_up).setOnClickListener(new View.OnClickListener() {

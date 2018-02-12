@@ -68,4 +68,7 @@ public interface NoteDao {
     @Delete
     void deleteNotes(List<NoteTable> noteTables);
 
+    @Query("DELETE FROM notetable")
+    void deleteAllRecords();
+
 }

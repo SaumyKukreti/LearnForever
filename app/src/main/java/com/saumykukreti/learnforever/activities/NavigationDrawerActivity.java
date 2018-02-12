@@ -1,5 +1,7 @@
 package com.saumykukreti.learnforever.activities;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -21,16 +23,22 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.saumykukreti.learnforever.R;
+import com.saumykukreti.learnforever.events.InitializationCompleteEvent;
+import com.saumykukreti.learnforever.events.LogoutCompleteEvent;
 import com.saumykukreti.learnforever.fragments.CategoriesFragment;
 import com.saumykukreti.learnforever.fragments.HomeFragment;
 import com.saumykukreti.learnforever.fragments.ReviseFragment;
 import com.saumykukreti.learnforever.fragments.SettingsFragment;
 import com.saumykukreti.learnforever.fragments.TempFragment;
 import com.saumykukreti.learnforever.util.Utility;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.io.InputStream;
 
@@ -117,6 +125,9 @@ public class NavigationDrawerActivity extends AppCompatActivity
         //If some other fragment needs to get added
         if (!fragmentName.equalsIgnoreCase(FRAGMENT_HOME)) {
             //Check which is the current fragment, if it is home fragment then adding the new fragment on the top else first popping the previous fragment and then adding the new fragment
+            //Letting the home fragment know it is in background
+            mHomeFragment.goneInBackgroung();
+
             mCurrentFragment = null;
             switch (fragmentName) {
                 case FRAGMENT_CATEGORIES:
@@ -355,15 +366,22 @@ private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
             case R.id.nav_settings:
                 creteAndLoadFragment(FRAGMENT_SETTINGS);
                 break;
-            case R.id.nav_send:
-                //TODO - TEMP CODE REMOVE
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
+            case R.id.nav_about:
+                Dialog dialog = new Dialog(this);
+                dialog.setContentView(R.layout.dialog_settings_about_me);
+                //TODO - REMOVE THIS CODE
+                dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        FragmentManager fragmentManager = getSupportFragmentManager();
+                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                        fragmentTransaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
 
-                fragmentTransaction.add(R.id.navigation_drawer_fragment_container, new TempFragment()).commit();
-                break;
-            case R.id.nav_share:
+                        fragmentTransaction.add(R.id.navigation_drawer_fragment_container, new TempFragment()).commit();
+                    }
+                });
+
+                dialog.show();
                 break;
 
         }
@@ -410,4 +428,27 @@ private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
             mFab.setVisibility(View.GONE);
         }
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+
+    @Subscribe
+    public void onMessageEvent(LogoutCompleteEvent event) {
+        Intent intent = new Intent(this, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        this.finish();
+    }
+
 }

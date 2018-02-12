@@ -34,5 +34,6 @@ public interface ReminderDao {
     @Delete
     void deleteReminder(ReminderTable reminderTable);
 
-
+    @Query("DELETE FROM remindertable")
+    void deleteAllRecords();
 }

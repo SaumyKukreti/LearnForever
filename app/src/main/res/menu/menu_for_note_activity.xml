@@ -10,8 +10,13 @@
         android:id="@+id/note_activity_delete"
         android:title="Delete"
         android:icon="@drawable/ic_delete_white"
-        app:showAsAction="always"
-        />
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/action_help"
+        android:orderInCategory="100"
+        android:title="Help"
+        app:showAsAction="never"/>
 
     <item
         android:id="@+id/note_activity_show_all_views"

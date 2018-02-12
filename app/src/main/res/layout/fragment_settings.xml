@@ -203,7 +203,7 @@
             android:layout_marginRight="3dp">
 
             <LinearLayout
-                android:id="@+id/linear_settings_about_me"
+                android:id="@+id/linear_settings_logout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -213,12 +213,12 @@
                     android:id="@+id/text_one_about"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="About the app"
+                    android:text="Log out"
                     android:textSize="18sp"
                     android:textStyle="bold"/>
 
                 <TextView
-                    android:id="@+id/text_two_about"
+                    android:id="@+id/text_two_logout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"

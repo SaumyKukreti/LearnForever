@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -19,6 +20,7 @@ import android.widget.ListView;
 import com.saumykukreti.learnforever.R;
 import com.saumykukreti.learnforever.activities.CategoryActivity;
 import com.saumykukreti.learnforever.dataManager.NoteDataController;
+import com.saumykukreti.learnforever.util.Utility;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +47,7 @@ public class CategoriesFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         if (getArguments() != null) {
             //Get arguments here
         }
@@ -161,5 +164,15 @@ public class CategoriesFragment extends Fragment {
 
     public interface OnCategoriesFragmentInteractionListener {
         void updateActionBarForCategoriesFragment();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_help:
+                Utility.showHelp(getContext(), getResources().getString(R.string.help_string_categories));
+                return true;
+        }
+        return false;
     }
 }

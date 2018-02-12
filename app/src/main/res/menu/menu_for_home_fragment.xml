@@ -36,6 +36,12 @@
         app:showAsAction="never"/>
 
     <item
+        android:id="@+id/action_help"
+        android:orderInCategory="100"
+        android:title="Help"
+        app:showAsAction="never"/>
+
+    <item
         android:id="@+id/home_cancel"
         android:orderInCategory="100"
         android:title="Cancel"

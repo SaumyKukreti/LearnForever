@@ -1,6 +1,7 @@
 package com.saumykukreti.learnforever.util;
 
 import android.app.AlarmManager;
+import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -11,8 +12,13 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Environment;
 import android.util.Log;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.saumykukreti.learnforever.R;
 import com.saumykukreti.learnforever.brodcastReceiver.NotificationBuilder;
 import com.saumykukreti.learnforever.constants.Constants;
 import com.saumykukreti.learnforever.dataManager.ReminderDataController;
@@ -184,4 +190,19 @@ public class Utility {
         return sharedPreferences.getString(key,"");
     }
 
+
+    /**
+     *  This method shows a dialog shwoing help regarding the page
+     */
+    public static void showHelp(Context context, String message) {
+        Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.dialog_help_layout);
+        TextView helpText = dialog.findViewById(R.id.text_help);
+        helpText.setText(message);
+        WindowManager.LayoutParams params = dialog.getWindow().getAttributes();
+        params.width = ViewGroup.LayoutParams.MATCH_PARENT;
+        params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+        dialog.onWindowAttributesChanged(params);
+        dialog.show();
+    }
 }

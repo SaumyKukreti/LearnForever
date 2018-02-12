@@ -80,4 +80,8 @@ public class ReminderDataController {
     public void deleteReminder(ReminderTable reminderTable) {
         mDatabase.reminderDao().deleteReminder(reminderTable);
     }
+
+    public void deleteAllRecords() {
+        mDatabase.reminderDao().deleteAllRecords();
+    }
 }

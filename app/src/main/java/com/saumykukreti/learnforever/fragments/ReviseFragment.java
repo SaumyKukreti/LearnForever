@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -30,6 +31,7 @@ public class ReviseFragment extends Fragment {
         super.onResume();
         mListener.updateActionBarForReviseFragment();
     }
+
     public ReviseFragment() {
         // Required empty public constructor
     }
@@ -44,6 +46,7 @@ public class ReviseFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         if (getArguments() != null) {
             //Get arguments here
         }
@@ -64,11 +67,11 @@ public class ReviseFragment extends Fragment {
         //Getting the notes
         noteList = NoteDataController.getInstance(getContext()).getNoteWithIds(notesToRemind);
 
-        if(noteList!=null && !noteList.isEmpty()){
+        if (noteList != null && !noteList.isEmpty()) {
             ReviseNotesAdapter adapter = new ReviseNotesAdapter(getContext(), noteList);
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             recyclerView.setAdapter(adapter);
-        }else{
+        } else {
             recyclerView.setVisibility(View.GONE);
             view.findViewById(R.id.text_no_notes).setVisibility(View.VISIBLE);
         }
@@ -93,5 +96,15 @@ public class ReviseFragment extends Fragment {
 
     public interface OnReviseFragmentInteractionListener {
         void updateActionBarForReviseFragment();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_help:
+                Utility.showHelp(getContext(), getResources().getString(R.string.help_string_revise));
+                return true;
+        }
+        return false;
     }
 }

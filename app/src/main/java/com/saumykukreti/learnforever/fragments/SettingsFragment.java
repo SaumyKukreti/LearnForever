@@ -1,5 +1,6 @@
 package com.saumykukreti.learnforever.fragments;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -20,9 +22,11 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.saumykukreti.learnforever.LearnForeverApplication;
 import com.saumykukreti.learnforever.R;
 import com.saumykukreti.learnforever.activities.CustomIntervalActivity;
 import com.saumykukreti.learnforever.constants.Constants;
+import com.saumykukreti.learnforever.jobs.LogoutJob;
 import com.saumykukreti.learnforever.util.Converter;
 import com.saumykukreti.learnforever.util.TextCreator;
 import com.saumykukreti.learnforever.util.Utility;
@@ -51,6 +55,7 @@ public class SettingsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setHasOptionsMenu(true);
         mSharedPreferences = getContext().getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE, Context.MODE_PRIVATE);
 
         //Initialising SpeechRate
@@ -124,10 +129,10 @@ public class SettingsFragment extends Fragment {
             }
         });
 
-        getView().findViewById(R.id.linear_settings_about_me).setOnClickListener(new View.OnClickListener() {
+        getView().findViewById(R.id.linear_settings_logout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showAboutMeDialog();
+                showLogoutDialog();
             }
         });
         getView().findViewById(R.id.linear_settings_layout_style).setOnClickListener(new View.OnClickListener() {
@@ -199,10 +204,26 @@ public class SettingsFragment extends Fragment {
     /**
      *  This method shows a dialog that tells the user about me
      */
-    private void showAboutMeDialog() {
-        Dialog dialog = new Dialog(getContext());
-        dialog.setContentView(R.layout.dialog_settings_about_me);
-        setParams(dialog);
+    private void showLogoutDialog() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
+
+        dialog.setTitle("Logout");
+        dialog.setMessage("Are you sure you want to logout?");
+        dialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //Start logout process
+                LearnForeverApplication.getInstance().getJobManager().addJobInBackground(new LogoutJob(getContext(),null));
+            }
+        });
+
+        dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //Do nothing
+                dialog.dismiss();
+            }
+        });
         dialog.show();
     }
 
@@ -529,9 +550,20 @@ public class SettingsFragment extends Fragment {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data){
-        if(resultCode == LIST_CHANGED){
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == LIST_CHANGED) {
             setValues();
         }
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_help:
+                Utility.showHelp(getContext(), getResources().getString(R.string.help_string_settings));
+                return true;
+        }
+        return false;
+    }
 }
+

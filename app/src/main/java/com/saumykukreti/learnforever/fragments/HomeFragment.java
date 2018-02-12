@@ -1,6 +1,7 @@
 package com.saumykukreti.learnforever.fragments;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.content.Context;
@@ -55,6 +56,7 @@ public class HomeFragment extends Fragment{
     private LinearLayout mSearchContainer;
     private RecyclerView mRecyclerView;
     private String mCurrentLayoutManager;
+    private boolean mIsInForeGround = true;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -336,13 +338,18 @@ public class HomeFragment extends Fragment{
             case R.id.home_send:
                 sendSelectedNotes();
                 return true;
+            case R.id.action_help:
+                if(mIsInForeGround) {
+                    Utility.showHelp(getContext(), getResources().getString(R.string.help_string_home));
+                    return true;
+                }
+                break;
             case R.id.home_cancel:
                 if(mSelectionModeOn){
-
+                    cancelAction();
                 }else {
                     Toast.makeText(getContext(), "Nothing to cancel!", Toast.LENGTH_SHORT).show();
                 }
-                cancelAction();
                 return true;
             case R.id.home_search:
                 if(mSearchContainer.getVisibility() == View.VISIBLE){
@@ -352,8 +359,9 @@ public class HomeFragment extends Fragment{
                 }
                 return true;
         }
-        return true;
+        return false;
     }
+
 
     private void sendSelectedNotes() {
         if(mSelectionModeOn){
@@ -492,6 +500,7 @@ public class HomeFragment extends Fragment{
      * Call this method when the layout of home fragment needs to be refreshed
      */
     public void refreshLayout(){
+        mIsInForeGround = true;
         //Checking if layout settings were changed or not if so refreshing the layout
         String layoutPreference = Utility.getStringFromPreference(getContext(),Constants.LEARN_FOREVER_PREFERENCE_LAYOUT_PREFERENCE);
 
@@ -499,5 +508,12 @@ public class HomeFragment extends Fragment{
             //Setting must have changed, thus refreshing layout
             initialiseNotesAdapter(false);
         }
+    }
+
+    /**
+     * Calling this method to let home fragment know that it is not in foreground
+     */
+    public void goneInBackgroung(){
+        mIsInForeGround = false;
     }
 }

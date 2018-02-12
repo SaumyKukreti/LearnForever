@@ -16,4 +16,16 @@
     <string name="title_activity_splash">SplashActivity</string>
     <string name="title_activity_category">CategoryActivity</string>
 
+
+    <!--Help strings-->
+    <string name="help_string_settings">CategoryActivity</string>
+    <string name="help_string_home">The is the home of all the notes. Use this place to see, edit annd delete the notes. \n\n
+        Use the plus button given in the bottom right corner to create a new note. \n\n
+                            Use the buttons delete and volume button to delete and speak out notes respectively.
+                            In order to use these functions either first click on the icons to activate selection mode or long press on the notes.
+                            Now just select all the notes you want the action to be performed. Then just click on the action to complete the action.\n\n
+                            Use the option menu (Three dots in the top rights corner) to open search and send notes.\n\n</string>
+    <string name="help_string_categories">CategoryActivity</string>
+    <string name="help_string_revise">CategoryActivity</string>
+
 </resources>

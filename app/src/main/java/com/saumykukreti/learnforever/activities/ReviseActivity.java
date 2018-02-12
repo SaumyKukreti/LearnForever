@@ -7,6 +7,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.transition.TransitionManager;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -230,5 +231,15 @@ public class ReviseActivity extends AppCompatActivity {
         mPreference.edit().putBoolean(Constants.LEARN_FOREVER_PREFERENCE_IS_SPEECH_ON, mIsSpeechOn).apply();
         mPreference.edit().putString(Constants.LEARN_FOREVER_PREFERENCE_LAST_REVISE_DATE, DateHandler.convertDateToString(new Date())).apply();
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_help:
+                Utility.showHelp(this, "messaoigej");
+                return true;
+        }
+        return false;
     }
 }

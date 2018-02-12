@@ -264,6 +264,10 @@ public class NoteDataController {
         List<NoteTable> noteList = mDatabase.noteDao().searchNoteWithStringAndCategory(searchString, category);
         return noteList;
     }
+
+    public void deleteAllRecords() {
+        mDatabase.noteDao().deleteAllRecords();
+    }
 }
 
 
