@@ -33,7 +33,7 @@ public class LogoutJob extends Job {
     private NoteDataController mNoteDataController;
 
     public LogoutJob(Context context, Params params) {
-        super(params);
+        super(new Params(1).setRequiresNetwork(true));
         mContext = context;
     }
 

@@ -528,6 +528,7 @@ public class HomeFragment extends Fragment{
      * Call this method when the layout of home fragment needs to be refreshed
      */
     public void refreshLayout(){
+        mRecyclerView.setVisibility(View.VISIBLE);
         mIsInForeGround = true;
         //Checking if layout settings were changed or not if so refreshing the layout
         String layoutPreference = Utility.getStringFromPreference(getContext(),Constants.LEARN_FOREVER_PREFERENCE_LAYOUT_PREFERENCE);
@@ -543,5 +544,6 @@ public class HomeFragment extends Fragment{
      */
     public void goneInBackgroung(){
         mIsInForeGround = false;
+        mRecyclerView.setVisibility(View.GONE);
     }
 }
