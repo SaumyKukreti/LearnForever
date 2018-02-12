@@ -6,230 +6,268 @@
              android:clickable="true"
              android:focusable="true">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <!--Revise-->
-        <android.support.v7.widget.CardView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="1dp"
-            android:layout_marginLeft="3dp"
-            android:layout_marginRight="3dp">
+            android:orientation="vertical">
 
-            <LinearLayout
-                android:id="@+id/linear_settings_revise_intervals"
+            <!--Revise-->
+            <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="15dp">
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp"
+                android:layout_marginTop="1dp">
 
-                <TextView
-                    android:id="@+id/text_one_revise_intervals"
+                <LinearLayout
+                    android:id="@+id/linear_settings_revise_intervals"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Revise Intervals"
-                    android:textSize="18sp"
-                    android:textStyle="bold"/>
+                    android:orientation="vertical"
+                    android:padding="15dp">
 
-                <TextView
-                    android:id="@+id/text_two_revise_intervals"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:textSize="14sp"
-                    tools:text="Current revise interval"/>
-            </LinearLayout>
-        </android.support.v7.widget.CardView>
+                    <TextView
+                        android:id="@+id/text_one_revise_intervals"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Revise Intervals"
+                        android:textSize="18sp"
+                        android:textStyle="bold"/>
 
-        <!--New note-->
-        <android.support.v7.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="1dp"
-            android:layout_marginLeft="3dp"
-            android:layout_marginRight="3dp">
+                    <TextView
+                        android:id="@+id/text_two_revise_intervals"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:textSize="14sp"
+                        tools:text="Current revise interval"/>
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
 
-            <LinearLayout
-                android:id="@+id/linear_settings_new_note"
+            <!--New note-->
+            <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="15dp">
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp"
+                android:layout_marginTop="1dp">
 
-                <TextView
-                    android:id="@+id/text_one_new_note"
+                <LinearLayout
+                    android:id="@+id/linear_settings_new_note"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="New note settings"
-                    android:textSize="18sp"
-                    android:textStyle="bold"/>
+                    android:orientation="vertical"
+                    android:padding="15dp">
 
-                <TextView
-                    android:id="@+id/text_two_new_note"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:textSize="14sp"
-                    tools:text="Show all"/>
-            </LinearLayout>
+                    <TextView
+                        android:id="@+id/text_one_new_note"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="New note settings"
+                        android:textSize="18sp"
+                        android:textStyle="bold"/>
 
-        </android.support.v7.widget.CardView>
+                    <TextView
+                        android:id="@+id/text_two_new_note"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:textSize="14sp"
+                        tools:text="Show all"/>
+                </LinearLayout>
 
-        <!--Notification time-->
-        <android.support.v7.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="1dp"
-            android:layout_marginLeft="3dp"
-            android:layout_marginRight="3dp">
+            </android.support.v7.widget.CardView>
 
-            <LinearLayout
-                android:id="@+id/linear_settings_notification_time"
+            <!--Notification time-->
+            <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="15dp">
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp"
+                android:layout_marginTop="1dp">
 
-                <TextView
-                    android:id="@+id/text_one_notification"
+                <LinearLayout
+                    android:id="@+id/linear_settings_notification_time"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Notification Time"
-                    android:textSize="18sp"
-                    android:textStyle="bold"/>
+                    android:orientation="vertical"
+                    android:padding="15dp">
 
-                <TextView
-                    android:id="@+id/text_two_notification"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:textSize="14sp"
-                    tools:text="9:00 pm"/>
-            </LinearLayout>
+                    <TextView
+                        android:id="@+id/text_one_notification"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Notification Time"
+                        android:textSize="18sp"
+                        android:textStyle="bold"/>
 
-        </android.support.v7.widget.CardView>
+                    <TextView
+                        android:id="@+id/text_two_notification"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:textSize="14sp"
+                        tools:text="9:00 pm"/>
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
 
 
-        <!--Reading speed-->
-        <android.support.v7.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="1dp"
-            android:layout_marginLeft="3dp"
-            android:layout_marginRight="3dp">
-
-            <LinearLayout
-                android:id="@+id/linear_settings_reading_speed"
+            <!--Reading speed-->
+            <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="15dp">
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp"
+                android:layout_marginTop="1dp">
 
-                <TextView
-                    android:id="@+id/text_one_reading"
+                <LinearLayout
+                    android:id="@+id/linear_settings_reading_speed"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Reading speed"
-                    android:textSize="18sp"
-                    android:textStyle="bold"/>
+                    android:orientation="vertical"
+                    android:padding="15dp">
 
-                <TextView
-                    android:id="@+id/text_two_reading"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:textSize="14sp"
-                    tools:text="1.0"/>
-            </LinearLayout>
+                    <TextView
+                        android:id="@+id/text_one_reading"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Reading speed"
+                        android:textSize="18sp"
+                        android:textStyle="bold"/>
 
-        </android.support.v7.widget.CardView>
+                    <TextView
+                        android:id="@+id/text_two_reading"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:textSize="14sp"
+                        tools:text="1.0"/>
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
 
 
-        <!--Home fragment layout style-->
-        <android.support.v7.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="1dp"
-            android:layout_marginLeft="3dp"
-            android:layout_marginRight="3dp">
-
-            <LinearLayout
-                android:id="@+id/linear_settings_layout_style"
+            <!--Home fragment layout style-->
+            <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="15dp">
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp"
+                android:layout_marginTop="1dp">
 
-                <TextView
-                    android:id="@+id/text_one_layout_style"
+                <LinearLayout
+                    android:id="@+id/linear_settings_layout_style"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Layout style"
-                    android:textSize="18sp"
-                    android:textStyle="bold"/>
+                    android:orientation="vertical"
+                    android:padding="15dp">
 
-                <TextView
-                    android:id="@+id/text_two_layout_style"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:textSize="14sp"
-                    tools:text="Grid"/>
-            </LinearLayout>
+                    <TextView
+                        android:id="@+id/text_one_layout_style"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Layout style"
+                        android:textSize="18sp"
+                        android:textStyle="bold"/>
 
-        </android.support.v7.widget.CardView>
+                    <TextView
+                        android:id="@+id/text_two_layout_style"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:textSize="14sp"
+                        tools:text="Grid"/>
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
 
 
-        <!--About me-->
-        <android.support.v7.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="1dp"
-            android:layout_marginBottom="1dp"
-            android:layout_marginLeft="3dp"
-            android:layout_marginRight="3dp">
-
-            <LinearLayout
-                android:id="@+id/linear_settings_logout"
+            <!--Send feedback-->
+            <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="15dp">
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp"
+                android:layout_marginTop="1dp">
 
-                <TextView
-                    android:id="@+id/text_one_about"
+                <LinearLayout
+                    android:id="@+id/linear_settings_feedback"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Log out"
-                    android:textSize="18sp"
-                    android:textStyle="bold"/>
+                    android:orientation="vertical"
+                    android:padding="15dp">
 
-                <TextView
-                    android:id="@+id/text_two_logout"
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Give Feedback"
+                        android:textSize="18sp"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:text="Click to give feedback"
+                        android:textSize="14sp"/>
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+
+            <!--Log out-->
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="1dp"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp"
+                android:layout_marginTop="1dp">
+
+                <LinearLayout
+                    android:id="@+id/linear_settings_logout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:textSize="14sp"
-                    android:text="Learn more about app and us"/>
-            </LinearLayout>
+                    android:orientation="vertical"
+                    android:padding="15dp">
 
-        </android.support.v7.widget.CardView>
-    </LinearLayout>
+                    <TextView
+                        android:id="@+id/text_one_about"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Log out"
+                        android:textSize="18sp"
+                        android:textStyle="bold"/>
 
+                    <TextView
+                        android:id="@+id/text_two_logout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:text="Learn more about app and us"
+                        android:textSize="14sp"/>
+                </LinearLayout>
 
+            </android.support.v7.widget.CardView>
+        </LinearLayout>
+    </ScrollView>
 </FrameLayout>

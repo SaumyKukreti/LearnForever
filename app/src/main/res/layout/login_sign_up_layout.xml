@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <RelativeLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -77,20 +77,18 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="50dp"
+                android:layout_marginBottom="20dp"
                 android:orientation="horizontal">
 
                 <Button
                     android:id="@+id/scene_signup_button_sign_up"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
                     android:text="Sign up"
                     android:background="@drawable/button_drawable_with_white_background_and_rounded_corners"
                     android:textAllCaps="false"/>
-
             </LinearLayout>
-
         </LinearLayout>
-    </RelativeLayout>
+    </ScrollView>
 </LinearLayout>
 

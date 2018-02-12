@@ -246,21 +246,18 @@ public class LoginActivity extends Activity {
         authResult.addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
+                startTransition(SCENE_LOGIN, null, 500);
                 if (task.isSuccessful()) {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d(TAG, "signInWithEmail:success");
                     mFireBaseUser = mAuth.getCurrentUser();
-
-                    //TODO - REMOVE THIS
-                    Toast.makeText(LoginActivity.this, "Login complete", Toast.LENGTH_SHORT).show();
-
                     //Sign in complete, initiate login procedure
                     startDataInitialiserJob();
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "signInWithEmail:failure", task.getException());
                     // Show appropriate error
-                    showInvalidCredentialsError();
+                    Toast.makeText(LoginActivity.this, "Invalid Credentials, please try again", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -288,17 +285,6 @@ public class LoginActivity extends Activity {
         } else {
             Toast.makeText(this, "Email verification pending", Toast.LENGTH_SHORT).show();
         }
-    }
-
-    /**
-     * This method displays invalid credentials error message
-     */
-    private void showInvalidCredentialsError() {
-
-        toggleTipLayout(false);
-
-        //TODO - show a dialog box instead
-        Toast.makeText(this, "Invalid Credentials, please try again", Toast.LENGTH_SHORT).show();
     }
 
 
@@ -401,6 +387,7 @@ public class LoginActivity extends Activity {
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
+
     }
 
     @Override
@@ -411,8 +398,12 @@ public class LoginActivity extends Activity {
         if (requestCode == RC_SIGN_IN && resultCode == RESULT_OK) {
             // The Task returned from this call is always completed, no need to attach
             // a listener.
+            startTransition(SCENE_TIP, null, 500);
             mGoogleSignInTask = GoogleSignIn.getSignedInAccountFromIntent(data);
             initiateFirebaseSignIn();
+        }else{
+            Toast.makeText(this, "Google Sign In Failed, please try again or try signing in with email!", Toast.LENGTH_SHORT).show();
+            startTransition(SCENE_LOGIN, null, 500);
         }
     }
 
@@ -437,12 +428,13 @@ public class LoginActivity extends Activity {
 
 
     private void initiateSignUp() {
+        startTransition(SCENE_TIP,null,500);
         final FirebaseAuth mAuth = FirebaseAuth.getInstance();
-
         mAuth.createUserWithEmailAndPassword(mEmailEditText.getText().toString(), mPasswordEditText.getText().toString())
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+                        startTransition(SCENE_LOGIN, null, 500);
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
