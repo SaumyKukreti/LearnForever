@@ -22,6 +22,7 @@ import com.saumykukreti.learnforever.R;
 import com.saumykukreti.learnforever.brodcastReceiver.NotificationBuilder;
 import com.saumykukreti.learnforever.constants.Constants;
 import com.saumykukreti.learnforever.dataManager.ReminderDataController;
+import com.saumykukreti.learnforever.modelClasses.dataTables.NoteTable;
 import com.saumykukreti.learnforever.modelClasses.dataTables.ReminderTable;
 
 import java.io.File;
@@ -32,6 +33,7 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
@@ -217,5 +219,69 @@ public class Utility {
         BigDecimal bd = new BigDecimal(Float.toString(d));
         bd = bd.setScale(decimalPlace, BigDecimal.ROUND_HALF_UP);
         return bd.floatValue();
+    }
+
+    public enum FilterMode {ALPHABETICALLY, RECENT_FIRST, OLD_FIRST}
+
+    public static List<NoteTable> sortList(List<NoteTable> listOfNotes, FilterMode filterMode){
+        switch (filterMode){
+            case ALPHABETICALLY:
+                AlphabeticComparater comp = new AlphabeticComparater();
+                listOfNotes.sort(comp);
+                return listOfNotes;
+
+            case OLD_FIRST:
+                listOfNotes.sort(new Comparator<NoteTable>() {
+                    @Override
+                    public int compare(NoteTable note1, NoteTable note2) {
+                        if(!note1.getDateOfCreation().isEmpty() && !note2.getDateOfCreation().isEmpty()){
+                            if(DateHandler.convertStringToDate(note1.getDateOfCreation()).getTime()>DateHandler.convertStringToDate(note2.getDateOfCreation()).getTime()){
+                                return 1;
+                            }
+                            else if(DateHandler.convertStringToDate(note1.getDateOfCreation()).getTime()<DateHandler.convertStringToDate(note2.getDateOfCreation()).getTime()){
+                                return -1;
+                            }
+                            else return 0;
+                        }
+                        else{
+                            return 0;
+                        }
+                    }
+                });
+                return listOfNotes;
+
+            case RECENT_FIRST:
+                listOfNotes.sort(new Comparator<NoteTable>() {
+                    @Override
+                    public int compare(NoteTable note1, NoteTable note2) {
+                        if(!note1.getDateOfCreation().isEmpty() && !note2.getDateOfCreation().isEmpty()){
+                            if(DateHandler.convertStringToDate(note1.getDateOfCreation()).getTime()>DateHandler.convertStringToDate(note2.getDateOfCreation()).getTime()){
+                                return -1;
+                            }
+                            else if(DateHandler.convertStringToDate(note1.getDateOfCreation()).getTime()<DateHandler.convertStringToDate(note2.getDateOfCreation()).getTime()){
+                                return 1;
+                            }
+                            else return 0;
+                        }
+                        else{
+                            return 0;
+                        }
+                    }
+                });
+                return listOfNotes;
+        }
+        return listOfNotes;
+    }
+
+    private static class AlphabeticComparater implements Comparator<NoteTable> {
+
+        @Override
+        public int compare(NoteTable note1, NoteTable note2) {
+            if(note1.getTitle()!=null && note2.getTitle()!=null && !note1.getTitle().isEmpty() && !note2.getTitle().isEmpty()){
+                return note1.getTitle().compareTo(note2.getTitle());
+            }else{
+                return 0;
+            }
+        }
     }
 }

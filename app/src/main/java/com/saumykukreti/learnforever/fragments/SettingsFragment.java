@@ -195,6 +195,8 @@ public class SettingsFragment extends Fragment {
             }
         });
 
+        setParams(dialog);
+
         dialog.show();
     }
 

@@ -179,6 +179,7 @@ public class HomeFragmentNotesRecyclerViewAdapter extends RecyclerView.Adapter<H
         mSelectedNoteList.clear();
         mNoteList.clear();
         mNoteList.addAll(noteTableList);
+        int i =1;
     }
 
 }

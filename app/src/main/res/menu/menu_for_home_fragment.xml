@@ -33,6 +33,11 @@
         android:orderInCategory="100"
         android:title="Revise"
         app:showAsAction="never"/>
+    <item
+        android:id="@+id/home_filter"
+        android:orderInCategory="100"
+        android:title="Sort Notes"
+        app:showAsAction="never"/>
 
     <item
         android:id="@+id/action_settings"

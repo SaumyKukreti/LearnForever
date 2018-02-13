@@ -27,6 +27,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.saumykukreti.learnforever.LearnForeverApplication;
@@ -60,6 +61,7 @@ public class HomeFragment extends Fragment{
     private RecyclerView mRecyclerView;
     private String mCurrentLayoutManager;
     private boolean mIsInForeGround = true;
+    private int mCurrentFilter = 0;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -365,8 +367,56 @@ public class HomeFragment extends Fragment{
             case R.id.home_revise:
                 handleReviseButtonPress();
                 break;
+            case R.id.home_filter:
+                showFilteringOptions();
+                break;
         }
         return false;
+    }
+
+    /**
+     *  This method shows filtering options
+     */
+    private void showFilteringOptions() {
+        final Dialog dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.dialog_filtering_options);
+
+        RadioGroup radioGroup = dialog.findViewById(R.id.radio_group);
+
+        if(mCurrentFilter!=0){
+            radioGroup.check(mCurrentFilter);
+        }
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId){
+                    case R.id.radio_alphabetically:
+                        mCurrentFilter = R.id.radio_alphabetically;
+                        Utility.sortList(mAllNotes, Utility.FilterMode.ALPHABETICALLY);
+                        mHomeFragmentNotesRecyclerViewAdapter.notifyDataSetChanged();
+                        dialog.dismiss();
+                        break;
+                    case R.id.radio_recent_first:
+                        mCurrentFilter = R.id.radio_recent_first;
+                        Utility.sortList(mAllNotes, Utility.FilterMode.RECENT_FIRST);
+                        mHomeFragmentNotesRecyclerViewAdapter.notifyDataSetChanged();
+                        dialog.dismiss();
+                        break;
+                    case R.id.radio_old_first:
+                        mCurrentFilter = R.id.radio_old_first;
+                        Utility.sortList(mAllNotes, Utility.FilterMode.OLD_FIRST);
+                        mHomeFragmentNotesRecyclerViewAdapter.notifyDataSetChanged();
+                        dialog.dismiss();
+                        break;
+                }
+                Toast.makeText(getContext(), "Filter applied", Toast.LENGTH_SHORT).show();
+            }
+        });
+        WindowManager.LayoutParams params = dialog.getWindow().getAttributes();
+        params.width = ViewGroup.LayoutParams.MATCH_PARENT;
+        params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+        dialog.onWindowAttributesChanged(params);
+        dialog.show();
     }
 
     /**
