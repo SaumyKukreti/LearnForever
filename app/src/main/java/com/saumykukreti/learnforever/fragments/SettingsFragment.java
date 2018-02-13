@@ -141,6 +141,12 @@ public class SettingsFragment extends Fragment {
                 showLayoutStyleDialog();
             }
         });
+        getView().findViewById(R.id.linear_settings_speech).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showSpeechSettingDialog();
+            }
+        });
         getView().findViewById(R.id.linear_settings_feedback).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -159,6 +165,37 @@ public class SettingsFragment extends Fragment {
 
         //Initialising values
         setValues();
+    }
+
+    /**
+     *  This method shows a dialog to turn on or off reading in background
+     */
+    private void showSpeechSettingDialog() {
+        Dialog dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.dialog_speech_settings);
+
+        RadioGroup radioGroup = dialog.findViewById(R.id.radio_group_speech);
+        if(mSharedPreferences.getBoolean(Constants.LEARN_FOREVER_PREFERENCE_SPEECH_IN_BACKGROUND_PREFERENCE, false)){
+            radioGroup.check(R.id.radio_on);
+        }else{
+            radioGroup.check(R.id.radio_off);
+        }
+
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId){
+                    case R.id.radio_on:
+                        mSharedPreferences.edit().putBoolean(Constants.LEARN_FOREVER_PREFERENCE_SPEECH_IN_BACKGROUND_PREFERENCE, true).apply();
+                        break;
+                    case R.id.radio_off:
+                        mSharedPreferences.edit().putBoolean(Constants.LEARN_FOREVER_PREFERENCE_SPEECH_IN_BACKGROUND_PREFERENCE, false).apply();
+                        break;
+                }
+            }
+        });
+
+        dialog.show();
     }
 
     /**
@@ -416,6 +453,14 @@ public class SettingsFragment extends Fragment {
             Toast.makeText(getContext(), "Rate of speech changed!", Toast.LENGTH_SHORT).show();
         }
         currentRateOfSpeech.setText(String.valueOf(Utility.round(((float) (mSpeechRate * 0.1)),1)));
+
+        TextView speechSetting = getView().findViewById(R.id.text_two_speech);
+        //Setting speech setting text view
+        if(mSharedPreferences.getBoolean(Constants.LEARN_FOREVER_PREFERENCE_SPEECH_IN_BACKGROUND_PREFERENCE, false)){
+            speechSetting.setText("On");
+        }else{
+            speechSetting.setText("Off");
+        }
     }
 
     /**

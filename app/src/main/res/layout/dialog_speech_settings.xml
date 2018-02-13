@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="18dp"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
+        android:text="Turn reading in background ON/OFF"
+        android:textSize="18sp"/>
+
+    <RadioGroup
+        android:id="@+id/radio_group_speech"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RadioButton
+            android:id="@+id/radio_on"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:layoutDirection="rtl"
+            android:padding="20dp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:text="On"
+            android:layout_marginRight="20dp"/>
+
+        <RadioButton
+            android:id="@+id/radio_off"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:layoutDirection="rtl"
+            android:padding="20dp"
+            android:maxLines="1"
+            android:text="Off"
+            android:ellipsize="end"
+            android:layout_marginRight="20dp"/>
+    </RadioGroup>
+</LinearLayout>

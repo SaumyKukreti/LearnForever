@@ -69,7 +69,7 @@ public class CategoriesFragmentRecyclerViewAdapter extends RecyclerView.Adapter<
             }
         });
 
-        if(mCurrentPosition < position) {
+        if(mCurrentPosition <= position) {
             holder.itemView.startAnimation(AnimationUtils.loadAnimation(mContext, R.anim.item_animation_from_bottom));
         }else{
             holder.itemView.startAnimation(AnimationUtils.loadAnimation(mContext, R.anim.item_animation_fall_down));

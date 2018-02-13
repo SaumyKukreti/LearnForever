@@ -242,6 +242,41 @@
                 android:layout_marginTop="1dp">
 
                 <LinearLayout
+                    android:id="@+id/linear_settings_speech"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="15dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Background reading"
+                        android:textSize="18sp"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:id="@+id/text_two_speech"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:textSize="14sp"/>
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <!--Log out-->
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="1dp"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp"
+                android:layout_marginTop="1dp">
+
+                <LinearLayout
                     android:id="@+id/linear_settings_logout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

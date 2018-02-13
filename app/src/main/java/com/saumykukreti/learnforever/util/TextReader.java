@@ -33,10 +33,13 @@ public class TextReader implements TextToSpeech.OnInitListener, LifecycleObserve
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     void onDestroy(){
-        //Freeing memory
-        stopReading();
-        mTts.shutdown();
-        mTts = null;
+        SharedPreferences sharedPreferences = mContext.getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE,Context.MODE_PRIVATE);
+        if(!sharedPreferences.getBoolean(Constants.LEARN_FOREVER_PREFERENCE_SPEECH_IN_BACKGROUND_PREFERENCE, false)){
+            stopReading();
+            mTts.shutdown();
+            mTts = null;
+        }
+        //else do nothing
     }
 
 
