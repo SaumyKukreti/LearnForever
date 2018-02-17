@@ -62,8 +62,8 @@ public class CategoriesFragmentRecyclerViewAdapter extends RecyclerView.Adapter<
             public boolean onLongClick(View v) {
                 //Sending the user directly to revise all the notes belonging to that category
                 Intent intent = new Intent(mContext, ReviseActivity.class);
-                List<NoteTable> listOfNotes = NoteDataController.getInstance(mContext).getNoteWithCategory(mListOfCategories.get(position));
-                intent.putParcelableArrayListExtra(ReviseActivity.METADATA_NOTES_TO_REVISE, (ArrayList<? extends Parcelable>) listOfNotes);
+                List<String> listOfNotes = NoteDataController.getInstance(mContext).getNoteIdsWithCategory(mListOfCategories.get(position));
+                intent.putStringArrayListExtra(ReviseActivity.METADATA_NOTES_TO_REVISE, (ArrayList<String>) listOfNotes);
                 mContext.startActivity(intent);
                 return true;
             }

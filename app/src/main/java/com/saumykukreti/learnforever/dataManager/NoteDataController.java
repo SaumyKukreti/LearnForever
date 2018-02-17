@@ -10,6 +10,7 @@ import com.saumykukreti.learnforever.jobs.DeleteReminderJob;
 import com.saumykukreti.learnforever.jobs.ReminderJob;
 import com.saumykukreti.learnforever.modelClasses.dataTables.NoteTable;
 import com.saumykukreti.learnforever.util.AppDatabase;
+import com.saumykukreti.learnforever.util.Converter;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -267,6 +268,12 @@ public class NoteDataController {
 
     public void deleteAllRecords() {
         mDatabase.noteDao().deleteAllRecords();
+    }
+
+    public List<String> getNoteIdsWithCategory(String category) {
+        //Get only the note ids and return
+        List<NoteTable> listOfNotes = mDatabase.noteDao().getNotesWithCategory(category);
+        return Converter.convertNoteListToStringList(listOfNotes);
     }
 }
 

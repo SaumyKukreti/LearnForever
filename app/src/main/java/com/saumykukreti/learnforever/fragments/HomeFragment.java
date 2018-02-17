@@ -38,6 +38,7 @@ import com.saumykukreti.learnforever.constants.Constants;
 import com.saumykukreti.learnforever.dataManager.NoteDataController;
 import com.saumykukreti.learnforever.jobs.DataSyncJob;
 import com.saumykukreti.learnforever.modelClasses.dataTables.NoteTable;
+import com.saumykukreti.learnforever.util.Converter;
 import com.saumykukreti.learnforever.util.TextCreator;
 import com.saumykukreti.learnforever.util.TextReader;
 import com.saumykukreti.learnforever.util.Utility;
@@ -450,7 +451,7 @@ public class HomeFragment extends Fragment {
             List<NoteTable> selectedNoteList = mHomeFragmentNotesRecyclerViewAdapter.getSelectedList();
             if (!selectedNoteList.isEmpty()) {
                 Intent intent = new Intent(getContext(), ReviseActivity.class);
-                intent.putParcelableArrayListExtra(ReviseActivity.METADATA_NOTES_TO_REVISE, (ArrayList<? extends Parcelable>) selectedNoteList);
+                intent.putStringArrayListExtra(ReviseActivity.METADATA_NOTES_TO_REVISE, (ArrayList<String>) Converter.convertNoteListToStringList(selectedNoteList));
                 startActivity(intent);
                 cancelAction();
             } else {

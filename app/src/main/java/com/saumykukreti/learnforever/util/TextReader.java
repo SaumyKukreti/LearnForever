@@ -31,8 +31,8 @@ public class TextReader implements TextToSpeech.OnInitListener, LifecycleObserve
         mTts = new TextToSpeech(mContext, this);
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
-    void onPause(){
+    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+    void onDestroy(){
         SharedPreferences sharedPreferences = mContext.getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE,Context.MODE_PRIVATE);
         if(!sharedPreferences.getBoolean(Constants.LEARN_FOREVER_PREFERENCE_SPEECH_IN_BACKGROUND_PREFERENCE, false)){
             stopReading();

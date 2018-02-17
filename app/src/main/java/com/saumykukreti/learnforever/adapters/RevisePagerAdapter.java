@@ -24,6 +24,7 @@ public class RevisePagerAdapter extends PagerAdapter {
     private final LayoutInflater mLayoutInflater;
     private final Context mContext;
     private final RevisePagerAdapterListener mListener;
+    private NoteTable mNote;
 
     public RevisePagerAdapter(Context context, List<NoteTable> listOfNotes, RevisePagerAdapterListener revisePagerAdapterListener) {
         mListener = revisePagerAdapterListener;
@@ -44,7 +45,7 @@ public class RevisePagerAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        NoteTable note = mListOfNotes.get(position);
+        mNote = mListOfNotes.get(position);
         View view = mLayoutInflater.inflate(R.layout.revise_item_layout, container, false);
 
         //Setting values
@@ -61,33 +62,33 @@ public class RevisePagerAdapter extends PagerAdapter {
         ImageView categoryLine = view.findViewById(R.id.image_note_category);
         ImageView contentLine = view.findViewById(R.id.image_note_content);
 
-        if(note.getTitle()!=null && !note.getTitle().isEmpty()) {
+        if(mNote.getTitle()!=null && !mNote.getTitle().isEmpty()) {
             showViews(titleTitleTextView,titleTextView,titleLine);
-            titleTextView.setText(note.getTitle());
+            titleTextView.setText(mNote.getTitle());
         }
         else{
             hideViews(titleTitleTextView,titleTextView,titleLine);
         }
 
-        if(note.getContentInShort()!=null && !note.getContentInShort().isEmpty()) {
+        if(mNote.getContentInShort()!=null && !mNote.getContentInShort().isEmpty()) {
             showViews(contentInShort,contentInShortLine,contentInShortTitle);
-            contentInShort.setText(note.getContentInShort());
+            contentInShort.setText(mNote.getContentInShort());
         }
         else{
             hideViews(contentInShort,contentInShortLine,contentInShortTitle);
         }
 
-        if(note.getCategory()!=null && !note.getCategory().isEmpty()) {
+        if(mNote.getCategory()!=null && !mNote.getCategory().isEmpty()) {
             showViews(categoryTextView,categoryTitleTextView,categoryLine);
-            categoryTextView.setText(note.getCategory());
+            categoryTextView.setText(mNote.getCategory());
         }
         else{
             hideViews(categoryTextView,categoryTitleTextView,categoryLine);
         }
 
-         if(note.getContent()!=null && !note.getContent().isEmpty()) {
+         if(mNote.getContent()!=null && !mNote.getContent().isEmpty()) {
             showViews(contentTextView,contentTitleTextView,contentLine);
-             contentTextView.setText(note.getContent());
+             contentTextView.setText(mNote.getContent());
         }
         else{
             hideViews(contentTextView,contentTitleTextView,contentLine);
@@ -101,7 +102,6 @@ public class RevisePagerAdapter extends PagerAdapter {
     public void destroyItem(ViewGroup container, int position, Object object) {
         container.removeView((CardView)object);
     }
-
 
     public interface RevisePagerAdapterListener{
         void noteClicked();

@@ -1,6 +1,7 @@
 package com.saumykukreti.learnforever.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.support.v4.view.ViewPager;
@@ -28,6 +29,7 @@ import com.saumykukreti.learnforever.util.TextCreator;
 import com.saumykukreti.learnforever.util.TextReader;
 import com.saumykukreti.learnforever.util.Utility;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -35,13 +37,15 @@ public class ReviseActivity extends AppCompatActivity {
 
     public static final String METADATA_POSITION = "metadata_position";
     public static final String METADATA_NOTES_TO_REVISE = "metadata_notes_to_revise";
-    private List<NoteTable> mNoteList;
+    private List<NoteTable> mNoteList = new ArrayList<>(                                                 );
     private TextReader mTextReader;
     private boolean mIsSpeechOn = true;
     private boolean mIsSpeechIconVisible = false;
     private int mPageNumber;
     private boolean mTtsInitialised = false;
     private SharedPreferences mPreference;
+    private RevisePagerAdapter mPagerAdapter;
+    private ViewPager mNotesViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +92,7 @@ public class ReviseActivity extends AppCompatActivity {
     private void initialiseViews() {
         LinearLayout settingLinearLayout = findViewById(R.id.linear_index_container);
         final ImageView noSpeechImage = findViewById(R.id.image_speech_off);
+        final ImageView editImage = findViewById(R.id.image_edit);
         final ImageView arrowImage = findViewById(R.id.image_up_arrow);
 
         //Setting speech icon
@@ -107,10 +112,12 @@ public class ReviseActivity extends AppCompatActivity {
                 if(!mIsSpeechIconVisible) {
                     mIsSpeechIconVisible= true;
                     noSpeechImage.setVisibility(View.VISIBLE);
+                    editImage.setVisibility(View.VISIBLE);
                     arrowImage.animate().rotation(180);
                 }else{
                     mIsSpeechIconVisible = false;
                     noSpeechImage.setVisibility(View.GONE);
+                    editImage.setVisibility(View.GONE);
                     arrowImage.animate().rotation(0);
                 }
 
@@ -134,6 +141,17 @@ public class ReviseActivity extends AppCompatActivity {
                     noSpeechImage.setBackground(getResources().getDrawable(R.drawable.ic_volume_on_white));
                     Toast.makeText(ReviseActivity.this, "Speech on", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+
+        editImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Start edit note activity
+                Intent intent = new Intent(ReviseActivity.this, NoteActivity.class);
+                NoteTable note = mNoteList.get(mNotesViewPager.getCurrentItem());
+                intent.putExtra(NoteActivity.METADATA_NOTE, note);
+                startActivity(intent);
             }
         });
     }
@@ -167,17 +185,17 @@ public class ReviseActivity extends AppCompatActivity {
     }
 
     private void setViewPager() {
-        ViewPager notesViewPager = findViewById(R.id.view_pager_notes);
+        mNotesViewPager = findViewById(R.id.view_pager_notes);
 
-        RevisePagerAdapter pagerAdapter = new RevisePagerAdapter(this, mNoteList, new RevisePagerAdapter.RevisePagerAdapterListener() {
+        mPagerAdapter = new RevisePagerAdapter(this, mNoteList, new RevisePagerAdapter.RevisePagerAdapterListener() {
             @Override
             public void noteClicked() {
                 mTextReader.stopReading();
             }
         });
-        notesViewPager.setAdapter(pagerAdapter);
-        notesViewPager.setPageMargin(20);
-        notesViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        mNotesViewPager.setAdapter(mPagerAdapter);
+        mNotesViewPager.setPageMargin(20);
+        mNotesViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -211,7 +229,7 @@ public class ReviseActivity extends AppCompatActivity {
         });
 
         if(mPageNumber!=0){
-            notesViewPager.setCurrentItem(mPageNumber);
+            mNotesViewPager.setCurrentItem(mPageNumber);
         }
 
     }
@@ -222,12 +240,14 @@ public class ReviseActivity extends AppCompatActivity {
     private void getNotesToRevise() {
         //Checking if we have notes to revise from previous activity, if so using those notes else using notes to revise
         if(getIntent().hasExtra(METADATA_NOTES_TO_REVISE)){
-            mNoteList = getIntent().getParcelableArrayListExtra(METADATA_NOTES_TO_REVISE);
+            List<String> notesToRemind = getIntent().getStringArrayListExtra(METADATA_NOTES_TO_REVISE);
+            mNoteList.clear();
+            mNoteList.addAll(NoteDataController.getInstance(this).getNoteWithIds(notesToRemind));
         }
         else {
             List<String> notesToRemind = Utility.getNoteIdsToRemind(this);
-            //Getting the notes
-            mNoteList = NoteDataController.getInstance(this).getNoteWithIds(notesToRemind);
+            mNoteList.clear();
+            mNoteList.addAll(NoteDataController.getInstance(this).getNoteWithIds(notesToRemind));
         }
     }
 
@@ -248,5 +268,12 @@ public class ReviseActivity extends AppCompatActivity {
                 return true;
         }
         return false;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getNotesToRevise();
+        mPagerAdapter.notifyDataSetChanged();
     }
 }

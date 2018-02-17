@@ -1,6 +1,7 @@
 package com.saumykukreti.learnforever.util;
 
 import com.saumykukreti.learnforever.constants.Constants;
+import com.saumykukreti.learnforever.modelClasses.dataTables.NoteTable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -97,5 +98,13 @@ public class Converter {
         catch (Exception e){
             return Constants.DAY_INTERVAL_ONE;
         }
+    }
+
+    public static List<String> convertNoteListToStringList(List<NoteTable> listOfNotes){
+        List<String> listOfNoteIds = new ArrayList<>();
+        for(NoteTable note :listOfNotes){
+            listOfNoteIds.add(String.valueOf(note.getId()));
+        }
+        return listOfNoteIds;
     }
 }
