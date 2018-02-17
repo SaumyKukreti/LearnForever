@@ -34,6 +34,7 @@ import com.saumykukreti.learnforever.modelClasses.dataTables.NoteTable;
 import com.saumykukreti.learnforever.util.DateHandler;
 import com.saumykukreti.learnforever.util.TextCreator;
 import com.saumykukreti.learnforever.util.TextReader;
+import com.saumykukreti.learnforever.util.Utility;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -99,10 +100,10 @@ public class NoteActivity extends AppCompatActivity {
             promptSpeechInput();
         }
 
-        if(getIntent().getAction()!=null &&
+        if (getIntent().getAction() != null &&
                 getIntent().getAction().equals(Intent.ACTION_SEND) &&
-                getIntent().getType()!=null &&
-                getIntent().getType().equals("text/plain")){
+                getIntent().getType() != null &&
+                getIntent().getType().equals("text/plain")) {
 
             handleSendText(getIntent());
         }
@@ -110,12 +111,13 @@ public class NoteActivity extends AppCompatActivity {
     }
 
     /**
-     *  This method handles the text sent by other applications
+     * This method handles the text sent by other applications
+     *
      * @param intent - The received intent
      */
     private void handleSendText(Intent intent) {
         String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
-        if(sharedText!=null && !sharedText.isEmpty()){
+        if (sharedText != null && !sharedText.isEmpty()) {
             mNoteContentEdit.setText(sharedText);
         }
     }
@@ -374,7 +376,9 @@ public class NoteActivity extends AppCompatActivity {
                     mTextReader.readAloud(TextCreator.getNoteTextForReading(mNote));
                 }
                 break;
-
+            case R.id.action_help:
+                Utility.showHelp(this, getResources().getString(R.string.help_string_note_activity));
+                return true;
         }
         return true;
     }

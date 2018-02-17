@@ -18,6 +18,7 @@
 
 
     <!--Help strings-->
+    <string name="help_string_note_activity">Please use this screen to add a note or to edit a new note.\n\n Please use the switch button to learn this note. Turning this on will save reminders on particular intervals. These frequent revise intervals help you to learn something forever. You can also change this interval setting from the settings page. \n\nPlease use the voice button on the top right corner to dictate your note\n\n</string>
     <string name="help_string_home">The is the home of all the notes. Use this place to see, edit annd delete the notes. \n\n
         Use the plus button given in the bottom right corner to create a new note. \n\n
                             Use the buttons delete and volume button to delete and speak out notes respectively.
