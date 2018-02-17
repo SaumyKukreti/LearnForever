@@ -27,11 +27,16 @@ public class Constants {
     public static final String LEARN_FOREVER_PREFERENCE_CUSTOM_INTERVAL = "lf_preference_custom_interval";
     public static final String LEARN_FOREVER_PREFERENCE_LAYOUT_PREFERENCE = "lf_preference_layout_style";
     public static final String LEARN_FOREVER_PREFERENCE_SPEECH_IN_BACKGROUND_PREFERENCE = "lf_preference_speech_in_background";
+    public static final String LEARN_FOREVER_PREFERENCE_DEFAULT_FILTER = "lf_preference_default_filter";
 
     //Preferences
     public static final String LEARN_FOREVER_PREFERENCE_TITLE_SETTINGS = "lf_preference_title";
     public static final String LEARN_FOREVER_PREFERENCE_CIS_SETTINGS = "lf_preference_cis";
     public static final String LEARN_FOREVER_PREFERENCE_CATEGORY_SETTINGS = "lf_preference_category";
+
+    public static final String LEARN_FOREVER_PREFERENCE_FILTER_SETTING_ALPHABETICALLY = "lf_preference_alphabetically";
+    public static final String LEARN_FOREVER_PREFERENCE_FILTER_SETTING_OLD_FIRST = "lf_preference_old_first";
+    public static final String LEARN_FOREVER_PREFERENCE_FILTER_SETTING_NEW_FIRST = "lf_preference_new_first";
 
     //Notification time
     public static final String LEARN_FOREVER_PREFERENCE_NOTIFICATION_HOUR = "lf_preference_hour";

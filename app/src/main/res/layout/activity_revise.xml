@@ -6,7 +6,7 @@
     android:id="@+id/revise_activity_relative_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/black"
+    android:background="#4A148C"
     tools:context="com.saumykukreti.learnforever.activities.ReviseActivity">
 
     <android.support.v4.view.ViewPager

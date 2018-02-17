@@ -45,7 +45,7 @@ import com.saumykukreti.learnforever.util.Utility;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeFragment extends Fragment{
+public class HomeFragment extends Fragment {
     private OnHomeFragmentInteractionListener mListener;
     private NoteDataController datacontroller;
     private List<NoteTable> mAllNotes;
@@ -97,7 +97,6 @@ public class HomeFragment extends Fragment{
     }
 
 
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -114,7 +113,7 @@ public class HomeFragment extends Fragment{
     public void onDetach() {
         super.onDetach();
         mListener = null;
-        mTextReader =null;
+        mTextReader = null;
     }
 
     @Override
@@ -122,7 +121,7 @@ public class HomeFragment extends Fragment{
         super.onViewCreated(view, savedInstanceState);
 
         initialiseViews();
-        if(mCategory!=null && !mCategory.isEmpty()){
+        if (mCategory != null && !mCategory.isEmpty()) {
             //Means this activity shows notes of a particular category
 
             //Update mNotesList and initialise adapter
@@ -132,8 +131,7 @@ public class HomeFragment extends Fragment{
 
             //Not for home fragment but the list we are shown when in categories (tap one)
             setLiveDataForCategory();
-        }
-        else{
+        } else {
             //Modify fragment to show all notes
             initialiseNotesAdapter(true);
 
@@ -144,11 +142,36 @@ public class HomeFragment extends Fragment{
 
         //Initialise search view
         initialiseSearchView();
-
     }
 
     /**
-     *  This method intialises all the views that are used across the fragment
+     * Apply default filter
+     */
+    private void applyDefaultFilter() {
+        String filterOption = Utility.getStringFromPreference(getContext(), Constants.LEARN_FOREVER_PREFERENCE_DEFAULT_FILTER);
+        switch (filterOption) {
+            case Constants.LEARN_FOREVER_PREFERENCE_FILTER_SETTING_ALPHABETICALLY:
+                mCurrentFilter = R.id.radio_alphabetically;
+                Utility.sortList(mAllNotes, Constants.LEARN_FOREVER_PREFERENCE_FILTER_SETTING_ALPHABETICALLY);
+                break;
+            case Constants.LEARN_FOREVER_PREFERENCE_FILTER_SETTING_NEW_FIRST:
+                mCurrentFilter = R.id.radio_recent_first;
+                Utility.sortList(mAllNotes, Constants.LEARN_FOREVER_PREFERENCE_FILTER_SETTING_NEW_FIRST);
+                break;
+            case Constants.LEARN_FOREVER_PREFERENCE_FILTER_SETTING_OLD_FIRST:
+                mCurrentFilter = R.id.radio_old_first;
+                Utility.sortList(mAllNotes, Constants.LEARN_FOREVER_PREFERENCE_FILTER_SETTING_OLD_FIRST);
+                break;
+            default:
+                mCurrentFilter = R.id.radio_recent_first;
+                Utility.sortList(mAllNotes, Constants.LEARN_FOREVER_PREFERENCE_FILTER_SETTING_NEW_FIRST);
+                break;
+        }
+        mHomeFragmentNotesRecyclerViewAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * This method intialises all the views that are used across the fragment
      */
     private void initialiseViews() {
         mSearchEdit = getView().findViewById(R.id.edit_search);
@@ -163,7 +186,8 @@ public class HomeFragment extends Fragment{
                 mHomeFragmentNotesRecyclerViewAdapter.setNoteTableList(noteTables);
                 mHomeFragmentNotesRecyclerViewAdapter.notifyDataSetChanged();
                 syncData();
-            }});
+            }
+        });
     }
 
 
@@ -173,13 +197,14 @@ public class HomeFragment extends Fragment{
             @Override
             public void onChanged(@Nullable List<NoteTable> noteTables) {
                 mHomeFragmentNotesRecyclerViewAdapter.setNoteTableList(noteTables);
-                mHomeFragmentNotesRecyclerViewAdapter.notifyDataSetChanged();
+                applyDefaultFilter();
                 syncData();
-            }});
+            }
+        });
     }
 
     /**
-     *  This method sets text watcher on the search view and
+     * This method sets text watcher on the search view and
      */
     private void initialiseSearchView() {
         TextWatcher textWatcher = new TextWatcher() {
@@ -189,25 +214,22 @@ public class HomeFragment extends Fragment{
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if(charSequence.length()>2){
+                if (charSequence.length() > 2) {
                     //Boolean to keep track if the current list is updated or not to avoid unnecessary database calls
                     mNoteListUpdated = true;
-                    if(mCategory!=null && !mCategory.isEmpty()){
+                    if (mCategory != null && !mCategory.isEmpty()) {
                         mAllNotes = datacontroller.searchNoteWithStringAndCategory(charSequence.toString(), mCategory);
-                    }
-                    else {
+                    } else {
                         mAllNotes = datacontroller.searchNoteWithString(charSequence.toString());
                     }
                     initialiseNotesAdapter(false);
-                }
-                else{
+                } else {
                     //Show all notes
-                    if(mNoteListUpdated) {
+                    if (mNoteListUpdated) {
                         mNoteListUpdated = false;
-                        if(mCategory!=null && !mCategory.isEmpty()){
+                        if (mCategory != null && !mCategory.isEmpty()) {
                             mAllNotes = datacontroller.getNoteWithCategory(mCategory);
-                        }
-                        else {
+                        } else {
                             mAllNotes = datacontroller.getAllNotes();
                         }
                         initialiseNotesAdapter(false);
@@ -230,10 +252,10 @@ public class HomeFragment extends Fragment{
     }
 
     /**
-     *  This method starts a job that sync data to firebase
+     * This method starts a job that sync data to firebase
      */
     private void syncData() {
-        LearnForeverApplication.getInstance().getJobManager().addJobInBackground(new DataSyncJob(getContext(),null));
+        LearnForeverApplication.getInstance().getJobManager().addJobInBackground(new DataSyncJob(getContext(), null));
     }
 
     /**
@@ -241,12 +263,11 @@ public class HomeFragment extends Fragment{
      *
      * @param turnOn - Pass true to show cancel button and vice versa
      */
-    private void toggleCancelFabVisibility(boolean turnOn){
+    private void toggleCancelFabVisibility(boolean turnOn) {
         FloatingActionButton cancelFab = getView().findViewById(R.id.fab_cancel);
-        if(turnOn) {
+        if (turnOn) {
             cancelFab.setVisibility(View.VISIBLE);
-        }
-        else{
+        } else {
             cancelFab.setVisibility(View.GONE);
         }
         cancelFab.setOnClickListener(new View.OnClickListener() {
@@ -258,9 +279,9 @@ public class HomeFragment extends Fragment{
     }
 
     /**
-     *  This method is used to disable selection mode
+     * This method is used to disable selection mode
      */
-    private void cancelAction(){
+    private void cancelAction() {
         mTextReader.stopReading();
         setSelectionMode(false);
         mHomeFragmentNotesRecyclerViewAdapter.clearSelectedList();
@@ -273,7 +294,7 @@ public class HomeFragment extends Fragment{
      * @param updateNoteList - Pass true when you want the list data to be refreshed else pass false
      */
     public void initialiseNotesAdapter(boolean updateNoteList) {
-        if(updateNoteList){
+        if (updateNoteList) {
             mAllNotes = datacontroller.getAllNotes();
         }
         mRecyclerView = getView().findViewById(R.id.recycler_notes);
@@ -287,12 +308,11 @@ public class HomeFragment extends Fragment{
 
         String layoutStyle = Utility.getStringFromPreference(getContext(), Constants.LEARN_FOREVER_PREFERENCE_LAYOUT_PREFERENCE);
 
-        if(layoutStyle.equalsIgnoreCase("list")){
+        if (layoutStyle.equalsIgnoreCase("list")) {
             mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             mCurrentLayoutManager = "list";
-        }
-        else{
-            mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
+        } else {
+            mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
             mCurrentLayoutManager = "grid";
         }
         mRecyclerView.setAdapter(mHomeFragmentNotesRecyclerViewAdapter);
@@ -307,11 +327,11 @@ public class HomeFragment extends Fragment{
                 @Override
                 public boolean onFling(int velocityX, int velocityY) {
                     //If velocity is positive, the user is scolling down and vice versa
-                    TransitionManager.beginDelayedTransition(fragment_container,fade);
-                    if(velocityY>3000){
+                    TransitionManager.beginDelayedTransition(fragment_container, fade);
+                    if (velocityY > 3000) {
                         //Scrolling down
                         mSearchContainer.setVisibility(View.GONE);
-                    }else if((velocityY<-3000)){
+                    } else if ((velocityY < -3000)) {
                         //Scolling up
                         mSearchContainer.setVisibility(View.VISIBLE);
                     }
@@ -322,18 +342,18 @@ public class HomeFragment extends Fragment{
     }
 
     /**
-     *  This method controls the fab button in the navigation drawer activity
+     * This method controls the fab button in the navigation drawer activity
      *
      * @param turnOn - Pass true to show fab and vice versa
      */
-    public void toggleFabVisiblity(boolean turnOn){
+    public void toggleFabVisiblity(boolean turnOn) {
         //When selection mode is on turn off fab visibility and vice versa
         mListener.toggleFabVisibility(turnOn);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.home_delete:
                 handleDeleteButtonPress();
                 return true;
@@ -344,22 +364,22 @@ public class HomeFragment extends Fragment{
                 sendSelectedNotes();
                 return true;
             case R.id.action_help:
-                if(mIsInForeGround) {
+                if (mIsInForeGround) {
                     Utility.showHelp(getContext(), getResources().getString(R.string.help_string_home));
                     return true;
                 }
                 break;
             case R.id.home_cancel:
-                if(mSelectionModeOn){
+                if (mSelectionModeOn) {
                     cancelAction();
-                }else {
+                } else {
                     Toast.makeText(getContext(), "Nothing to cancel!", Toast.LENGTH_SHORT).show();
                 }
                 return true;
             case R.id.home_search:
-                if(mSearchContainer.getVisibility() == View.VISIBLE){
+                if (mSearchContainer.getVisibility() == View.VISIBLE) {
                     Toast.makeText(getContext(), "Search is already visible!", Toast.LENGTH_SHORT).show();
-                }else{
+                } else {
                     mSearchContainer.setVisibility(View.VISIBLE);
                 }
                 return true;
@@ -375,7 +395,7 @@ public class HomeFragment extends Fragment{
     }
 
     /**
-     *  This method shows filtering options
+     * This method shows filtering options
      */
     private void showFilteringOptions() {
         final Dialog dialog = new Dialog(getContext());
@@ -383,28 +403,31 @@ public class HomeFragment extends Fragment{
 
         RadioGroup radioGroup = dialog.findViewById(R.id.radio_group);
 
-        if(mCurrentFilter!=0){
+        if (mCurrentFilter != 0) {
             radioGroup.check(mCurrentFilter);
         }
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (checkedId){
+                switch (checkedId) {
                     case R.id.radio_alphabetically:
                         mCurrentFilter = R.id.radio_alphabetically;
-                        Utility.sortList(mAllNotes, Utility.FilterMode.ALPHABETICALLY);
+                        Utility.sortList(mAllNotes, Constants.LEARN_FOREVER_PREFERENCE_FILTER_SETTING_ALPHABETICALLY);
                         mHomeFragmentNotesRecyclerViewAdapter.notifyDataSetChanged();
+                        Utility.saveStringInPreference(getContext(), Constants.LEARN_FOREVER_PREFERENCE_DEFAULT_FILTER, Constants.LEARN_FOREVER_PREFERENCE_FILTER_SETTING_ALPHABETICALLY);
                         dialog.dismiss();
                         break;
                     case R.id.radio_recent_first:
                         mCurrentFilter = R.id.radio_recent_first;
-                        Utility.sortList(mAllNotes, Utility.FilterMode.RECENT_FIRST);
+                        Utility.sortList(mAllNotes, Constants.LEARN_FOREVER_PREFERENCE_FILTER_SETTING_NEW_FIRST);
+                        Utility.saveStringInPreference(getContext(), Constants.LEARN_FOREVER_PREFERENCE_DEFAULT_FILTER, Constants.LEARN_FOREVER_PREFERENCE_FILTER_SETTING_NEW_FIRST);
                         mHomeFragmentNotesRecyclerViewAdapter.notifyDataSetChanged();
                         dialog.dismiss();
                         break;
                     case R.id.radio_old_first:
                         mCurrentFilter = R.id.radio_old_first;
-                        Utility.sortList(mAllNotes, Utility.FilterMode.OLD_FIRST);
+                        Utility.sortList(mAllNotes, Constants.LEARN_FOREVER_PREFERENCE_FILTER_SETTING_OLD_FIRST);
+                        Utility.saveStringInPreference(getContext(), Constants.LEARN_FOREVER_PREFERENCE_DEFAULT_FILTER, Constants.LEARN_FOREVER_PREFERENCE_FILTER_SETTING_OLD_FIRST);
                         mHomeFragmentNotesRecyclerViewAdapter.notifyDataSetChanged();
                         dialog.dismiss();
                         break;
@@ -420,82 +443,78 @@ public class HomeFragment extends Fragment{
     }
 
     /**
-     *  This method handles the revise button
+     * This method handles the revise button
      */
     private void handleReviseButtonPress() {
-        if(mSelectionModeOn) {
+        if (mSelectionModeOn) {
             List<NoteTable> selectedNoteList = mHomeFragmentNotesRecyclerViewAdapter.getSelectedList();
-            if(!selectedNoteList.isEmpty()){
+            if (!selectedNoteList.isEmpty()) {
                 Intent intent = new Intent(getContext(), ReviseActivity.class);
                 intent.putParcelableArrayListExtra(ReviseActivity.METADATA_NOTES_TO_REVISE, (ArrayList<? extends Parcelable>) selectedNoteList);
                 startActivity(intent);
                 cancelAction();
-            }
-            else{
+            } else {
                 Toast.makeText(getContext(), "Select some notes first!", Toast.LENGTH_SHORT).show();
             }
-        }
-        else{
+        } else {
             setSelectionMode(true);
         }
     }
 
 
     private void sendSelectedNotes() {
-        if(mSelectionModeOn){
+        if (mSelectionModeOn) {
             List<NoteTable> selectedNoteList = mHomeFragmentNotesRecyclerViewAdapter.getSelectedList();
-            if(!selectedNoteList.isEmpty()){
+            if (!selectedNoteList.isEmpty()) {
                 Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
                 sharingIntent.setType("text/plain");
 
-                if(selectedNoteList.size()==1 && selectedNoteList.get(0).getTitle()!=null && !selectedNoteList.get(0).getTitle().isEmpty()){
+                if (selectedNoteList.size() == 1 && selectedNoteList.get(0).getTitle() != null && !selectedNoteList.get(0).getTitle().isEmpty()) {
                     //Setting the subject the title of the note if only one note is being sent and title is available
                     sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, selectedNoteList.get(0).getTitle());
-                }
-                else{
+                } else {
                     sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Notes");
                 }
 
                 sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, TextCreator.getNoteTextForSending(selectedNoteList));
-                startActivity(Intent.createChooser(sharingIntent,"Send notes via"));
+                startActivity(Intent.createChooser(sharingIntent, "Send notes via"));
             }
-        }else{
+        } else {
             setSelectionMode(true);
         }
     }
 
     /**
-     *  This method handles the case when delete button is pressed
+     * This method handles the case when delete button is pressed
      */
     private void handleDeleteButtonPress() {
-        if(mSelectionModeOn){
+        if (mSelectionModeOn) {
             //This means that already some notes have been selected and those have to be deleted
             List<NoteTable> selectedNoteList = mHomeFragmentNotesRecyclerViewAdapter.getSelectedList();
-            if(!selectedNoteList.isEmpty()){
+            if (!selectedNoteList.isEmpty()) {
                 askForConfirmationAndDeleteNote(selectedNoteList);
             }
-        }
-        else{
+        } else {
             setSelectionMode(true);
         }
     }
 
     /**
-     *  This method controls the visibility of buttons
+     * This method controls the visibility of buttons
+     *
      * @param turnOn
      */
-    public void setSelectionMode(boolean turnOn){
+    public void setSelectionMode(boolean turnOn) {
         mSelectionModeOn = turnOn;
 
-        if(turnOn){
+        if (turnOn) {
             //Notifying the adapter
             mHomeFragmentNotesRecyclerViewAdapter.toggleSelectionMode(true);
 
             //Changing the visisblity of fabs
             toggleFabVisiblity(false);
             toggleCancelFabVisibility(true);
-        }
-        else{
+        } else {
             //Notifying the adapter
             mHomeFragmentNotesRecyclerViewAdapter.toggleSelectionMode(false);
 
@@ -506,7 +525,7 @@ public class HomeFragment extends Fragment{
     }
 
     /**
-     *  This method shows a dialog asking the user to delete the current note or not
+     * This method shows a dialog asking the user to delete the current note or not
      *
      * @param selectedNoteList
      */
@@ -535,6 +554,7 @@ public class HomeFragment extends Fragment{
 
     public interface OnHomeFragmentInteractionListener {
         void updateActionBarForHomeFragment();
+
         void toggleFabVisibility(boolean on);
     }
 
@@ -549,21 +569,20 @@ public class HomeFragment extends Fragment{
         mListener.toggleFabVisibility(true);
     }
 
-    public boolean getSelectionMode(){
+    public boolean getSelectionMode() {
         return mSelectionModeOn;
     }
 
-    public void onNavigationFabLongClick(){
+    public void onNavigationFabLongClick() {
     }
 
 
     private void readSelectedNotes() {
         //Check if some notes are selected
-        if(mSelectionModeOn){
+        if (mSelectionModeOn) {
             List<NoteTable> listOfSelectedNotes = mHomeFragmentNotesRecyclerViewAdapter.getSelectedList();
             mTextReader.readAloud(TextCreator.getNoteTextForReading(listOfSelectedNotes));
-        }
-        else{
+        } else {
             setSelectionMode(true);
         }
     }
@@ -577,13 +596,13 @@ public class HomeFragment extends Fragment{
     /**
      * Call this method when the layout of home fragment needs to be refreshed
      */
-    public void refreshLayout(){
+    public void refreshLayout() {
         mRecyclerView.setVisibility(View.VISIBLE);
         mIsInForeGround = true;
         //Checking if layout settings were changed or not if so refreshing the layout
-        String layoutPreference = Utility.getStringFromPreference(getContext(),Constants.LEARN_FOREVER_PREFERENCE_LAYOUT_PREFERENCE);
+        String layoutPreference = Utility.getStringFromPreference(getContext(), Constants.LEARN_FOREVER_PREFERENCE_LAYOUT_PREFERENCE);
 
-        if(!layoutPreference.equalsIgnoreCase(mCurrentLayoutManager)){
+        if (!layoutPreference.equalsIgnoreCase(mCurrentLayoutManager)) {
             //Setting must have changed, thus refreshing layout
             initialiseNotesAdapter(false);
         }
@@ -592,7 +611,7 @@ public class HomeFragment extends Fragment{
     /**
      * Calling this method to let home fragment know that it is not in foreground
      */
-    public void goneInBackgroung(){
+    public void goneInBackgroung() {
         mIsInForeGround = false;
         mRecyclerView.setVisibility(View.GONE);
     }

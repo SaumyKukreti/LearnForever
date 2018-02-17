@@ -221,16 +221,14 @@ public class Utility {
         return bd.floatValue();
     }
 
-    public enum FilterMode {ALPHABETICALLY, RECENT_FIRST, OLD_FIRST}
-
-    public static List<NoteTable> sortList(List<NoteTable> listOfNotes, FilterMode filterMode){
+    public static List<NoteTable> sortList(List<NoteTable> listOfNotes, String filterMode){
         switch (filterMode){
-            case ALPHABETICALLY:
+            case Constants.LEARN_FOREVER_PREFERENCE_FILTER_SETTING_ALPHABETICALLY:
                 AlphabeticComparater comp = new AlphabeticComparater();
                 listOfNotes.sort(comp);
                 return listOfNotes;
 
-            case OLD_FIRST:
+            case Constants.LEARN_FOREVER_PREFERENCE_FILTER_SETTING_OLD_FIRST:
                 listOfNotes.sort(new Comparator<NoteTable>() {
                     @Override
                     public int compare(NoteTable note1, NoteTable note2) {
@@ -250,7 +248,7 @@ public class Utility {
                 });
                 return listOfNotes;
 
-            case RECENT_FIRST:
+            case Constants.LEARN_FOREVER_PREFERENCE_FILTER_SETTING_NEW_FIRST:
                 listOfNotes.sort(new Comparator<NoteTable>() {
                     @Override
                     public int compare(NoteTable note1, NoteTable note2) {
