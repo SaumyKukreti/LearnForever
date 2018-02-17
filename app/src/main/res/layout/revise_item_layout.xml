@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView
-    android:id="@+id/cardView"
+    android:id="@+id/card_view"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,23 +11,24 @@
     android:orientation="vertical">
 
     <ScrollView
-        android:id="@+id/scrollview"
+        android:id="@+id/scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:longClickable="true"
         android:layout_margin="20dp">
+
         <LinearLayout
             android:id="@+id/linear_container"
-            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/text_note_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:text="Title"/>
+                android:text="Title"
+                android:textStyle="bold"/>
 
             <!--Line-->
             <ImageView
@@ -49,9 +50,9 @@
                 android:id="@+id/text_content_in_short_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
                 android:text="Content in short"
-                android:textStyle="bold"
-                android:layout_marginTop="20dp"/>
+                android:textStyle="bold"/>
 
             <!--Line-->
             <ImageView
@@ -62,19 +63,19 @@
                 android:background="@android:color/darker_gray"/>
 
             <TextView
-                android:layout_marginTop="10dp"
                 android:id="@+id/text_content_in_short"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 tools:text="Content in short"/>
 
             <TextView
                 android:id="@+id/text_category_title"
-                android:layout_marginTop="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:text="Category"/>
+                android:layout_marginTop="20dp"
+                android:text="Category"
+                android:textStyle="bold"/>
 
             <!--Line-->
             <ImageView
@@ -85,20 +86,20 @@
                 android:background="@android:color/darker_gray"/>
 
             <TextView
-                android:layout_marginTop="10dp"
                 android:id="@+id/text_category"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 tools:text="Category"/>
 
 
             <TextView
                 android:id="@+id/text_content_title"
-                android:layout_marginTop="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:text="Content"/>
+                android:layout_marginTop="20dp"
+                android:text="Content"
+                android:textStyle="bold"/>
 
             <!--Line-->
             <ImageView
@@ -109,10 +110,10 @@
                 android:background="@android:color/darker_gray"/>
 
             <TextView
-                android:layout_marginTop="10dp"
                 android:id="@+id/text_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 tools:text="Content"/>
 
         </LinearLayout>

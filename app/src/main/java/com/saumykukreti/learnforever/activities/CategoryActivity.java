@@ -1,6 +1,7 @@
 package com.saumykukreti.learnforever.activities;
 
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -22,6 +23,7 @@ public class CategoryActivity extends AppCompatActivity implements HomeFragment.
     private String TAG = CategoryActivity.class.getSimpleName();
     private Toolbar mToolbar;
     private HomeFragment mHomeFragment;
+    private FloatingActionButton mFab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +32,7 @@ public class CategoryActivity extends AppCompatActivity implements HomeFragment.
 
         getCategoryName();
         initialiseToolbar();
+        initialiseFab();
 
         if(mCategoryName!=null) {
             setHomeFragment();
@@ -92,6 +95,19 @@ public class CategoryActivity extends AppCompatActivity implements HomeFragment.
             return true;
         }
         return false;
+    }
+
+    /**
+     * This method initialises FAB
+     */
+    private void initialiseFab() {
+        mFab = (FloatingActionButton) findViewById(R.id.fab);
+        mFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(CategoryActivity.this, NoteActivity.class));
+            }
+        });
     }
 
 }
