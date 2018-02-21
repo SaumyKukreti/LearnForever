@@ -193,6 +193,25 @@ public class Utility {
         return sharedPreferences.getString(key,"");
     }
 
+    public static void saveBooleanInPreference(Context context, String key, boolean value){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE,Context.MODE_PRIVATE);
+        sharedPreferences.edit().putBoolean(key,value).apply();
+    }
+
+    public static boolean getBooleanFromPreference(Context context, String key){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE,Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean(key,false);
+    }
+
+    public static void saveIntInPreference(Context context, String key, int value){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE,Context.MODE_PRIVATE);
+        sharedPreferences.edit().putInt(key,value).apply();
+    }
+
+    public static int getIntFromPreference(Context context, String key){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE,Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(key,-1);
+    }
 
     /**
      *  This method shows a dialog shwoing help regarding the page
