@@ -8,14 +8,21 @@
           app:showAsAction="always"/>
 
     <item
-        android:id="@+id/action_help"
-        android:orderInCategory="100"
-        android:title="Help"
+        android:id="@+id/note_activity_show_all_views"
+        android:title="Show all views"
         app:showAsAction="never"/>
 
     <item
-        android:id="@+id/note_activity_show_all_views"
-        android:title="Show all views"
+        android:id="@+id/note_activity_change_interval"
+        android:title="Change interval"
+        app:showAsAction="never"/>
+
+
+
+    <item
+        android:id="@+id/action_help"
+        android:orderInCategory="100"
+        android:title="Help"
         app:showAsAction="never"/>
 
 </menu>

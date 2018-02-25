@@ -33,8 +33,6 @@ import com.saumykukreti.learnforever.util.TextCreator;
 import com.saumykukreti.learnforever.util.Utility;
 
 public class SettingsFragment extends Fragment {
-    public static final int LIST_CHANGED = 101;
-    public static final int CANCELLED = 102;
     private OnSettingsFragmentInteractionListener mListener;
     private SharedPreferences mSharedPreferences;
     private int mSpeechRate;
@@ -529,7 +527,7 @@ public class SettingsFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == LIST_CHANGED) {
+        if (resultCode == Constants.RESULT_LIST_CHANGED) {
             mIntervalDialog.dataSetChanged();
         }
     }

@@ -30,6 +30,7 @@ import android.widget.Switch;
 import com.saumykukreti.learnforever.R;
 import com.saumykukreti.learnforever.constants.Constants;
 import com.saumykukreti.learnforever.dataManager.NoteDataController;
+import com.saumykukreti.learnforever.dialog.IntervalDialog;
 import com.saumykukreti.learnforever.modelClasses.dataTables.NoteTable;
 import com.saumykukreti.learnforever.util.DateHandler;
 import com.saumykukreti.learnforever.util.TextCreator;
@@ -65,6 +66,7 @@ public class NoteActivity extends AppCompatActivity {
     private ArrayAdapter<String> mAutoCompleteAdapter;
     private TextReader mTextReader;
     private SharedPreferences mSharedPreferences;
+    private IntervalDialog mIntervalDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -379,6 +381,11 @@ public class NoteActivity extends AppCompatActivity {
             case R.id.action_help:
                 Utility.showHelp(this, getResources().getString(R.string.help_string_note_activity));
                 return true;
+            case R.id.note_activity_change_interval:
+                //Show revise interval dialog
+                mIntervalDialog = new IntervalDialog(this);
+                mIntervalDialog.show();
+                return true;
         }
         return true;
     }
@@ -505,6 +512,9 @@ public class NoteActivity extends AppCompatActivity {
         if (requestCode == REQ_CODE_SPEECH_INPUT && resultCode == RESULT_OK && data != null) {
             ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
             mNoteContentEdit.setText(mNoteContentEdit.getText() +" "+ result.get(0));
+        }
+        else if(resultCode == Constants.RESULT_LIST_CHANGED){
+            mIntervalDialog.dataSetChanged();
         }
     }
 }

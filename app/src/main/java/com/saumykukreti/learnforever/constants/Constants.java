@@ -60,4 +60,7 @@ public class Constants {
 
     public static final int NOTIFICATION_ALARM_REQUEST_CODE = 1000;
     public static final int NOTIFICATION_REQUEST_CODE = 1001;
+
+    public static final int RESULT_LIST_CHANGED = 1002;
+    public static final int RESULT_CANCELLED = 1003;
 }

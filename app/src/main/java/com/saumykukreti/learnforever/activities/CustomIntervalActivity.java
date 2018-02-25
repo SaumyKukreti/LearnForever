@@ -99,10 +99,10 @@ public class CustomIntervalActivity extends AppCompatActivity {
                         String listOfIntervalString = Utility.getIntervalListString(arrayListOfIntervals);
                         Utility.saveStringInPreference(CustomIntervalActivity.this, Constants.LEARN_FOREVER_PREFERENCE_LIST_OF_INTERVALS, listOfIntervalString);
                     }
-                    setResult(SettingsFragment.LIST_CHANGED);
+                    setResult(Constants.RESULT_LIST_CHANGED);
                 }
                 else{
-                    setResult(SettingsFragment.CANCELLED);
+                    setResult(Constants.RESULT_CANCELLED);
                 }
                 finish();
             }
