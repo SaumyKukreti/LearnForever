@@ -47,6 +47,7 @@ public class NoteActivity extends AppCompatActivity {
     //Intent constants
     public static final String METADATA_NOTE = "metadata_note";
     public static final String METADATA_FROM_WIDGET = "metadata_from_widget";
+    public static final String METADATA_CATEGORY = "metadata_category";
     private static final int REQ_CODE_SPEECH_INPUT = 1001;
     private static final String TAG = NoteActivity.class.getSimpleName();
 
@@ -87,8 +88,10 @@ public class NoteActivity extends AppCompatActivity {
             isNewNote = true;
         }
 
-        if (isNewNote)
+        if (isNewNote) {
             setVisibilityOfViewsBasedOnPreference();
+            setCategoryValue();
+        }
         //else make visible contents only those items that is of note
 
         setCategoryAutoComplete();
@@ -110,6 +113,17 @@ public class NoteActivity extends AppCompatActivity {
             handleSendText(getIntent());
         }
 
+    }
+
+    /**
+     * This method pre populates category value. This method is used when new note is being created from within category
+     */
+    private void setCategoryValue() {
+        if(getIntent().hasExtra(METADATA_CATEGORY)){
+            //Setting the visibility of category visible irrespective of preference and setting the value
+            showCategoryViews();
+            ((AutoCompleteTextView)findViewById(R.id.autocomplete_category)).setText(getIntent().getStringExtra(METADATA_CATEGORY));
+        }
     }
 
     /**

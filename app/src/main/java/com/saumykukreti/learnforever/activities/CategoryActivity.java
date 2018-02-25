@@ -34,10 +34,9 @@ public class CategoryActivity extends AppCompatActivity implements HomeFragment.
         initialiseToolbar();
         initialiseFab();
 
-        if(mCategoryName!=null) {
+        if (mCategoryName != null) {
             setHomeFragment();
-        }
-        else{
+        } else {
             Log.e(TAG, "Category needs to be passed in order for this activity to work");
         }
     }
@@ -53,10 +52,10 @@ public class CategoryActivity extends AppCompatActivity implements HomeFragment.
     }
 
     /**
-     *  This method gets category name
+     * This method gets category name
      */
     private void getCategoryName() {
-        if(getIntent().hasExtra(METADATA_CATEGORY)){
+        if (getIntent().hasExtra(METADATA_CATEGORY)) {
             mCategoryName = getIntent().getStringExtra(METADATA_CATEGORY);
         }
     }
@@ -90,7 +89,7 @@ public class CategoryActivity extends AppCompatActivity implements HomeFragment.
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() ==  android.R.id.home){
+        if (item.getItemId() == android.R.id.home) {
             onBackPressed();
             return true;
         }
@@ -105,9 +104,12 @@ public class CategoryActivity extends AppCompatActivity implements HomeFragment.
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(CategoryActivity.this, NoteActivity.class));
+                //Sending the category name to note activity to prepopulate
+                Intent intent = new Intent(CategoryActivity.this, NoteActivity.class);
+                intent.putExtra(NoteActivity.METADATA_CATEGORY, mCategoryName);
+                startActivity(intent);
+
             }
         });
     }
-
 }
