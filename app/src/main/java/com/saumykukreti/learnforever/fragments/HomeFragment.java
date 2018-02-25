@@ -496,6 +496,7 @@ public class HomeFragment extends Fragment {
                 askForConfirmationAndDeleteNote(selectedNoteList);
             }
         } else {
+            Toast.makeText(getContext(), "Please select some notes", Toast.LENGTH_SHORT).show();
             setSelectionMode(true);
         }
     }
@@ -584,6 +585,7 @@ public class HomeFragment extends Fragment {
             List<NoteTable> listOfSelectedNotes = mHomeFragmentNotesRecyclerViewAdapter.getSelectedList();
             mTextReader.readAloud(TextCreator.getNoteTextForReading(listOfSelectedNotes));
         } else {
+            Toast.makeText(getContext(), "Please select some notes", Toast.LENGTH_SHORT).show();
             setSelectionMode(true);
         }
     }

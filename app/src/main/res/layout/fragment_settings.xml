@@ -241,11 +241,13 @@
                 android:layout_marginRight="3dp"
                 android:layout_marginTop="1dp">
 
+                <!--Todo - Hiding it for now, as the working is not working completely-->
                 <LinearLayout
                     android:id="@+id/linear_settings_speech"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
+                    android:visibility="gone"
                     android:padding="15dp">
 
                     <TextView
@@ -298,7 +300,7 @@
                         android:layout_marginTop="5dp"
                         android:ellipsize="end"
                         android:maxLines="1"
-                        android:text="Learn more about app and us"
+                        android:text="Click on the button to logout"
                         android:textSize="14sp"/>
                 </LinearLayout>
 
