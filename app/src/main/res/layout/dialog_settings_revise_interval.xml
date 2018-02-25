@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,60 +11,38 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="18dp"
-        android:textStyle="bold"
-        android:textColor="@android:color/black"
         android:text="Choose revise intervals.."
-        android:textSize="18sp"/>
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        android:textStyle="bold"/>
 
-    <RadioGroup
-        android:id="@+id/radio_group"
+    <LinearLayout
+        android:id="@+id/linear_add_new_category"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="18dp">
 
-        <RadioButton
-            android:id="@+id/radio_custom"
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:srcCompat="@drawable/ic_add_black"/>
+
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:layoutDirection="rtl"
-            android:padding="20dp"
-            android:maxLines="1"
-            android:ellipsize="end"
-            android:text="Custom"
-            android:layout_marginRight="20dp"/>
+            android:layout_marginLeft="10dp"
+            android:text="Add new interval"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            android:textStyle="bold"/>
 
-        <RadioButton
-            android:id="@+id/radio_one"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:layoutDirection="rtl"
-            android:padding="20dp"
-            android:maxLines="1"
-            android:ellipsize="end"
-            android:layout_marginRight="20dp"/>
+    </LinearLayout>
 
-        <RadioButton
-            android:id="@+id/radio_two"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:ellipsize="end"
-            android:layoutDirection="rtl"
-            android:padding="20dp"
-            android:maxLines="1"
-            android:layout_marginRight="20dp"/>
-
-        <RadioButton
-            android:id="@+id/radio_three"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:maxLines="1"
-            android:ellipsize="end"
-            android:layoutDirection="rtl"
-            android:padding="20dp"
-            android:layout_marginRight="20dp"/>
-    </RadioGroup>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/intervals_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>

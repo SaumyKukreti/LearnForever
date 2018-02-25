@@ -35,6 +35,7 @@ import com.saumykukreti.learnforever.util.Utility;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -64,8 +65,7 @@ public class DataInitializerJob extends Job {
         mDataController = NoteDataController.getInstance(mContext);
 
         //Getting id
-        SharedPreferences preference = mContext.getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE, Context.MODE_PRIVATE);
-        intialisePreferenceSettings(preference);
+        intialisePreferenceSettings();
         ActivityCompat.requestPermissions((Activity) mContext, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 111);
 
         //Initialising alarm
@@ -77,8 +77,7 @@ public class DataInitializerJob extends Job {
 
         if(userId!=null && !userId.isEmpty()) {
             //Saving the user id in preference
-            preference.edit().putString(Constants.LEARN_FOREVER_PREFERENCE_USER_ID, userId).apply();
-
+            Utility.saveStringInPreference(mContext,Constants.LEARN_FOREVER_PREFERENCE_USER_ID, userId);
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             DatabaseReference myRef = database.getReference(userId);
             myRef.child("Notes").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -110,13 +109,18 @@ public class DataInitializerJob extends Job {
         }
     }
 
-    private void intialisePreferenceSettings(SharedPreferences preference) {
+    private void intialisePreferenceSettings() {
         //Initialising preference values, by default setting all the fields to true
-        preference.edit().putBoolean(Constants.LEARN_FOREVER_PREFERENCE_TITLE_SETTINGS,true).apply();
-        preference.edit().putBoolean(Constants.LEARN_FOREVER_PREFERENCE_CIS_SETTINGS,true).apply();
-        preference.edit().putBoolean(Constants.LEARN_FOREVER_PREFERENCE_CATEGORY_SETTINGS,true).apply();
-        preference.edit().putInt(Constants.LEARN_FOREVER_PREFERENCE_SPEECH_RATE,10).apply();
-        preference.edit().putString(Constants.LEARN_FOREVER_PREFERENCE_LAST_REVISE_DATE, DateHandler.convertDateToString(new Date())).apply();
+        Utility.saveBooleanInPreference(mContext,Constants.LEARN_FOREVER_PREFERENCE_TITLE_SETTINGS, true);
+        Utility.saveBooleanInPreference(mContext,Constants.LEARN_FOREVER_PREFERENCE_CIS_SETTINGS, true);
+        Utility.saveBooleanInPreference(mContext,Constants.LEARN_FOREVER_PREFERENCE_CATEGORY_SETTINGS, true);
+        Utility.saveIntInPreference(mContext,Constants.LEARN_FOREVER_PREFERENCE_SPEECH_RATE, 10);
+        Utility.saveStringInPreference(mContext,Constants.LEARN_FOREVER_PREFERENCE_LAST_REVISE_DATE, DateHandler.convertDateToString(new Date()));
+        String intervalOne = Arrays.toString(Constants.DAY_INTERVAL_ONE).substring(1,Arrays.toString(Constants.DAY_INTERVAL_ONE).length()-1);
+        String intervalTwo = Arrays.toString(Constants.DAY_INTERVAL_TWO).substring(1,Arrays.toString(Constants.DAY_INTERVAL_TWO).length()-1);
+        String intervalThree = Arrays.toString(Constants.DAY_INTERVAL_THREE).substring(1,Arrays.toString(Constants.DAY_INTERVAL_THREE).length()-1);
+        Utility.saveStringInPreference(mContext,Constants.LEARN_FOREVER_PREFERENCE_LIST_OF_INTERVALS,intervalOne+Constants.INTERVAL_STRING_SEPARATER+
+                        intervalTwo +Constants.INTERVAL_STRING_SEPARATER+intervalThree);
     }
 
 

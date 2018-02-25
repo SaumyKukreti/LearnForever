@@ -26,6 +26,7 @@ import com.saumykukreti.learnforever.LearnForeverApplication;
 import com.saumykukreti.learnforever.R;
 import com.saumykukreti.learnforever.activities.CustomIntervalActivity;
 import com.saumykukreti.learnforever.constants.Constants;
+import com.saumykukreti.learnforever.dialog.IntervalDialog;
 import com.saumykukreti.learnforever.jobs.LogoutJob;
 import com.saumykukreti.learnforever.util.Converter;
 import com.saumykukreti.learnforever.util.TextCreator;
@@ -39,6 +40,7 @@ public class SettingsFragment extends Fragment {
     private int mSpeechRate;
     private TextView mSpeechRateText;
     private int mCurrentSpeechRate;
+    private IntervalDialog mIntervalDialog;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -376,25 +378,6 @@ public class SettingsFragment extends Fragment {
      */
     private void setValues() {
         String currentIntervalPreference = mSharedPreferences.getString(Constants.LEARN_FOREVER_PREFERENCE_CURRENT_INTERVAL,"");
-        int[] currentInterval;
-        switch (currentIntervalPreference){
-            case "1":
-                currentInterval = Constants.DAY_INTERVAL_ONE;
-                break;
-            case "2":
-                currentInterval = Constants.DAY_INTERVAL_TWO;
-                break;
-            case "3":
-                currentInterval = Constants.DAY_INTERVAL_THREE;
-                break;
-            case "custom":
-                currentInterval = Converter.convertStringToIntArray(mSharedPreferences.getString(Constants.LEARN_FOREVER_PREFERENCE_CUSTOM_INTERVAL,""));
-                break;
-            default:
-                currentInterval = Constants.DAY_INTERVAL_ONE;
-                break;
-        }
-
         String currentLayoutPreference = mSharedPreferences.getString(Constants.LEARN_FOREVER_PREFERENCE_LAYOUT_PREFERENCE,"");
         String currentStyle = "Grid";
         switch (currentLayoutPreference){
@@ -414,7 +397,7 @@ public class SettingsFragment extends Fragment {
         TextView currentTime = getView().findViewById(R.id.text_two_notification);
         TextView currentLayoutStyle = getView().findViewById(R.id.text_two_layout_style);
 
-        currentIntervalTV.setText((TextCreator.getIntervalText(currentInterval)));
+        currentIntervalTV.setText(currentIntervalPreference);
         currentLayoutStyle.setText(currentStyle);
 
         String currentFieldsString = TextCreator.getNoteSettingsText(mSharedPreferences.getBoolean(Constants.LEARN_FOREVER_PREFERENCE_TITLE_SETTINGS, false),
@@ -518,76 +501,14 @@ public class SettingsFragment extends Fragment {
      * This method shows a dialog that displays various interval options
      */
     private void showReviseIntervalsDialog() {
-        final Dialog dialog = new Dialog(getContext());
-        dialog.setContentView(R.layout.dialog_settings_revise_interval);
-
-        final RadioButton radioOne = dialog.findViewById(R.id.radio_one);
-        final RadioButton radioTwo = dialog.findViewById(R.id.radio_two);
-        final RadioButton radioThree = dialog.findViewById(R.id.radio_three);
-        final RadioGroup radioGroup = dialog.findViewById(R.id.radio_group);
-
-        //Setting selection based on earlier preferences
-        mSharedPreferences = getContext().getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE, Context.MODE_PRIVATE);
-
-        radioOne.setText(TextCreator.getIntervalText(Constants.DAY_INTERVAL_ONE));
-        radioTwo.setText(TextCreator.getIntervalText(Constants.DAY_INTERVAL_TWO));
-        radioThree.setText(TextCreator.getIntervalText(Constants.DAY_INTERVAL_THREE));
-
-        //Set current choice
-        String currentPreference = mSharedPreferences.getString(Constants.LEARN_FOREVER_PREFERENCE_CURRENT_INTERVAL,"");
-        switch (currentPreference){
-            case "1":
-                radioGroup.check(R.id.radio_one);
-                break;
-            case "2":
-                radioGroup.check(R.id.radio_two);
-                break;
-            case "3":
-                radioGroup.check(R.id.radio_three);
-                break;
-            case "custom":
-                radioGroup.check(R.id.radio_custom);
-                break;
-            default:
-                radioGroup.check(R.id.radio_one);
-                break;
-        }
-
-        //Setting current selection
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (checkedId){
-                    case R.id.radio_one:
-                        mSharedPreferences.edit().putString(Constants.LEARN_FOREVER_PREFERENCE_CURRENT_INTERVAL,"1").apply();
-                        break;
-
-                    case R.id.radio_two:
-                        mSharedPreferences.edit().putString(Constants.LEARN_FOREVER_PREFERENCE_CURRENT_INTERVAL,"2").apply();
-                        break;
-
-                    case R.id.radio_three:
-                        mSharedPreferences.edit().putString(Constants.LEARN_FOREVER_PREFERENCE_CURRENT_INTERVAL,"3").apply();
-                        break;
-
-                    case R.id.radio_custom:
-                        openCustomIntervalActivity();
-                        break;
-                }
-                dialog.dismiss();
-                Toast.makeText(getContext(), "Revise Interval Changed!", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+        mIntervalDialog = new IntervalDialog(getContext());
+        mIntervalDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
                 setValues();
             }
         });
-
-        setParams(dialog);
-        dialog.show();
+        mIntervalDialog.show();
     }
 
     /**
@@ -602,11 +523,6 @@ public class SettingsFragment extends Fragment {
         dialog.onWindowAttributesChanged(params);
     }
 
-    private void openCustomIntervalActivity() {
-        Intent intent = new Intent(getContext(), CustomIntervalActivity.class);
-        startActivityForResult(intent,1020);
-    }
-
     public interface OnSettingsFragmentInteractionListener {
         void updateActionBarForSettingsFragment();
     }
@@ -614,7 +530,7 @@ public class SettingsFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == LIST_CHANGED) {
-            setValues();
+            mIntervalDialog.dataSetChanged();
         }
     }
 

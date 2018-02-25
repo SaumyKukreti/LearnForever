@@ -15,6 +15,7 @@ import com.saumykukreti.learnforever.R;
 import com.saumykukreti.learnforever.constants.Constants;
 import com.saumykukreti.learnforever.fragments.SettingsFragment;
 import com.saumykukreti.learnforever.util.Converter;
+import com.saumykukreti.learnforever.util.Utility;
 
 import java.util.ArrayList;
 
@@ -82,9 +83,23 @@ public class CustomIntervalActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(!mListOfDays.isEmpty()){
                     //If so save the list in preference
-                    SharedPreferences sharedPreferences = getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE, Context.MODE_PRIVATE);
-                    sharedPreferences.edit().putString(Constants.LEARN_FOREVER_PREFERENCE_CURRENT_INTERVAL,"custom").apply();
-                    sharedPreferences.edit().putString(Constants.LEARN_FOREVER_PREFERENCE_CUSTOM_INTERVAL, Converter.convertIntegerListToString(mListOfDays)).apply();
+                    String newInterval = Converter.convertIntegerListToString(mListOfDays);
+                    Utility.saveStringInPreference(CustomIntervalActivity.this, Constants.LEARN_FOREVER_PREFERENCE_CURRENT_INTERVAL, newInterval);
+                    String listOfIntervals = Utility.getStringFromPreference(CustomIntervalActivity.this, Constants.LEARN_FOREVER_PREFERENCE_LIST_OF_INTERVALS);
+
+                    String[] intervals = listOfIntervals.split(Constants.INTERVAL_STRING_SEPARATER);
+                    ArrayList<String> arrayListOfIntervals = new ArrayList<>();
+
+                    for(String interval : intervals){
+                        arrayListOfIntervals.add(interval);
+                    }
+
+                    if(!arrayListOfIntervals.contains(newInterval)){
+                        //Add the new interval in the preference
+                        arrayListOfIntervals.add(newInterval);
+                        String listOfIntervalString = Utility.getIntervalListString(arrayListOfIntervals);
+                        Utility.saveStringInPreference(CustomIntervalActivity.this, Constants.LEARN_FOREVER_PREFERENCE_LIST_OF_INTERVALS, listOfIntervalString);
+                    }
                     setResult(SettingsFragment.LIST_CHANGED);
                 }
                 else{

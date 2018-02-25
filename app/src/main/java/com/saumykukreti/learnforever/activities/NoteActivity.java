@@ -504,7 +504,7 @@ public class NoteActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQ_CODE_SPEECH_INPUT && resultCode == RESULT_OK && data != null) {
             ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-            mNoteContentEdit.setText(result.get(0));
+            mNoteContentEdit.setText(mNoteContentEdit.getText() +" "+ result.get(0));
         }
     }
 }

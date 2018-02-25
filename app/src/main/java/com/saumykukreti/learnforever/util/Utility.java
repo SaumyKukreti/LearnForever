@@ -186,6 +186,7 @@ public class Utility {
     public static void saveStringInPreference(Context context, String key, String value){
         SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE,Context.MODE_PRIVATE);
         sharedPreferences.edit().putString(key,value).apply();
+
     }
 
     public static String getStringFromPreference(Context context, String key){
@@ -300,5 +301,19 @@ public class Utility {
                 return 0;
             }
         }
+    }
+
+    public static String getIntervalListString(ArrayList<String> listOfIntervals){
+        StringBuffer str = new StringBuffer();
+        for(String interval: listOfIntervals){
+            str.append(interval).append(Constants.INTERVAL_STRING_SEPARATER);
+        }
+        if(str.length()>Constants.INTERVAL_STRING_SEPARATER.length()) {
+            return str.substring(0, str.length() - Constants.INTERVAL_STRING_SEPARATER.length());
+        }
+        else{
+            return "";
+        }
+
     }
 }

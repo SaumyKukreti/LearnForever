@@ -456,4 +456,8 @@ private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         this.finish();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        mCurrentFragment.onActivityResult(requestCode,resultCode,data);
+    }
 }

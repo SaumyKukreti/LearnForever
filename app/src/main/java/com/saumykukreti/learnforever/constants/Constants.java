@@ -24,7 +24,6 @@ public class Constants {
     public static final String LEARN_FOREVER_PREFERENCE_SIGN_IN_METHOD = "lf_preference_sign_in_method";
     public static final String LEARN_FOREVER_PREFERENCE_USER_ID = "lf_preference_user_id";
     public static final String LEARN_FOREVER_PREFERENCE_CURRENT_INTERVAL = "lf_preference_current_interval";
-    public static final String LEARN_FOREVER_PREFERENCE_CUSTOM_INTERVAL = "lf_preference_custom_interval";
     public static final String LEARN_FOREVER_PREFERENCE_LAYOUT_PREFERENCE = "lf_preference_layout_style";
     public static final String LEARN_FOREVER_PREFERENCE_SPEECH_IN_BACKGROUND_PREFERENCE = "lf_preference_speech_in_background";
     public static final String LEARN_FOREVER_PREFERENCE_DEFAULT_FILTER = "lf_preference_default_filter";
@@ -42,6 +41,9 @@ public class Constants {
     public static final String LEARN_FOREVER_PREFERENCE_NOTIFICATION_HOUR = "lf_preference_hour";
     public static final String LEARN_FOREVER_PREFERENCE_NOTIFICATION_MINUTE = "lf_preference_minute";
 
+    //Custom intervals
+    public static final String LEARN_FOREVER_PREFERENCE_LIST_OF_INTERVALS = "lf_preference_interval_list";
+
     //Revise date
     public static final String LEARN_FOREVER_PREFERENCE_LAST_REVISE_DATE = "lf_preference_last_revise_date";
 
@@ -52,6 +54,8 @@ public class Constants {
     public static final int[] DAY_INTERVAL_ONE = {1,3,7,14,29, 59, 89, 129,219, 309, 399};
     public static final int[] DAY_INTERVAL_TWO = {1,2,3,5,7,11,15,23,31,47,63,95,127,191,255,383};
     public static final int[] DAY_INTERVAL_THREE = {1,2,4,7,11,16,22,29,37,46,56,67,79,92,106,121};
+
+    public static final String INTERVAL_STRING_SEPARATER = "######";
 
 
     public static final int NOTIFICATION_ALARM_REQUEST_CODE = 1000;

@@ -139,24 +139,7 @@ public class ReminderJob extends Job {
         String reminderDates = "";
 
         String currentIntervalPreference = preference.getString(Constants.LEARN_FOREVER_PREFERENCE_CURRENT_INTERVAL, "");
-
-        //Default
-        int[] currentInterval = Constants.DAY_INTERVAL_ONE;
-
-        if(!currentIntervalPreference.isEmpty()){
-            if(currentIntervalPreference.equalsIgnoreCase("1")){
-                currentInterval =  Constants.DAY_INTERVAL_ONE;
-            }else if(currentIntervalPreference.equalsIgnoreCase("2")){
-                currentInterval =  Constants.DAY_INTERVAL_TWO;
-            }else if(currentIntervalPreference.equalsIgnoreCase("3")){
-                currentInterval =  Constants.DAY_INTERVAL_THREE;
-            }else if(currentIntervalPreference.equalsIgnoreCase("custom")){
-                if(!preference.getString(Constants.LEARN_FOREVER_PREFERENCE_CUSTOM_INTERVAL,"").isEmpty()){
-                    currentInterval = Converter.convertStringToIntArray(
-                            preference.getString(Constants.LEARN_FOREVER_PREFERENCE_CUSTOM_INTERVAL,""));
-                }
-            }
-        }
+        int[] currentInterval = Converter.convertStringToIntArray(currentIntervalPreference);
 
         for(int days : currentInterval){
             Calendar cal = Calendar.getInstance();
