@@ -136,6 +136,7 @@ public class IntervalDialog extends Dialog {
 
     public void dataSetChanged() {
         getDataFromPreference();
+        Toast.makeText(mContext, "Interval Added", Toast.LENGTH_SHORT).show();
         mAdapter.notifyDataSetChanged();
     }
 

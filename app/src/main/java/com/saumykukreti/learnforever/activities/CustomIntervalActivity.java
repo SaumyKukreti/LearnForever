@@ -84,7 +84,6 @@ public class CustomIntervalActivity extends AppCompatActivity {
                 if(!mListOfDays.isEmpty()){
                     //If so save the list in preference
                     String newInterval = Converter.convertIntegerListToString(mListOfDays);
-                    Utility.saveStringInPreference(CustomIntervalActivity.this, Constants.LEARN_FOREVER_PREFERENCE_CURRENT_INTERVAL, newInterval);
                     String listOfIntervals = Utility.getStringFromPreference(CustomIntervalActivity.this, Constants.LEARN_FOREVER_PREFERENCE_LIST_OF_INTERVALS);
 
                     String[] intervals = listOfIntervals.split(Constants.INTERVAL_STRING_SEPARATER);

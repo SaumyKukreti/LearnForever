@@ -13,7 +13,9 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.saumykukreti.learnforever.R;
+import com.saumykukreti.learnforever.constants.Constants;
 import com.saumykukreti.learnforever.dialog.IntervalDialog;
+import com.saumykukreti.learnforever.util.Utility;
 
 import java.util.ArrayList;
 
@@ -27,11 +29,13 @@ public class IntervalDialogRecyclerAdapter extends RecyclerView.Adapter<Interval
     private final Context mContext;
     private final ArrayList<String> mListOfIntervals;
     private final IntervalDialog.intervalDialogListener mListener;
+    private final String mCurrentInterval;
 
     public IntervalDialogRecyclerAdapter(Context context, ArrayList<String> arrayListOfIntervals, IntervalDialog.intervalDialogListener intervalDialogListener) {
         mContext = context;
         mListOfIntervals = arrayListOfIntervals;
         mListener = intervalDialogListener;
+        mCurrentInterval = Utility.getStringFromPreference(context, Constants.LEARN_FOREVER_PREFERENCE_CURRENT_INTERVAL);
     }
 
     @Override
@@ -42,7 +46,8 @@ public class IntervalDialogRecyclerAdapter extends RecyclerView.Adapter<Interval
 
     @Override
     public void onBindViewHolder(final IntervalDialogViewHolder holder, final int position) {
-        holder.intervalText.setText(mListOfIntervals.get(position));
+        String interval = mListOfIntervals.get(position);
+        holder.intervalText.setText(interval);
 
         holder.intervalText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,6 +69,11 @@ public class IntervalDialogRecyclerAdapter extends RecyclerView.Adapter<Interval
                 showDeletionConfirmationDialog(position);
             }
         });
+
+
+        if(mCurrentInterval.equalsIgnoreCase(interval)){
+            holder.radioButton.setChecked(true);
+        }
     }
 
     private void showDeletionConfirmationDialog(final int position) {
@@ -103,4 +113,5 @@ public class IntervalDialogRecyclerAdapter extends RecyclerView.Adapter<Interval
             this.itemView=itemView;
         }
     }
+
 }
