@@ -31,6 +31,7 @@ import com.saumykukreti.learnforever.R;
 import com.saumykukreti.learnforever.constants.Constants;
 import com.saumykukreti.learnforever.dataManager.NoteDataController;
 import com.saumykukreti.learnforever.dialog.IntervalDialog;
+import com.saumykukreti.learnforever.dialog.ReviseDatesDialog;
 import com.saumykukreti.learnforever.modelClasses.dataTables.NoteTable;
 import com.saumykukreti.learnforever.util.DateHandler;
 import com.saumykukreti.learnforever.util.TextCreator;
@@ -383,6 +384,9 @@ public class NoteActivity extends AppCompatActivity {
             case R.id.note_activity_dictate:
                 promptSpeechInput();
                 break;
+            case R.id.note_activity_show_revise_dates:
+                openReviseDatesDialog();
+                break;
 
             case R.id.note_activity_speak:
                 //Checking if the note is currently being read, if so stop the reading else start it
@@ -402,6 +406,14 @@ public class NoteActivity extends AppCompatActivity {
                 return true;
         }
         return true;
+    }
+
+    /**
+     * This method shows the upcoming dates of revision
+     */
+    private void openReviseDatesDialog() {
+        ReviseDatesDialog reviseDatesDialog = new ReviseDatesDialog(this, mNote);
+        reviseDatesDialog.show();
     }
 
     /**
