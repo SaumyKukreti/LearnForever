@@ -60,9 +60,10 @@ public class TextCreator {
      */
     public static String getRandomTip() {
         String[] arrayOfStrings = new String[] {
-                "Tips 1 ",
-                "Tips 2 ",
-                "Tips 3 "
+                "Your brain forgets anything it learns if you do not revise it regularly enough.",
+                "Revise something regularly enough and it will go into your permanent memory.",
+                "Listen to the notes, more the sensors involved in learning the better the learning. ",
+                "Do not listen to notes directly, first try to recall them."
         };
 
         int index = new Random().nextInt(arrayOfStrings.length-1);

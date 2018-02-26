@@ -37,6 +37,7 @@ import com.saumykukreti.learnforever.R;
 import com.saumykukreti.learnforever.constants.Constants;
 import com.saumykukreti.learnforever.events.InitializationCompleteEvent;
 import com.saumykukreti.learnforever.jobs.DataInitializerJob;
+import com.saumykukreti.learnforever.util.TextCreator;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -221,7 +222,8 @@ public class LoginActivity extends Activity {
                 }
             });
         } else if (currentScene == SCENE_TIP) {
-
+            //Setting values in tip layout
+            ((TextView)findViewById(R.id.text_tip)).setText(TextCreator.getRandomTip());
         }
     }
 
