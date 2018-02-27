@@ -11,6 +11,7 @@ import com.saumykukreti.learnforever.jobs.ReminderJob;
 import com.saumykukreti.learnforever.modelClasses.dataTables.NoteTable;
 import com.saumykukreti.learnforever.util.AppDatabase;
 import com.saumykukreti.learnforever.util.Converter;
+import com.saumykukreti.learnforever.util.Utility;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -22,12 +23,11 @@ import java.util.Set;
  */
 public class NoteDataController {
 
-    static NoteDataController mDataController = null;
+    static NoteDataController mNoteDataController = null;
     private final AppDatabase mDatabase;
     private final Context mContext;
 
     private NoteDataController(Context context) {
-        //TODO - REMOVE ALLOW MAIN THREAD QUERIES
         mContext = context;
         mDatabase = Room.databaseBuilder(context,
                 AppDatabase.class, "learn_forever").allowMainThreadQueries().build();
@@ -38,11 +38,11 @@ public class NoteDataController {
     }
 
     public static NoteDataController getInstance(Context context) {
-        if (mDataController == null) {
-            mDataController = new NoteDataController(context);
-            return mDataController;
+        if (mNoteDataController == null) {
+            mNoteDataController = new NoteDataController(context);
+            return mNoteDataController;
         } else {
-            return mDataController;
+            return mNoteDataController;
         }
     }
 
@@ -116,8 +116,6 @@ public class NoteDataController {
      */
     public boolean newNote(String category, String noteTitle, String contentInShort, String content, String timeStamp, boolean learn) {
         //Validate data
-
-
         if(category==null || noteTitle == null || contentInShort == null || content == null || timeStamp == null){
             return false;
         }
@@ -155,8 +153,8 @@ public class NoteDataController {
             listName = Constants.LEARN_FOREVER_PREFERENCE_SYNC_PENDING_NOTE_IDS;
         }
 
-        SharedPreferences preference = mContext.getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE, Context.MODE_PRIVATE);
-        Set<String> setOfNoteIds = preference.getStringSet(listName, null);
+        SharedPreferences preferences = Utility.getPreference(mContext);
+        Set<String> setOfNoteIds = preferences.getStringSet(listName, null);
 
         if (setOfNoteIds == null) {
             setOfNoteIds = new HashSet<String>();
@@ -165,62 +163,29 @@ public class NoteDataController {
             setOfNoteIds.add(String.valueOf(noteId));
         }
 
-        preference.edit().putStringSet(listName, setOfNoteIds).apply();
+        preferences.edit().putStringSet(listName, setOfNoteIds).apply();
     }
 
     public boolean updateNote(NoteTable noteTable) {
-        mDatabase.noteDao().updateNote(noteTable);
-        saveToSyncQueue(noteTable.getId(), false);
-        if (noteTable.isLearn()) {
-            LearnForeverApplication.getInstance().getJobManager().addJobInBackground(new ReminderJob(mContext, noteTable.getId(), null, null));
-        } else {
-            LearnForeverApplication.getInstance().getJobManager().addJobInBackground(new DeleteReminderJob(mContext, noteTable,false, null));
+        //Checking if the learn boolean has changed from previous value or not if so starting respective job
+        List<NoteTable> previousNote = mDatabase.noteDao().getNoteWithId(noteTable.getId());
+        if(previousNote.get(0).isLearn()!=noteTable.isLearn()){
+            if (noteTable.isLearn()) {
+                LearnForeverApplication.getInstance().getJobManager().addJobInBackground(new ReminderJob(mContext, noteTable.getId(), null, null));
+            } else {
+                LearnForeverApplication.getInstance().getJobManager().addJobInBackground(new DeleteReminderJob(mContext, noteTable,false, null));
+            }
         }
 
+        //Updating the note in database
+        mDatabase.noteDao().updateNote(noteTable);
+        saveToSyncQueue(noteTable.getId(), false);
         return true;
     }
 
-    public void updateNoteInDatabseOnly(NoteTable noteTable) {
+    public void updateNoteFromDatabase(NoteTable noteTable) {
         mDatabase.noteDao().updateNote(noteTable);
         saveToSyncQueue(noteTable.getId(), false);
-    }
-
-    public boolean updateNote(long noteId, String category, String noteTitle, String contentInShort, String content, String timeStamp, boolean learn) {
-        //Validate mandatory fields
-        if (category == null || category.equalsIgnoreCase("") ||
-                noteTitle == null || noteTitle.equalsIgnoreCase("") ||
-                contentInShort == null || contentInShort.equalsIgnoreCase("") ||
-                content == null || content.equalsIgnoreCase("")) {
-            //A mandatory field is null/blank, note cannot be added
-            return false;
-        }
-
-        NoteTable note;
-
-        //Check if noteid exists
-        List<NoteTable> listOfNotes = getNoteWithId(noteId);
-        if (listOfNotes.size() == 0) {
-            return false;
-        } else {
-            note = listOfNotes.get(0);
-        }
-
-        note.setCategory(category);
-        note.setTitle(noteTitle);
-        note.setContentInShort(contentInShort);
-        note.setContent(content);
-        note.setDateOfCreation(timeStamp);
-        note.setLearn(learn);
-
-        mDatabase.noteDao().updateNote(note);
-        saveToSyncQueue(note.getId(), false);
-        if (note.isLearn()) {
-            LearnForeverApplication.getInstance().getJobManager().addJobInBackground(new ReminderJob(mContext, note.getId(),null, null));
-        } else {
-            LearnForeverApplication.getInstance().getJobManager().addJobInBackground(new DeleteReminderJob(mContext, note,false, null));
-        }
-
-        return true;
     }
 
     /**

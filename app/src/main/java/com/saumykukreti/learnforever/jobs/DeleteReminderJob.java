@@ -1,17 +1,13 @@
 package com.saumykukreti.learnforever.jobs;
 
-import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.birbit.android.jobqueue.Job;
 import com.birbit.android.jobqueue.Params;
 import com.birbit.android.jobqueue.RetryConstraint;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.saumykukreti.learnforever.constants.Constants;
@@ -19,15 +15,10 @@ import com.saumykukreti.learnforever.dataManager.NoteDataController;
 import com.saumykukreti.learnforever.dataManager.ReminderDataController;
 import com.saumykukreti.learnforever.modelClasses.dataTables.NoteTable;
 import com.saumykukreti.learnforever.modelClasses.dataTables.ReminderTable;
-import com.saumykukreti.learnforever.util.AppDatabase;
 import com.saumykukreti.learnforever.util.Converter;
-import com.saumykukreti.learnforever.util.DateHandler;
 import com.saumykukreti.learnforever.util.Utility;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -89,34 +80,23 @@ public class DeleteReminderJob extends Job {
                     mNoteDataController.deleteNoteFromDatabase(note);
                 }
             }
-
-            //Check if network is available, sync the reminders list
-            if (Utility.isNetworkAvailable(mContext)) {
-                //Network available
-                syncReminderDataToFirebase();
-            }
-
         } else {
-
             //The note needs to be deleted
             if (mNote.isLearn()) {
                 deleteNoteWithLearningOn(mNote);
-
-                //Check if network is available, sync the reminders list
-                if (Utility.isNetworkAvailable(mContext)) {
-                    //Network available
-                    syncReminderDataToFirebase();
-                }
             } else {
                 if(mDeleteNote) {
+                    //Directly delete the note
                     mNoteDataController.deleteNoteFromDatabase(mNote);
                 }
-                //Else do nothing, this may arise when trying to save a note
+                else{
+                    //Delete reminder data first then and update the note
+                    deleteNoteWithLearningOn(mNote);
+                }
             }
 
         }
     }
-
     /**
      * This method deletes a note which has learning mode on
      *
@@ -174,7 +154,7 @@ public class DeleteReminderJob extends Job {
             } else {
                 //Saving nothing
                 note.setReminderDates("");
-                mNoteDataController.updateNoteInDatabseOnly(note);
+                mNoteDataController.updateNoteFromDatabase(note);
             }
         }
     }
@@ -213,20 +193,6 @@ public class DeleteReminderJob extends Job {
             }
         }
     }
-
-
-    void syncReminderDataToFirebase() {
-        if(Utility.isNetworkAvailable(mContext)) {
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference myRef = database.getReference(mUserId);
-
-            SharedPreferences preference = mContext.getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE, Context.MODE_PRIVATE);
-            String savedNoteString = preference.getString(Constants.LEARN_FOREVER_PREFERENCE_SAVED_NOTES_LIST, "");
-
-            myRef.child("Reminders").setValue(savedNoteString);
-        }
-    }
-
 
     @Override
     protected void onCancel(int cancelReason, @Nullable Throwable throwable) {

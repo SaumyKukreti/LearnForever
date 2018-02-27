@@ -13,7 +13,6 @@ import android.os.Build;
 import android.os.Environment;
 import android.util.Log;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,7 +29,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
@@ -183,35 +181,32 @@ public class Utility {
         return mediaFile;
     }
 
-    public static void saveStringInPreference(Context context, String key, String value){
-        SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE,Context.MODE_PRIVATE);
-        sharedPreferences.edit().putString(key,value).apply();
+    public static SharedPreferences getPreference(Context context){
+        return context.getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE,Context.MODE_PRIVATE);
+    }
 
+    public static void saveStringInPreference(Context context, String key, String value){
+        getPreference(context).edit().putString(key,value).apply();
     }
 
     public static String getStringFromPreference(Context context, String key){
-        SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE,Context.MODE_PRIVATE);
-        return sharedPreferences.getString(key,"");
+        return getPreference(context).getString(key,"");
     }
 
     public static void saveBooleanInPreference(Context context, String key, boolean value){
-        SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE,Context.MODE_PRIVATE);
-        sharedPreferences.edit().putBoolean(key,value).apply();
+        getPreference(context).edit().putBoolean(key,value).apply();
     }
 
     public static boolean getBooleanFromPreference(Context context, String key){
-        SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE,Context.MODE_PRIVATE);
-        return sharedPreferences.getBoolean(key,false);
+        return getPreference(context).getBoolean(key,false);
     }
 
     public static void saveIntInPreference(Context context, String key, int value){
-        SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE,Context.MODE_PRIVATE);
-        sharedPreferences.edit().putInt(key,value).apply();
+        getPreference(context).edit().putInt(key,value).apply();
     }
 
     public static int getIntFromPreference(Context context, String key){
-        SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE,Context.MODE_PRIVATE);
-        return sharedPreferences.getInt(key,-1);
+        return getPreference(context).getInt(key,-1);
     }
 
     /**

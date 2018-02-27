@@ -9,8 +9,6 @@ import android.util.Log;
 import com.birbit.android.jobqueue.Job;
 import com.birbit.android.jobqueue.Params;
 import com.birbit.android.jobqueue.RetryConstraint;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.saumykukreti.learnforever.constants.Constants;
@@ -56,12 +54,14 @@ public class ReminderJob extends Job {
         mContext = context;
         mNoteId = noteId;
         mDateOfCreation = dateOfCreation;
+        mPreference = Utility.getPreference(context);
     }
 
     public ReminderJob(Context context, List<NoteTable> listOfNotes, Params params) {
         super(new Params(PRIORITY).requireNetwork());
         mContext = context;
         mListOfNotes = listOfNotes;
+        mPreference = Utility.getPreference(context);
     }
 
     @Override
@@ -94,10 +94,7 @@ public class ReminderJob extends Job {
      *  This method saves the noteId in the ReminderTable, at frequent intervals
      */
     public void saveNoteIdInReminderTable() {
-        mPreference = mContext.getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE, Context.MODE_PRIVATE);
-        SharedPreferences preference = mContext.getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE, Context.MODE_PRIVATE);
-        String savedNoteString = preference.getString(Constants.LEARN_FOREVER_PREFERENCE_SAVED_NOTES_LIST, "");
-
+        String savedNoteString = mPreference.getString(Constants.LEARN_FOREVER_PREFERENCE_SAVED_NOTES_LIST, "");
         mUserId = mPreference.getString(Constants.LEARN_FOREVER_PREFERENCE_USER_ID, "");
 
         if(!mUserId.isEmpty()) {
@@ -121,12 +118,11 @@ public class ReminderJob extends Job {
 
     private void saveNoteIdInPreferenceAndUpdateReminderTable(long noteId, String savedNoteString) {
         //Saving data in preference
-        SharedPreferences preference = mContext.getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE, Context.MODE_PRIVATE);
         if(savedNoteString.isEmpty()){
-            preference.edit().putString(Constants.LEARN_FOREVER_PREFERENCE_SAVED_NOTES_LIST, String.valueOf(noteId)).apply();
+            mPreference.edit().putString(Constants.LEARN_FOREVER_PREFERENCE_SAVED_NOTES_LIST, String.valueOf(noteId)).apply();
         }
         else{
-            preference.edit().putString(Constants.LEARN_FOREVER_PREFERENCE_SAVED_NOTES_LIST, savedNoteString+","+noteId).apply();
+            mPreference.edit().putString(Constants.LEARN_FOREVER_PREFERENCE_SAVED_NOTES_LIST, savedNoteString+","+noteId).apply();
         }
         Date currentDate;
         if(mDateOfCreation!=null){
@@ -138,7 +134,7 @@ public class ReminderJob extends Job {
 
         String reminderDates = "";
 
-        String currentIntervalPreference = preference.getString(Constants.LEARN_FOREVER_PREFERENCE_CURRENT_INTERVAL, "");
+        String currentIntervalPreference = mPreference.getString(Constants.LEARN_FOREVER_PREFERENCE_CURRENT_INTERVAL, "");
         int[] currentInterval = Converter.convertStringToIntArray(currentIntervalPreference);
 
         for(int days : currentInterval){
@@ -172,7 +168,6 @@ public class ReminderJob extends Job {
         }
 
         saveReminderDatesToNote(noteId, reminderDates);
-        syncReminderDataToFirebase();
     }
 
     private void saveReminderDatesToNote(long noteId, String reminderDates) {
@@ -182,22 +177,9 @@ public class ReminderJob extends Job {
             NoteTable noteTable = listOfNotes.get(0);
 
             noteTable.setReminderDates(reminderDates);
-            mNoteDataController.updateNoteInDatabseOnly(noteTable);
+            mNoteDataController.updateNoteFromDatabase(noteTable);
         }
     }
-
-    void syncReminderDataToFirebase(){
-        if(Utility.isNetworkAvailable(mContext)) {
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference myRef = database.getReference(mUserId);
-
-            SharedPreferences preference = mContext.getSharedPreferences(Constants.LEARN_FOREVER_PREFERENCE, Context.MODE_PRIVATE);
-            String savedNoteString = preference.getString(Constants.LEARN_FOREVER_PREFERENCE_SAVED_NOTES_LIST, "");
-
-            myRef.child("Reminders").setValue(savedNoteString);
-        }
-    }
-
 
     @Override
     protected void onCancel(int cancelReason, @Nullable Throwable throwable) {

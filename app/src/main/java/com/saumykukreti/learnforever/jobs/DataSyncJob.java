@@ -38,7 +38,6 @@ public class DataSyncJob extends Job {
     public DataSyncJob(Context context, Params params) {
         super(new Params(PRIORITY).requireNetwork());
         mContext = context;
-
     }
 
     @Override
@@ -58,9 +57,17 @@ public class DataSyncJob extends Job {
 
             syncNotes(setOfNoteIds, false);
             syncNotes(setOfNoteIdsToDelete, true);
+            syncReminderDataToFirebase();
         } else {
             Log.e(TAG, "User id is empty / Network not available");
         }
+    }
+
+    private void syncReminderDataToFirebase() {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference(mUserId);
+        String savedNoteString = mPreference.getString(Constants.LEARN_FOREVER_PREFERENCE_SAVED_NOTES_LIST, "");
+        myRef.child("Reminders").setValue(savedNoteString);
     }
 
     private void syncNotes(Set<String> setOfNoteIds, boolean toDelete) {

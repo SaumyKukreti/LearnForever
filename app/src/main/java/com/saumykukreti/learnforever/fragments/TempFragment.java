@@ -147,26 +147,6 @@ public class TempFragment extends Fragment {
             }
         });
 
-        update.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if (datacontroller.updateNote(Long.parseLong(noteToUpdate.getText().toString()),
-                        categoryedit.getText().toString(),
-                        titleedit.getText().toString(),
-                        contentinshort.getText().toString(),
-                        content.getText().toString(),
-                        "timestamp",
-                        true)) {
-                    Toast.makeText(getContext(), "Note Updated", Toast.LENGTH_SHORT).show();
-
-                } else {
-                    Toast.makeText(getContext(), "Note note updated", Toast.LENGTH_SHORT).show();
-
-                }
-            }
-        });
-
         categories.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
