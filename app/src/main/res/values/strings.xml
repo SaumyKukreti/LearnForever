@@ -12,19 +12,38 @@
     <string name="navigation_drawer_menu_item_settings">Settings</string>
 
     <!--Help strings-->
-    <string name="help_string_note_activity">Please use this screen to add a note or to edit a new note.\n\n
-        Please use the switch button to learn this note. T
-        is on will save reminders on particular intervals. These frequent revise intervals help you to learn something forever. You can also change this interval setting from the settings page. \n\nPlease use the voice button on the top right corner to dictate your note\n\n</string>
-    <string name="help_string_home">The is the home of all the notes. Use this place to see, edit annd delete the notes. \n\n
-        Use the plus button given in the bottom right corner to create a new note. \n\n
-                            Use the buttons delete and volume button to delete and speak out notes respectively.
-                            In order to use these functions either first click on the icons to activate selection mode or long press on the notes.
-                            Now just select all the notes you want the action to be performed. Then just click on the action to complete the action.\n\n
-                            Use the option menu (Three dots in the top rights corner) to open search and send notes.\n\n</string>
+    <string name="help_string_note_activity">This is the create/view note activity.\n\nUse this screen to add a new note or edit an existing note.\n\nUse the switch button to learn this note.Turning this on will set reminders on preset intervals.These frequent revise intervals help you to learn something forever.\n\nYou can also change this interval setting from the settings page. \n\nFunctions:\n\nWhile creating a note:\n\n
+1. Tap on the mic button on the top right corner to dictate your note\n
+2. Tap on show all views to show all the views (title, content in short, category, content)\n
+3. Tap on the change interval button to change the intervals you want the note to be reminded on.\n\n
+        While viewing a note:\n\n
+        1. Tap on the volume button to start reading the note.\n
+        2. Tap on the delete button to delete the note.\n
+        3. Tap on show all views to show all the views (title, content in short, category, content)\n
+        4. Tap on Upcoming revise dates to show all the upcoming reminder dates in MM/DD/YY \n\n
+    </string>
+
+    <string name="help_string_home">This is the home screen, here you will find all the notes that you create.\n\n
+Use this place to see, edit and delete the notes. \n\n
+Use the plus button given in the bottom right corner to create a new note. \n\n
+Functions:\n\n
+1. Use the delete button to delete the note.\n
+2. Use the volume button to read out notes. \n
+3. Use the search button to open search.\n
+4. Use the send note to send notes to other applications.\n
+5. Use the revise button to revise the selected notes.\n
+6. Use the sort notes to sort notes in different order.\n
+7. Use the settings button to open settings.\n
+8. Use the cancel button to cancel selection mode.\n\n
+
+Please note:\n
+In order to use these functions either first click on the icons to activate selection mode or long press on the notes.
+Now just select all the notes you want the action to be performed. Then just click on the action to complete the action.\n\n
+</string>
     <string name="help_string_categories">This section shows a list of categories. \n\n Press on a category to see the notes only for that category. \n\n Long click on an item to start revising all the notes of that category.\n</string>
     <string name="help_string_revise">This section shows the notes that are due to be revised by you. \n\n All the notes that are not revised since you revised are shown in this section.\n\n Please select any note to start revising.</string>
-    <string name="help_string_settings">This app allows for the following settings to change \n\n 1. Revise Intervals - Click this to change the frequency with which you wnt the notes to be revised. \n\n 2. New Note settings - Click this setting to change the sections you want to see while creating a new note. \n\n 3. Notification time - Click on this setting to change the time you want to be notified to revise notes.
-        \n\n 4. Reading speed - Click on this settings to change the rate of speech for the whole app. \n\n 5. Layout style - Click on this setting to change how the notes are presented in the home fragment \n\n 6. Log out - Click this setting to log out and clear all data from this device. </string>
-    <string name="about_us">About us \n\n </string>
+    <string name="help_string_settings">This app allows for the following settings to be changed \n\n 1. Revise Intervals - Click this to change the frequency with which you wnt the notes to be revised. \n\n 2. New Note settings - Click this setting to change the sections you want to see while creating a new note. \n\n 3. Notification time - Click on this setting to change the time you want to be notified to revise notes.
+        \n\n 4. Reading speed - Click on this settings to change the rate of speech for the whole app. \n\n 5. Layout style - Click on this setting to change how the notes are presented in the home fragment \n\n 6. Click on the give feedback setting to give feedback.\n\n 7. Log out - Click this setting to log out and clear all data from this device.\n\n </string>
+    <string name="about_us">This application is designed with the sole purpose of learning new things easier. \n\nBy constantly revising a particular note in certain intervals, we transfer the memory from short term memory to long term memory. \n\nThis app also has Text to speech integrated into it. According to us, the more are the source of inputs while we are learning, the better we learn. </string>
 
 </resources>

@@ -12,7 +12,7 @@
         android:padding="18dp"
         android:textStyle="bold"
         android:textColor="@android:color/black"
-        android:text="About us"
+        android:text="About"
         android:textSize="18sp"/>
 
 

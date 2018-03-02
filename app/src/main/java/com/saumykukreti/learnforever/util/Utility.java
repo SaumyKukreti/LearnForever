@@ -87,6 +87,7 @@ public class Utility {
             Calendar currentCalendarDate = Calendar.getInstance();
             lastRevisedCalendarDate.setTime(DateHandler.convertStringToDate(lastRevisedDateString));
 
+            //TODO - CHANGE THIS LOGIC, AS THIS WILL FAIL FOR NEW YEAR CASE
             if(lastRevisedCalendarDate.get(Calendar.DAY_OF_YEAR) >= currentCalendarDate.get(Calendar.DAY_OF_YEAR)){
                 //This means the notes were revised today, hence showing reminders for today only
                 ReminderTable notes = ReminderDataController.getInstance(context).getNotesForDate(new Date());
