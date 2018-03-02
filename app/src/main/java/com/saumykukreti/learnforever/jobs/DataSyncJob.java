@@ -127,7 +127,6 @@ public class DataSyncJob extends Job {
         }
     }
 
-
     @Override
     protected void onCancel(int cancelReason, @Nullable Throwable throwable) {
     }

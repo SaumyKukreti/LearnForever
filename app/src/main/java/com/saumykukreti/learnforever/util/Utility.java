@@ -98,7 +98,7 @@ public class Utility {
                 }
             }
 
-            while (lastRevisedCalendarDate.get(Calendar.DATE) < currentCalendarDate.get(Calendar.DATE)){
+            while (lastRevisedCalendarDate.get(Calendar.DAY_OF_YEAR) < currentCalendarDate.get(Calendar.DAY_OF_YEAR)){
                 lastRevisedCalendarDate.add(Calendar.DATE, 1);
                 ReminderTable notes = ReminderDataController.getInstance(context).getNotesForDate(lastRevisedCalendarDate.getTime());
                 if(notes!=null && notes.getNoteIds()!=null && !notes.getNoteIds().isEmpty()) {

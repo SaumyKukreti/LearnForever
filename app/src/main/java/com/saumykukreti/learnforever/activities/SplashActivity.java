@@ -22,6 +22,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.saumykukreti.learnforever.R;
 import com.saumykukreti.learnforever.constants.Constants;
+import com.saumykukreti.learnforever.util.Utility;
 
 public class SplashActivity extends Activity implements GoogleApiClient.ConnectionCallbacks{
 
@@ -56,6 +57,8 @@ public class SplashActivity extends Activity implements GoogleApiClient.Connecti
                 SplashActivity.this.finish();
             }
         }, 500);
+        //Meanwhile reset the notification
+        Utility.setNotification(this);
     }
 
     @Override
