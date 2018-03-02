@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/home_delete"
-        android:orderInCategory="100"
+        android:orderInCategory="1"
         android:title="Delete Note"
         android:icon="@drawable/ic_delete_white"
         app:showAsAction="always"/>
@@ -12,48 +12,48 @@
 
     <item
         android:id="@+id/home_read"
-        android:orderInCategory="100"
+        android:orderInCategory="2"
         android:title="Read out"
         android:icon="@drawable/ic_speak_white"
         app:showAsAction="always"/>
 
     <item
         android:id="@+id/home_search"
-        android:orderInCategory="100"
+        android:orderInCategory="3"
         android:title="Search"
         android:icon="@drawable/ic_search_white"
         app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/home_send"
-        android:orderInCategory="100"
+        android:orderInCategory="4"
         android:title="Send Note"
         app:showAsAction="never"/>
     <item
         android:id="@+id/home_revise"
-        android:orderInCategory="100"
+        android:orderInCategory="5"
         android:title="Revise"
         app:showAsAction="never"/>
     <item
         android:id="@+id/home_filter"
-        android:orderInCategory="100"
+        android:orderInCategory="6"
         android:title="Sort Notes"
         app:showAsAction="never"/>
 
     <item
         android:id="@+id/action_settings"
-        android:orderInCategory="100"
+        android:orderInCategory="7"
         android:title="Settings"
         app:showAsAction="never"/>
 
     <item
         android:id="@+id/action_help"
-        android:orderInCategory="100"
+        android:orderInCategory="8"
         android:title="Help"
         app:showAsAction="never"/>
 
     <item
         android:id="@+id/home_cancel"
-        android:orderInCategory="100"
+        android:orderInCategory="9"
         android:title="Cancel"
         android:visible="true"
         app:showAsAction="never"/>
