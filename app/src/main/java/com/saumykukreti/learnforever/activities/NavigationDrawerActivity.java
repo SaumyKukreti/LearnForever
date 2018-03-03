@@ -24,7 +24,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.saumykukreti.learnforever.R;
@@ -34,6 +33,7 @@ import com.saumykukreti.learnforever.fragments.HomeFragment;
 import com.saumykukreti.learnforever.fragments.ReviseFragment;
 import com.saumykukreti.learnforever.fragments.SettingsFragment;
 import com.saumykukreti.learnforever.util.Utility;
+import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -210,53 +210,14 @@ public class NavigationDrawerActivity extends AppCompatActivity
         if (user != null) {
             TextView nameTV = mNavigationView.getHeaderView(0).findViewById(R.id.tv_name);
             TextView emailTV = mNavigationView.getHeaderView(0).findViewById(R.id.tv_email);
-            final ImageView profileIM = mNavigationView.getHeaderView(0).findViewById(R.id.imageView_profile);
+            ImageView profileIM = mNavigationView.getHeaderView(0).findViewById(R.id.imageView_profile);
 
             nameTV.setText(user.getDisplayName());
             emailTV.setText(user.getEmail());
 
-            //Applying saved profile picture (if any till a new one is loaded from internet)
-            String str = Utility.getStringFromPreference(this,"profileImagePath");
-            if(str.length()>0 && !str.equalsIgnoreCase("unsuccessful")) {
-                Bitmap bit = BitmapFactory.decodeFile(str);
-                profileIM.setImageBitmap(bit);
-            }else{
-                //Apply default image
-                profileIM.setImageDrawable(getResources().getDrawable(R.drawable.learn_forever));
-            }
-
-            if (user.getPhotoUrl() != null && Utility.isNetworkAvailable(this)) {
-                new DownloadImageTask(profileIM).execute(user.getPhotoUrl().toString());
-            }
+            Picasso.with(this).load(user.getPhotoUrl()).into(profileIM);
         }
     }
-
-private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-    ImageView profileImage;
-
-    public DownloadImageTask(ImageView bmImage) {
-        this.profileImage = bmImage;
-    }
-
-    protected Bitmap doInBackground(String... urls) {
-        String urldisplay = urls[0];
-        Bitmap mIcon11 = null;
-        try {
-            InputStream in = new java.net.URL(urldisplay).openStream();
-            mIcon11 = BitmapFactory.decodeStream(in);
-        } catch (Exception e) {
-            Log.e("Error", e.getMessage());
-            e.printStackTrace();
-        }
-        return mIcon11;
-    }
-
-    protected void onPostExecute(Bitmap result) {
-        //Saving bitmap to file
-        profileImage.setImageBitmap(result);
-        Utility.saveStringInPreference(NavigationDrawerActivity.this,"profileImagePath",Utility.saveImage(NavigationDrawerActivity.this, result));
-    }
-}
 
 
     /**

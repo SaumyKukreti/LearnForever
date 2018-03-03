@@ -66,7 +66,6 @@ public class DataInitializerJob extends Job {
 
         //Getting id
         intialisePreferenceSettings();
-        ActivityCompat.requestPermissions((Activity) mContext, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 111);
 
         //Initialising alarm
         Utility.setNotification(mContext);
