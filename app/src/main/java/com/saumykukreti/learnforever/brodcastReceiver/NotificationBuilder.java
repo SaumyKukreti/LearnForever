@@ -11,11 +11,8 @@ import android.util.Log;
 import com.saumykukreti.learnforever.R;
 import com.saumykukreti.learnforever.activities.ReviseActivity;
 import com.saumykukreti.learnforever.constants.Constants;
-import com.saumykukreti.learnforever.dataManager.ReminderDataController;
-import com.saumykukreti.learnforever.modelClasses.dataTables.ReminderTable;
 import com.saumykukreti.learnforever.util.Utility;
 
-import java.util.Date;
 import java.util.List;
 
 /**

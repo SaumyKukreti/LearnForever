@@ -1,7 +1,5 @@
 package com.saumykukreti.learnforever.constants;
 
-import java.util.ArrayList;
-
 /**
  * Created by saumy on 12/16/2017.
  */

@@ -12,7 +12,7 @@ import com.saumykukreti.learnforever.modelClasses.dataTables.ReminderTable;
  * Created by saumy on 12/8/2017.
  */
 
-@Database(entities = {NoteTable.class, ReminderTable.class}, version = 1)
+@Database(entities = {NoteTable.class, ReminderTable.class}, version = 1, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
     public abstract NoteDao noteDao();
     public abstract ReminderDao reminderDao();

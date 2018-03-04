@@ -2,15 +2,8 @@ package com.saumykukreti.learnforever.activities;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Handler;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.transition.Fade;
-import android.transition.Scene;
-import android.transition.Transition;
-import android.transition.TransitionManager;
-import android.util.Log;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;

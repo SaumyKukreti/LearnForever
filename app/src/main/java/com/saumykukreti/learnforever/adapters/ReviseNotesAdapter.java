@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.saumykukreti.learnforever.R;
-import com.saumykukreti.learnforever.activities.NoteActivity;
 import com.saumykukreti.learnforever.activities.ReviseActivity;
 import com.saumykukreti.learnforever.modelClasses.dataTables.NoteTable;
 

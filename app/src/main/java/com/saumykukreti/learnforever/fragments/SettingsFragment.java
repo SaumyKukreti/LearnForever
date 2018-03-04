@@ -24,11 +24,9 @@ import android.widget.Toast;
 
 import com.saumykukreti.learnforever.LearnForeverApplication;
 import com.saumykukreti.learnforever.R;
-import com.saumykukreti.learnforever.activities.CustomIntervalActivity;
 import com.saumykukreti.learnforever.constants.Constants;
 import com.saumykukreti.learnforever.dialog.IntervalDialog;
 import com.saumykukreti.learnforever.jobs.LogoutJob;
-import com.saumykukreti.learnforever.util.Converter;
 import com.saumykukreti.learnforever.util.TextCreator;
 import com.saumykukreti.learnforever.util.Utility;
 

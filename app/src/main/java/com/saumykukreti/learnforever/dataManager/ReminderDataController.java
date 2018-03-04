@@ -2,16 +2,11 @@ package com.saumykukreti.learnforever.dataManager;
 
 import android.arch.persistence.room.Room;
 import android.content.Context;
-import android.content.SharedPreferences;
 
-import com.saumykukreti.learnforever.constants.Constants;
 import com.saumykukreti.learnforever.modelClasses.dataTables.ReminderTable;
 import com.saumykukreti.learnforever.util.AppDatabase;
 import com.saumykukreti.learnforever.util.DateHandler;
 
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 

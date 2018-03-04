@@ -2,20 +2,17 @@ package com.saumykukreti.learnforever.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
-import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.saumykukreti.learnforever.R;
 import com.saumykukreti.learnforever.activities.CategoryActivity;
 import com.saumykukreti.learnforever.activities.ReviseActivity;
 import com.saumykukreti.learnforever.dataManager.NoteDataController;
-import com.saumykukreti.learnforever.modelClasses.dataTables.NoteTable;
 
 import java.util.ArrayList;
 import java.util.List;

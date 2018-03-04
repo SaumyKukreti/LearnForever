@@ -1,22 +1,14 @@
 
 package com.saumykukreti.learnforever.jobs;
 
-import android.Manifest;
-import android.app.Activity;
-import android.app.job.JobScheduler;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.util.Log;
 
 import com.birbit.android.jobqueue.Job;
-import com.birbit.android.jobqueue.JobManager;
 import com.birbit.android.jobqueue.Params;
 import com.birbit.android.jobqueue.RetryConstraint;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -28,7 +20,6 @@ import com.saumykukreti.learnforever.constants.Constants;
 import com.saumykukreti.learnforever.dataManager.NoteDataController;
 import com.saumykukreti.learnforever.events.InitializationCompleteEvent;
 import com.saumykukreti.learnforever.modelClasses.dataTables.NoteTable;
-import com.saumykukreti.learnforever.util.Converter;
 import com.saumykukreti.learnforever.util.DateHandler;
 import com.saumykukreti.learnforever.util.Utility;
 

@@ -19,3 +19,15 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+# For view pager
+-dontwarn com.viewpagerindicator.**
+
+#For picasso
+-dontwarn com.squareup.okhttp.**
+
+# Add this global rule
+-keepattributes Signature
+
+-keepclassmembers class com.saumykukreti.learnforever.modelClasses.dataTables.** {
+  *;
+}

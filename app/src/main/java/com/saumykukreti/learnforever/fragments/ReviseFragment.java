@@ -14,13 +14,9 @@ import android.view.ViewGroup;
 import com.saumykukreti.learnforever.R;
 import com.saumykukreti.learnforever.adapters.ReviseNotesAdapter;
 import com.saumykukreti.learnforever.dataManager.NoteDataController;
-import com.saumykukreti.learnforever.dataManager.ReminderDataController;
 import com.saumykukreti.learnforever.modelClasses.dataTables.NoteTable;
-import com.saumykukreti.learnforever.modelClasses.dataTables.ReminderTable;
-import com.saumykukreti.learnforever.util.Converter;
 import com.saumykukreti.learnforever.util.Utility;
 
-import java.util.Date;
 import java.util.List;
 
 public class ReviseFragment extends Fragment {

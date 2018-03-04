@@ -1,10 +1,8 @@
 package com.saumykukreti.learnforever.fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,17 +13,11 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ListView;
 
 import com.saumykukreti.learnforever.R;
-import com.saumykukreti.learnforever.activities.CategoryActivity;
-import com.saumykukreti.learnforever.activities.ReviseActivity;
 import com.saumykukreti.learnforever.adapters.CategoriesFragmentRecyclerViewAdapter;
 import com.saumykukreti.learnforever.dataManager.NoteDataController;
-import com.saumykukreti.learnforever.modelClasses.dataTables.NoteTable;
 import com.saumykukreti.learnforever.util.Utility;
 
 import java.util.ArrayList;
