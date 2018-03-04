@@ -239,6 +239,7 @@
                 android:layout_marginBottom="1dp"
                 android:layout_marginLeft="3dp"
                 android:layout_marginRight="3dp"
+                android:visibility="gone"
                 android:layout_marginTop="1dp">
 
                 <!--Todo - Hiding it for now, as the working is not working completely-->

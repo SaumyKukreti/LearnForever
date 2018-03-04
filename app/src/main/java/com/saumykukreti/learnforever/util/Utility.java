@@ -241,47 +241,53 @@ public class Utility {
         switch (filterMode){
             case Constants.LEARN_FOREVER_PREFERENCE_FILTER_SETTING_ALPHABETICALLY:
                 AlphabeticComparater comp = new AlphabeticComparater();
-                listOfNotes.sort(comp);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    listOfNotes.sort(comp);
+                }
                 return listOfNotes;
 
             case Constants.LEARN_FOREVER_PREFERENCE_FILTER_SETTING_OLD_FIRST:
-                listOfNotes.sort(new Comparator<NoteTable>() {
-                    @Override
-                    public int compare(NoteTable note1, NoteTable note2) {
-                        if(!note1.getDateOfCreation().isEmpty() && !note2.getDateOfCreation().isEmpty()){
-                            if(DateHandler.convertStringToDate(note1.getDateOfCreation()).getTime()>DateHandler.convertStringToDate(note2.getDateOfCreation()).getTime()){
-                                return 1;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    listOfNotes.sort(new Comparator<NoteTable>() {
+                        @Override
+                        public int compare(NoteTable note1, NoteTable note2) {
+                            if(!note1.getDateOfCreation().isEmpty() && !note2.getDateOfCreation().isEmpty()){
+                                if(DateHandler.convertStringToDate(note1.getDateOfCreation()).getTime()>DateHandler.convertStringToDate(note2.getDateOfCreation()).getTime()){
+                                    return 1;
+                                }
+                                else if(DateHandler.convertStringToDate(note1.getDateOfCreation()).getTime()<DateHandler.convertStringToDate(note2.getDateOfCreation()).getTime()){
+                                    return -1;
+                                }
+                                else return 0;
                             }
-                            else if(DateHandler.convertStringToDate(note1.getDateOfCreation()).getTime()<DateHandler.convertStringToDate(note2.getDateOfCreation()).getTime()){
-                                return -1;
+                            else{
+                                return 0;
                             }
-                            else return 0;
                         }
-                        else{
-                            return 0;
-                        }
-                    }
-                });
+                    });
+                }
                 return listOfNotes;
 
             case Constants.LEARN_FOREVER_PREFERENCE_FILTER_SETTING_NEW_FIRST:
-                listOfNotes.sort(new Comparator<NoteTable>() {
-                    @Override
-                    public int compare(NoteTable note1, NoteTable note2) {
-                        if(!note1.getDateOfCreation().isEmpty() && !note2.getDateOfCreation().isEmpty()){
-                            if(DateHandler.convertStringToDate(note1.getDateOfCreation()).getTime()>DateHandler.convertStringToDate(note2.getDateOfCreation()).getTime()){
-                                return -1;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    listOfNotes.sort(new Comparator<NoteTable>() {
+                        @Override
+                        public int compare(NoteTable note1, NoteTable note2) {
+                            if(!note1.getDateOfCreation().isEmpty() && !note2.getDateOfCreation().isEmpty()){
+                                if(DateHandler.convertStringToDate(note1.getDateOfCreation()).getTime()>DateHandler.convertStringToDate(note2.getDateOfCreation()).getTime()){
+                                    return -1;
+                                }
+                                else if(DateHandler.convertStringToDate(note1.getDateOfCreation()).getTime()<DateHandler.convertStringToDate(note2.getDateOfCreation()).getTime()){
+                                    return 1;
+                                }
+                                else return 0;
                             }
-                            else if(DateHandler.convertStringToDate(note1.getDateOfCreation()).getTime()<DateHandler.convertStringToDate(note2.getDateOfCreation()).getTime()){
-                                return 1;
+                            else{
+                                return 0;
                             }
-                            else return 0;
                         }
-                        else{
-                            return 0;
-                        }
-                    }
-                });
+                    });
+                }
                 return listOfNotes;
         }
         return listOfNotes;

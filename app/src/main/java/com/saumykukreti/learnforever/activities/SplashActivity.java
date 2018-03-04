@@ -49,7 +49,11 @@ public class SplashActivity extends Activity implements GoogleApiClient.Connecti
             }
         }, 500);
         //Meanwhile reset the notification
-        Utility.setNotification(this);
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if(user!=null && user.isEmailVerified()) {
+            Utility.setNotification(this);
+        }
     }
 
     @Override

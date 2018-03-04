@@ -21,6 +21,9 @@
         <TextView
             android:id="@+id/text_tip"
             android:text="Tip text"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             android:layout_width="match_parent"
             android:gravity="center_horizontal"
             android:textColor="@android:color/white"
