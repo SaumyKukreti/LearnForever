@@ -21,6 +21,7 @@ import com.saumykukreti.learnforever.dataManager.NoteDataController;
 import com.saumykukreti.learnforever.events.InitializationCompleteEvent;
 import com.saumykukreti.learnforever.modelClasses.dataTables.NoteTable;
 import com.saumykukreti.learnforever.util.DateHandler;
+import com.saumykukreti.learnforever.util.TextCreator;
 import com.saumykukreti.learnforever.util.Utility;
 
 import org.greenrobot.eventbus.EventBus;
@@ -105,6 +106,7 @@ public class DataInitializerJob extends Job {
         Utility.saveBooleanInPreference(mContext,Constants.LEARN_FOREVER_PREFERENCE_CIS_SETTINGS, true);
         Utility.saveBooleanInPreference(mContext,Constants.LEARN_FOREVER_PREFERENCE_CATEGORY_SETTINGS, true);
         Utility.saveIntInPreference(mContext,Constants.LEARN_FOREVER_PREFERENCE_SPEECH_RATE, 10);
+        Utility.saveStringInPreference(mContext,Constants.LEARN_FOREVER_PREFERENCE_CURRENT_INTERVAL, TextCreator.getIntervalText(Constants.DAY_INTERVAL_ONE));
         Utility.saveStringInPreference(mContext,Constants.LEARN_FOREVER_PREFERENCE_LAST_REVISE_DATE, DateHandler.convertDateToString(new Date()));
         String intervalOne = Arrays.toString(Constants.DAY_INTERVAL_ONE).substring(1,Arrays.toString(Constants.DAY_INTERVAL_ONE).length()-1);
         String intervalTwo = Arrays.toString(Constants.DAY_INTERVAL_TWO).substring(1,Arrays.toString(Constants.DAY_INTERVAL_TWO).length()-1);
