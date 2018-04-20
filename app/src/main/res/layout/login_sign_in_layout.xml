@@ -35,6 +35,7 @@
                 android:background="@drawable/background_white_with_rounded_corders"
                 android:hint="Email"
                 android:paddingBottom="5dp"
+                android:maxLength="20"
                 android:imeOptions="actionNext"
                 android:nextFocusDown="@+id/edit_text_password"
                 android:paddingLeft="15dp"
@@ -49,6 +50,7 @@
                 android:hint="Password"
                 android:inputType="textPassword"
                 android:imeOptions="actionDone"
+                android:maxLength="20"
                 android:paddingBottom="5dp"
                 android:paddingLeft="15dp"
                 android:paddingTop="5dp"/>

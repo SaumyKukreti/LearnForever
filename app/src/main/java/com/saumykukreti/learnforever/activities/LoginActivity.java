@@ -42,6 +42,13 @@ import com.saumykukreti.learnforever.util.TextCreator;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.Vector;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 
 public class LoginActivity extends Activity {
 
@@ -171,7 +178,7 @@ public class LoginActivity extends Activity {
                 @Override
                 public void onClick(View v) {
                     //Verifying email
-                    if(mEmailEditText.getText().length()>0){
+                    if (mEmailEditText.getText().length() > 0) {
                         //Send mail to reset password
                         FirebaseAuth.getInstance().sendPasswordResetEmail(mEmailEditText.getText().toString())
                                 .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -179,20 +186,16 @@ public class LoginActivity extends Activity {
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if (task.isSuccessful()) {
                                             Toast.makeText(LoginActivity.this, "Email sent, please check your email to reset your password!", Toast.LENGTH_SHORT).show();
-                                        }
-                                        else{
+                                        } else {
                                             Toast.makeText(LoginActivity.this, "Failed to send reset email, please check your email address!", Toast.LENGTH_SHORT).show();
                                         }
                                     }
                                 });
-                    }
-                    else{
+                    } else {
                         Toast.makeText(LoginActivity.this, "Please enter the email address!", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
-
-
 
             //Setting on click listeners on sign up button
             findViewById(R.id.scene_login_button_sign_up).setOnClickListener(new View.OnClickListener() {
@@ -223,7 +226,7 @@ public class LoginActivity extends Activity {
             });
         } else if (currentScene == SCENE_TIP) {
             //Setting values in tip layout
-            ((TextView)findViewById(R.id.text_tip)).setText(TextCreator.getRandomTip());
+            ((TextView) findViewById(R.id.text_tip)).setText(TextCreator.getRandomTip());
         }
     }
 
@@ -297,79 +300,97 @@ public class LoginActivity extends Activity {
      */
     private boolean validateFields() {
         if (currentScene == SCENE_LOGIN) {
-            if (mEmailEditText.getText().length() > 0 && mPasswordEditText.getText().length() > 5) {
-                return true;
+            boolean emailFlag = false;
+            boolean passwordFlag = false;
+
+            //Showing the user what went wrong
+            if (mEmailEditText.getText().length() == 0) {
+                mEmailEditText.setBackground(ContextCompat.getDrawable(this, R.drawable.background_white_with_red_borders));
+                emailFlag = true;
             } else {
-                boolean emailFlag = false;
-                boolean passwordFlag = false;
-
-                //Showing the user what went wrong
-                if (mEmailEditText.getText().length() == 0) {
-                    mEmailEditText.setBackground(ContextCompat.getDrawable(this, R.drawable.background_white_with_red_borders));
-                    emailFlag = true;
-                } else {
-                    mEmailEditText.setBackground(ContextCompat.getDrawable(this, R.drawable.background_white_with_rounded_corders));
-                }
-                if (mPasswordEditText.getText().length() < 6) {
-                    mPasswordEditText.setBackground(ContextCompat.getDrawable(this, R.drawable.background_white_with_red_borders));
-                    passwordFlag = true;
-                } else {
-                    mPasswordEditText.setBackground(ContextCompat.getDrawable(this, R.drawable.background_white_with_rounded_corders));
-                }
-
-                if (emailFlag && passwordFlag) {
-                    Toast.makeText(this, "Please enter the email address and password to sign in or press the google sign in button to sign in with your google account!", Toast.LENGTH_SHORT).show();
-                } else if (emailFlag) {
-                    Toast.makeText(this, "Email cannot be empty", Toast.LENGTH_SHORT).show();
-                } else if (passwordFlag) {
-                    Toast.makeText(this, "The length of the password should be 6 or greater", Toast.LENGTH_SHORT).show();
-                }
+                mEmailEditText.setBackground(ContextCompat.getDrawable(this, R.drawable.background_white_with_rounded_corders));
             }
-        } else if (currentScene == SCENE_SIGN_UP) {
-            if (mEmailEditText.getText().length() > 0 &&
-                    mPasswordEditText.getText().length() > 6 &&
-                    (mPasswordEditText.getText().toString().equalsIgnoreCase(mConfirmPasswordEditText.getText().toString()))) {
-                return true;
+            if (mPasswordEditText.getText().length() < 6) {
+                mPasswordEditText.setBackground(ContextCompat.getDrawable(this, R.drawable.background_white_with_red_borders));
+                passwordFlag = true;
             } else {
-                boolean emailFlag = false;
-                boolean passwordFlag = false;
-                boolean sameCheck = false;
+                mPasswordEditText.setBackground(ContextCompat.getDrawable(this, R.drawable.background_white_with_rounded_corders));
+            }
 
-                if (mEmailEditText.getText().length() == 0) {
-                    mEmailEditText.setBackground(ContextCompat.getDrawable(this, R.drawable.background_white_with_red_borders));
-                    emailFlag = true;
-                } else {
-                    mEmailEditText.setBackground(ContextCompat.getDrawable(this, R.drawable.background_white_with_rounded_corders));
-                }
-                if (mPasswordEditText.getText().length() < 6) {
+            if (emailFlag && passwordFlag) {
+                Toast.makeText(this, "Please enter the email address and password to sign in or press the google sign in button to sign in with your google account!", Toast.LENGTH_SHORT).show();
+                return false;
+            } else if (emailFlag) {
+                Toast.makeText(this, "Email cannot be empty", Toast.LENGTH_SHORT).show();
+                return false;
+            } else if (passwordFlag) {
+                Toast.makeText(this, "The length of the password should be 6 or greater", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+
+            //If the above confitions are true validating email
+            if (!validateEmail(mEmailEditText.getText().toString())) {
+                Toast.makeText(this, "Email validation failed, please check your email address!", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+            //If it passes all the conditions
+            return true;
+
+        } else if (currentScene == SCENE_SIGN_UP) {
+
+            boolean emailFlag = false;
+            boolean passwordFlag = false;
+            boolean sameCheck = false;
+
+            if (mEmailEditText.getText().length() == 0) {
+                mEmailEditText.setBackground(ContextCompat.getDrawable(this, R.drawable.background_white_with_red_borders));
+                emailFlag = true;
+            } else {
+                mEmailEditText.setBackground(ContextCompat.getDrawable(this, R.drawable.background_white_with_rounded_corders));
+            }
+            if (mPasswordEditText.getText().length() < 6) {
+                mPasswordEditText.setBackground(ContextCompat.getDrawable(this, R.drawable.background_white_with_red_borders));
+                mConfirmPasswordEditText.setBackground(ContextCompat.getDrawable(this, R.drawable.background_white_with_red_borders));
+                passwordFlag = true;
+            } else {
+                //Else if the lentgth is ok then check
+                if (!mPasswordEditText.getText().toString().contentEquals(mConfirmPasswordEditText.getText().toString())) {
+                    sameCheck = true;
                     mPasswordEditText.setBackground(ContextCompat.getDrawable(this, R.drawable.background_white_with_red_borders));
                     mConfirmPasswordEditText.setBackground(ContextCompat.getDrawable(this, R.drawable.background_white_with_red_borders));
-                    passwordFlag = true;
                 } else {
-                    //Else if the lentgth is ok then check
-                    if(!mPasswordEditText.getText().toString().contentEquals(mConfirmPasswordEditText.getText().toString())){
-                        sameCheck = true;
-                        mPasswordEditText.setBackground(ContextCompat.getDrawable(this, R.drawable.background_white_with_red_borders));
-                        mConfirmPasswordEditText.setBackground(ContextCompat.getDrawable(this, R.drawable.background_white_with_red_borders));
-                    } else {
-                        mPasswordEditText.setBackground(ContextCompat.getDrawable(this, R.drawable.background_white_with_rounded_corders));
-                        mConfirmPasswordEditText.setBackground(ContextCompat.getDrawable(this, R.drawable.background_white_with_rounded_corders));
-                    }
-                }
-
-
-                if (emailFlag && passwordFlag) {
-                    Toast.makeText(this, "Please enter the email address and password to sign in or press the google sign in button to sign in with your google account!", Toast.LENGTH_SHORT).show();
-                } else if (emailFlag) {
-                    Toast.makeText(this, "Email cannot be empty", Toast.LENGTH_SHORT).show();
-                } else if (passwordFlag) {
-                    Toast.makeText(this, "The length of the password should be 6 or greater", Toast.LENGTH_SHORT).show();
-                } else if(sameCheck){
-                    Toast.makeText(this, "Password and confirm passwords do not match", Toast.LENGTH_SHORT).show();
+                    mPasswordEditText.setBackground(ContextCompat.getDrawable(this, R.drawable.background_white_with_rounded_corders));
+                    mConfirmPasswordEditText.setBackground(ContextCompat.getDrawable(this, R.drawable.background_white_with_rounded_corders));
                 }
             }
+
+
+            if (emailFlag && passwordFlag) {
+                Toast.makeText(this, "Please enter the email address and password to sign in or press the google sign in button to sign in with your google account!", Toast.LENGTH_SHORT).show();
+                return false;
+            } else if (emailFlag) {
+                Toast.makeText(this, "Email cannot be empty", Toast.LENGTH_SHORT).show();
+                return false;
+            } else if (passwordFlag) {
+                Toast.makeText(this, "The length of the password should be 6 or greater", Toast.LENGTH_SHORT).show();
+                return false;
+            } else if (sameCheck) {
+                Toast.makeText(this, "Password and confirm passwords do not match", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+
+            //If the above confitions are true validating email
+            if (validateEmail(mEmailEditText.getText().toString())) {
+                Toast.makeText(this, "Email validation failed, please check your email address!", Toast.LENGTH_SHORT).show();
+            }
+
+            //If it passes all the conditions
+            return true;
         }
-        return false;
+        else{
+            //Scene incorrect
+            return false;
+        }
     }
 
     /**
@@ -403,7 +424,7 @@ public class LoginActivity extends Activity {
             startTransition(SCENE_TIP, null, 500);
             mGoogleSignInTask = GoogleSignIn.getSignedInAccountFromIntent(data);
             initiateFirebaseSignIn();
-        }else{
+        } else {
             Toast.makeText(this, "Google Sign In Failed, please try again or try signing in with email!", Toast.LENGTH_SHORT).show();
             startTransition(SCENE_LOGIN, null, 500);
         }
@@ -430,7 +451,7 @@ public class LoginActivity extends Activity {
 
 
     private void initiateSignUp() {
-        startTransition(SCENE_TIP,null,500);
+        startTransition(SCENE_TIP, null, 500);
         final FirebaseAuth mAuth = FirebaseAuth.getInstance();
         mAuth.createUserWithEmailAndPassword(mEmailEditText.getText().toString(), mPasswordEditText.getText().toString())
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -455,6 +476,7 @@ public class LoginActivity extends Activity {
 
                             //TODO - REMOVE THIS TOAST
                             Toast.makeText(LoginActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                            startTransition(SCENE_SIGN_UP, null, 500);
                         }
                     }
                 });
@@ -467,5 +489,10 @@ public class LoginActivity extends Activity {
         } else {
             super.onBackPressed();
         }
+    }
+
+    private boolean validateEmail(String email) {
+        String email_regex = "[A-Z]+[a-zA-Z_]+@\b([a-zA-Z]+.){2}\b?.[a-zA-Z]+";
+        return email.matches(email_regex);
     }
 }
