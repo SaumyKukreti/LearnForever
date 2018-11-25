@@ -386,8 +386,7 @@ public class LoginActivity extends Activity {
 
             //If it passes all the conditions
             return true;
-        }
-        else{
+        } else {
             //Scene incorrect
             return false;
         }
